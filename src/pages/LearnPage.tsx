@@ -1,114 +1,22 @@
 import { useState } from 'react';
 import { Card } from '../components/UI/Card';
 import { ChevronDown, ChevronUp } from 'lucide-react';
+import gitaData from '../data/gita.json';
+import psychologyData from '../data/psychology.json';
+import financeData from '../data/finance-terms.json';
+import vocabularyData from '../data/vocabulary.json';
 
 // ─── GITA DATA ────────────────────────────────────────────────────────────────
-const gitaVerses = [
-  {
-    chapter: 2, verse: 47,
-    sanskrit: 'कर्मण्येवाधिकारस्ते मा फलेषु कदाचन। मा कर्मफलहेतुर्भूर्मा ते सङ्गोऽस्त्वकर्मणि॥',
-    transliteration: 'Karmaṇy-evādhikāras te mā phaleṣhu kadāchana | Mā karma-phala-hetur bhūr mā te saṅgo 'stvakarmaṇi ||',
-    translation: 'You have the right to perform your prescribed duties, but you are not entitled to the fruits of your actions. Never consider yourself the cause of the results of your activities, and never be attached to not doing your duty.',
-    explanation: `CONTEXT: At this moment in the Mahabharata, Arjuna has collapsed on the battlefield of Kurukshetra, paralysed by grief and moral confusion. He doesn't want to fight his own family. Krishna responds with what becomes the entire philosophical foundation of the Bhagavad Gita — beginning here, with arguably the most quoted verse in Indian philosophy.\n\nTHE PHILOSOPHY: Krishna is articulating the doctrine of Nishkama Karma — action without attachment to outcomes. This is not passive resignation. It is the most demanding form of engagement: doing your absolute best while being psychologically detached from whether you win or lose. The concept cuts against a fundamental human tendency to tie our self-worth to results. Krishna is saying: the results are not yours to control. The effort is.\n\nFOR YOUR LIFE: In finance and consulting, you will pitch ideas that get rejected, work on deals that collapse, study for exams you might fail. This verse is a precise antidote to outcome anxiety. It doesn't tell you to stop caring — it tells you to redirect your energy entirely into the quality of your work, not the verdict on it. The student who studies because they genuinely want to understand outperforms the one who studies only to pass. This is the same idea, 5,000 years older.`,
-    carryToday: 'Do the work completely. Release the outcome entirely. Your only domain is the effort — everything else is noise.'
-  },
-  {
-    chapter: 2, verse: 14,
-    sanskrit: 'मात्रास्पर्शास्तु कौन्तेय शीतोष्णसुखदुःखदाः। आगमापायिनोऽनित्यास्तांस्तितिक्षस्व भारत॥',
-    transliteration: 'Mātrā-sparśhās tu kaunteya śhītoṣhṇa-sukha-duḥkha-dāḥ | Āgamāpāyino \'nityās tāṁs titikṣhasva bhārata ||',
-    translation: 'O son of Kunti, the contact between the senses and sense objects gives rise to fleeting perceptions of happiness and distress. These are non-permanent — they come and go like winter and summer. One must learn to tolerate them without being disturbed.',
-    explanation: `CONTEXT: Arjuna is overwhelmed by grief — the prospect of loss, pain, death. Krishna responds not with sympathy but with a precise philosophical observation about the nature of experience itself. He is redirecting Arjuna from emotion to epistemology.\n\nTHE PHILOSOPHY: This verse introduces Titiksha — the Stoic-adjacent concept of equanimity. Krishna is pointing to impermanence (Anitya): every experience, whether pleasurable or painful, is temporary by nature. The Stoics called this Memento Mori. The Buddhists called it Anicca. Krishna calls it the basic operating condition of all sensory experience. What disturbs us is not the event — it is our assumption that the event is permanent.\n\nFOR YOUR LIFE: You will face rejection letters, failed internships, difficult managers, and market downturns. This verse is not telling you to be emotionally numb — it is telling you not to build your identity around temporary states. The bad semester passes. The hostile boss leaves. The bear market ends. Training yourself to zoom out — to see the temporary nature of your current discomfort — is one of the most practically useful mental skills you can develop in your 20s.`,
-    carryToday: 'Whatever is making you anxious right now is temporary. It came — it will go. Hold it lightly.'
-  },
-  {
-    chapter: 3, verse: 27,
-    sanskrit: 'प्रकृतेः क्रियमाणानि गुणैः कर्माणि सर्वशः। अहङ्कारविमूढात्मा कर्ताहमिति मन्यते॥',
-    transliteration: 'Prakṛiteḥ kriyamāṇāni guṇaiḥ karmāṇi sarvaśhaḥ | Ahankāra-vimūḍhātmā kartāham iti manyate ||',
-    translation: 'All actions are performed by the qualities of material nature. But the deluded, confused by ego, think: "I am the doer."',
-    explanation: `CONTEXT: Krishna is now moving deeper into the philosophy of action — explaining why humans suffer unnecessarily. The previous verses established what to do; this one diagnoses why we get it wrong.\n\nTHE PHILOSOPHY: This verse strikes at the ego — Ahankara, literally "I-maker." The delusion Krishna identifies is the belief that we are the sole authors of our outcomes. In reality, outcomes emerge from an extraordinary confluence of factors: your upbringing, timing, the economy, other people's decisions, biological luck, network effects. To claim full credit or full blame is epistemically false. The Gunas — three fundamental qualities of nature (Tamas, Rajas, Sattva) — operate through us, not solely because of us.\n\nFOR YOUR LIFE: This has direct implications for both success and failure. When your startup succeeds, the ego says "I did this." When it fails, the ego says "I failed." Both are distortions. The honest position is: "I contributed my best effort to a complex system whose outputs I don't fully control." This protects you from both arrogance in success and crushing self-blame in failure — two of the most career-derailing mental traps for ambitious young professionals.`,
-    carryToday: 'You are a contributor to outcomes, not their sole cause. Take credit wisely. Take blame honestly. Hold both lightly.'
-  }
-];
+const gitaVerses = gitaData as any[];
 
 // ─── PSYCHOLOGY DATA ──────────────────────────────────────────────────────────
-const psychologyConcept = {
-  name: 'Cognitive Dissonance',
-  originator: 'Leon Festinger',
-  year: 1957,
-  definition: `Cognitive dissonance is the mental discomfort experienced when a person holds two or more contradictory beliefs, values, or attitudes simultaneously — or when their actions conflict with their beliefs. The theory posits that this discomfort is a motivational state: people are driven to reduce it, often through rationalisation rather than genuine belief change. It is one of the most robust and consequential findings in social psychology.`,
-  research: `Festinger and Carlsmith's 1959 experiment remains the landmark study. Participants were paid either $1 or $20 to lie to another person, claiming a boring task was interesting. When surveyed afterward, the $1 group rated the task as significantly more enjoyable than the $20 group. The explanation: the $20 group had sufficient external justification for lying (they were paid well), so their belief remained unchanged. The $1 group had insufficient justification — so their minds resolved the dissonance by genuinely convincing themselves the task was interesting. The mind rewrites reality to protect internal consistency.`,
-  professional: `In consulting, cognitive dissonance explains why clients resist recommendations that contradict their existing strategy — they've already committed publicly to a direction, so accepting contrary evidence would produce dissonance. In finance, it underlies confirmation bias: an analyst who has already taken a position on a stock will unconsciously filter for confirming data. In corporate settings, it explains why teams that invested heavily in a failing project keep doubling down — the sunk cost is not just financial, it is psychological. Admitting the project should be killed means admitting their past judgment was wrong.`,
-  howToUse: `When you notice yourself rationalising a decision you've already made, stop and ask: "Would I make this same decision if I were starting fresh today?" When advising others, reduce dissonance by giving them a face-saving reframe rather than a direct contradiction. Instead of "your strategy is wrong," try "given new market data, there's an updated approach that builds on what you've done." And watch your own reactions to information that contradicts your positions — strong negative reactions to contrary evidence are almost always dissonance, not logic.`,
-  related: ['Confirmation Bias — the tendency to seek information that confirms existing beliefs', 'Self-Perception Theory (Bem, 1967) — we infer our own attitudes from our behaviour, not the other way around']
-};
+const psychologyList = psychologyData as any[];
 
 // ─── FINANCE TERMS DATA ───────────────────────────────────────────────────────
-const financeTerms = [
-  {
-    term: 'EBITDA',
-    domain: 'Corporate Finance / Valuation',
-    definition: `EBITDA — Earnings Before Interest, Taxes, Depreciation, and Amortisation — is a measure of a company's core operational profitability, stripped of financing decisions, accounting conventions, and tax environments. It is designed to approximate the cash-generating capacity of a business's operations independent of its capital structure. Unlike net income, which varies dramatically based on how a company is financed, EBITDA allows comparison across companies with different debt loads and depreciation policies.`,
-    whyItMatters: `Investment bankers use EBITDA as the primary denominator in EV/EBITDA multiples — the most common valuation metric in M&A transactions. Private equity firms focus on it because it approximates free cash flow available for debt service (in leveraged buyouts). Lenders use EBITDA-based covenants (e.g. Net Debt / EBITDA < 3x) to monitor financial health. If you're in consulting or finance, you will encounter this metric in almost every engagement involving corporate valuation.`,
-    formula: 'EBITDA = Net Income + Interest Expense + Tax Expense + Depreciation + Amortisation\nOR\nEBITDA = Operating Income (EBIT) + Depreciation + Amortisation',
-    example: `Reliance Industries FY2023: Net profit ~₹73,000 Cr. But their EBITDA was ~₹1,53,000 Cr — more than double — because of massive depreciation from their Jio infrastructure rollout and significant interest costs on their debt. A buyer acquiring Reliance would use EBITDA, not net profit, to assess what the business actually generates before financing and accounting choices distort the picture.`,
-    interviewTrap: `Candidates confuse EBITDA with free cash flow. They are NOT the same. EBITDA ignores capital expenditure (capex) — a capital-intensive business like a steel plant can have strong EBITDA but negative free cash flow because it must constantly reinvest in equipment. Warren Buffett famously called EBITDA "earnings before the bad stuff" for this reason. Always clarify whether the context calls for EBITDA or FCF.`
-  },
-  {
-    term: 'Working Capital',
-    domain: 'Corporate Finance / Accounting',
-    definition: `Working Capital is the difference between a company's current assets (cash, inventory, receivables) and current liabilities (payables, short-term debt). It represents the liquid resources a company has available to fund its day-to-day operations. Positive working capital means the company can cover its near-term obligations. Negative working capital — though counterintuitively — can be a sign of operational efficiency in certain business models (see below).`,
-    whyItMatters: `CFOs monitor working capital intensity to understand how much cash a business consumes as it grows. A company that requires significant working capital to scale (manufacturing, retail with large inventory) will need external financing to grow. Working capital analysis is central to LBO models, credit analysis, and any operational turnaround. Investment banking analysts build detailed working capital schedules in financial models to forecast cash requirements.`,
-    formula: 'Working Capital = Current Assets − Current Liabilities\nNet Working Capital (NWC) = (Receivables + Inventory) − Payables\nChange in NWC affects the Cash Flow Statement directly',
-    example: `Amazon has structurally negative working capital — customers pay immediately at purchase, but Amazon pays its suppliers 60–90 days later. This means Amazon receives cash before it needs to pay for the goods it sold. As Amazon grows, it generates more cash from operations automatically. This is a massive competitive advantage and explains how Amazon self-funded its growth for years despite thin margins.`,
-    interviewTrap: `Candidates get confused about the sign convention in cash flow models. An INCREASE in working capital is a USE of cash (e.g. inventory builds up — you've spent cash to hold goods). A DECREASE in working capital is a SOURCE of cash. This is counterintuitive and trips up even experienced analysts. If a company's receivables grow, it hasn't collected cash yet — that's cash trapped in the business.`
-  }
-];
+const financeTermsList = financeData as any[];
 
 // ─── VOCABULARY DATA ──────────────────────────────────────────────────────────
-const vocabWords = [
-  {
-    word: 'Perspicacious',
-    pronunciation: '/ˌpɜːr.spɪˈkeɪ.ʃəs/',
-    etymology: 'Latin perspicax (sharp-sighted), from perspicere — to see through clearly. Per (through) + specere (to look). The same root gives us "perspicuous" (clearly expressed) and "spectacle."',
-    definition: 'Having a ready insight into and understanding of things; acutely perceptive and discerning, especially in practical matters or in reading situations and people.',
-    examples: [
-      'The perspicacious analyst identified the flaw in the company\'s unit economics six months before the market did, positioning the fund ahead of a significant correction.',
-      'Her perspicacious observation during the client debrief — that the real problem was cultural, not structural — reframed the entire consulting engagement.',
-      'A perspicacious reader of geopolitical risk, he had moved his emerging market exposure to defensive positions three weeks before the currency crisis materialised.'
-    ],
-    synonyms: ['astute', 'shrewd', 'discerning', 'perceptive', 'sagacious'],
-    antonyms: ['obtuse', 'imperceptive', 'undiscerning'],
-    usageNote: 'Use "perspicacious" when you want to emphasise the quality of perception and insight — particularly when someone reads a situation correctly that others missed. It is stronger than "perceptive" and carries a connotation of practical intelligence, not just intelligence. Avoid using it as a synonym for "intelligent" — it specifically describes the ability to see clearly through complexity. Overusing it in casual contexts will sound affected.'
-  },
-  {
-    word: 'Equivocate',
-    pronunciation: '/ɪˈkwɪv.ə.keɪt/',
-    etymology: 'Medieval Latin aequivocatus, from aequivocus — of equal voice. Aequus (equal) + vox (voice). Originally meant to use words with two meanings; evolved to mean deliberately ambiguous speech.',
-    definition: 'To use ambiguous or unclear language in order to avoid committing to a position or to conceal the truth; to speak or act in a deliberately evasive way.',
-    examples: [
-      'When pressed by the board on the project\'s viability, the managing director equivocated rather than deliver the difficult assessment the situation required.',
-      'The central bank\'s statement was carefully constructed to equivocate on the timing of rate cuts, giving policymakers room to manoeuvre without triggering market volatility.',
-      'In cross-examination, the auditor equivocated on key dates — a strategic error that the opposing counsel immediately exploited to undermine his credibility.'
-    ],
-    synonyms: ['prevaricate', 'hedge', 'waffle', 'obfuscate', 'dissemble'],
-    antonyms: ['assert', 'affirm', 'declare', 'commit'],
-    usageNote: 'Equivocate has a specifically negative connotation — it implies deliberate evasion, not honest uncertainty. "He was uncertain" is neutral; "he equivocated" implies he was hiding something or avoiding accountability. Use it as a precise critique, not a neutral description. In professional writing, it is powerful because it signals a character judgment, not just a behavioural observation.'
-  },
-  {
-    word: 'Pellucid',
-    pronunciation: '/pəˈluː.sɪd/',
-    etymology: 'Latin pellucidus, from pellucere — to shine through. Per (through) + lucere (to shine). Related to "lucid," "elucidate," and "translucent." Originally described physical transparency; extended to mean clarity of expression.',
-    definition: 'Translucently clear; (of writing, argument, or expression) easily understood; lucid and unambiguous in a way that leaves no room for misinterpretation.',
-    examples: [
-      'The McKinsey partner\'s opening slide was pellucid in its logic — three causes, three implications, one recommendation — and the client committee approved it within twenty minutes.',
-      'Her memo on the regulatory risk was pellucid where her predecessor\'s had been opaque, which is precisely why the board finally understood the exposure they were carrying.',
-      'A pellucid argumentative structure is the single most underrated skill in consulting — clients don\'t reward complexity, they reward clarity.'
-    ],
-    synonyms: ['lucid', 'limpid', 'crystalline', 'transparent', 'perspicuous'],
-    antonyms: ['opaque', 'murky', 'obscure', 'convoluted'],
-    usageNote: '"Pellucid" is rarer than "lucid" and carries a slightly more elevated register — it is the word you reach for when you want to praise exceptional clarity of thought or expression, not just adequate clarity. It works especially well in written contexts (pellucid prose, pellucid argument) rather than spoken ones. Do not use it to describe people — use it for ideas, arguments, or writing.'
-  }
-];
+const vocabWordsList = vocabularyData as any[];
 
 // ─── BOOK SUMMARY DATA ────────────────────────────────────────────────────────
 const bookSummary = {
@@ -246,7 +154,13 @@ function GitaSection() {
 
 // ─── PSYCHOLOGY SECTION ───────────────────────────────────────────────────────
 function PsychologySection() {
-  const c = psychologyConcept;
+  const dayOfYear = Math.floor(
+    (new Date().getTime() - new Date(new Date().getFullYear(), 0, 0).getTime()) /
+      (1000 * 60 * 60 * 24)
+  );
+  const conceptIndex = dayOfYear % psychologyList.length;
+  const c = psychologyList[conceptIndex];
+
   return (
     <Section title="Psychology Concept">
       <Card>
@@ -287,10 +201,20 @@ function PsychologySection() {
 
 // ─── FINANCE TERMS SECTION ────────────────────────────────────────────────────
 function FinanceTermsSection() {
+  const dayOfYear = Math.floor(
+    (new Date().getTime() - new Date(new Date().getFullYear(), 0, 0).getTime()) /
+      (1000 * 60 * 60 * 24)
+  );
+  const startIndex = (dayOfYear * 2) % financeTermsList.length;
+  const selectedTerms = [
+    financeTermsList[startIndex],
+    financeTermsList[(startIndex + 1) % financeTermsList.length],
+  ];
+
   return (
     <Section title="Finance Terms">
       <div className="grid md:grid-cols-2 gap-5">
-        {financeTerms.map((term, i) => (
+        {selectedTerms.map((term, i) => (
           <Card key={i}>
             <div className="mb-4">
               <h3 className="text-lg font-medium text-gray-900 dark:text-white">{term.term}</h3>
@@ -324,10 +248,21 @@ function FinanceTermsSection() {
 
 // ─── VOCABULARY SECTION ───────────────────────────────────────────────────────
 function VocabularySection() {
+  const dayOfYear = Math.floor(
+    (new Date().getTime() - new Date(new Date().getFullYear(), 0, 0).getTime()) /
+      (1000 * 60 * 60 * 24)
+  );
+  const startIndex = (dayOfYear * 3) % vocabWordsList.length;
+  const selectedWords = [
+    vocabWordsList[startIndex],
+    vocabWordsList[(startIndex + 1) % vocabWordsList.length],
+    vocabWordsList[(startIndex + 2) % vocabWordsList.length],
+  ];
+
   return (
     <Section title="Vocabulary Builder">
       <div className="grid md:grid-cols-3 gap-5">
-        {vocabWords.map((word, i) => (
+        {selectedWords.map((word, i) => (
           <Card key={i}>
             <div className="mb-3 pb-3 border-b border-gray-100 dark:border-gray-800">
               <h3 className="text-xl font-medium text-gray-900 dark:text-white">{word.word}</h3>

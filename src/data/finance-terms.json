@@ -1,0 +1,47 @@
+[
+  {
+    "term": "EBITDA",
+    "domain": "Corporate Finance / Valuation",
+    "definition": "Earnings Before Interest, Taxes, Depreciation, and Amortization. It measures a company's operating profitability by calculating earnings from core business operations before the impact of capital structure (debt vs. equity), taxation, and non-cash charges (depreciation and amortization). EBITDA is often used as a proxy for free cash flow from operations, though it's not identical.",
+    "whyItMatters": "Private equity firms, investment bankers, and corporate development teams use EBITDA multiples to value companies. A healthcare startup might trade at 15x EBITDA while a software company at 25x, reflecting different margin profiles. EBITDA is also used to calculate 'leverage'—debt/EBITDA ratio—which determines debt capacity and financial risk.",
+    "formula": "EBITDA = Net Income + Interest + Taxes + Depreciation + Amortization. Or from revenue: EBITDA = Revenue - Cost of Goods Sold - Operating Expenses (excluding D&A).",
+    "example": "Infosys FY2023: Net Income ~₹15,000 Cr, but add back ₹2,000 Cr interest (hypothetical), ₹4,000 Cr taxes, ₹800 Cr depreciation = EBITDA ~₹21,800 Cr. If Revenue was ₹200,000 Cr, EBITDA margin = 10.9%. This is compared against peers—TCS at 12%, Accenture at 15%—to assess operational efficiency.",
+    "interviewTrap": "Candidates confuse EBITDA with free cash flow. EBITDA isn't cash—it's an accounting construct. A company can have high EBITDA but negative cash flow if it's investing heavily in capex or managing working capital poorly. Also: EBITDA can be manipulated by capitalizing expenses as assets (increasing D&A later). Always reconcile EBITDA to actual cash conversion."
+  },
+  {
+    "term": "Hurdle Rate",
+    "domain": "Investment / Private Equity",
+    "definition": "The minimum rate of return required by an investor or fund before they commit capital to a project or investment. It reflects the investor's cost of capital plus a risk premium appropriate to the investment class. Investments returning less than the hurdle rate are rejected; those exceeding it are pursued.",
+    "whyItMatters": "A PE fund's hurdle rate (typically 15-25%) reflects the expected return for the fund's LPs (limited partners). If the fund returns 18% on an exit, but the hurdle rate was 20%, the fund underperformed. Hurdle rates also govern corporate capital allocation: a CFO might set a 12% hurdle for capex projects, meaning only projects expected to return >12% are funded.",
+    "formula": "Hurdle Rate = Risk-Free Rate + Risk Premium. Example: Risk-free rate (10-year Gilt) = 6%, risk premium for private equity = 12%, hurdle rate = 18%.",
+    "example": "A VC fund has a 35% hurdle rate (typical for early-stage VC given high failure rates). If a startup reaches a Series B exit at 8x return over 5 years, the IRR is roughly 60%, beating the hurdle. A later-stage PE fund might have a 15% hurdle; the same exit at 8x over 5 years (60% IRR) would be exceptional.",
+    "interviewTrap": "Candidates often confuse hurdle rate with cost of capital. The hurdle rate is higher than cost of capital because it includes a risk premium. Also: hurdle rate is forward-looking (what return do we expect), not backward-looking (what did we actually return). Don't say 'we achieved a 25% hurdle'—say 'we exceeded the 20% hurdle by returning 25%.'"
+  },
+  {
+    "term": "Weighted Average Cost of Capital (WACC)",
+    "domain": "Corporate Finance / Valuation",
+    "definition": "The average rate of return a company must pay to finance its assets, weighted by the proportion of debt and equity in the capital structure. It's the discount rate used in DCF (Discounted Cash Flow) valuations. A lower WACC implies a more efficient capital structure and a higher valuation.",
+    "whyItMatters": "Investment bankers use WACC to value companies in M&A. A company with low WACC (cheap debt, efficient capital structure) gets valued higher than a similar company with high WACC. Strategic decisions like leverage (taking on debt) are evaluated by impact on WACC. Also: projects within a company are evaluated against the company's WACC; projects below WACC destroy value.",
+    "formula": "WACC = (E/V × Re) + (D/V × Rd × (1 - Tc)). Where E = market value of equity, D = market value of debt, V = E+D, Re = cost of equity, Rd = cost of debt, Tc = corporate tax rate.",
+    "example": "A company: E = ₹10,000 Cr, D = ₹4,000 Cr, V = ₹14,000 Cr. Re = 12%, Rd = 7%, Tc = 25%. WACC = (10,000/14,000 × 12%) + (4,000/14,000 × 7% × 75%) = 8.57% + 1.5% = 10.07%. A project returning 15% beats WACC and creates value.",
+    "interviewTrap": "Candidates calculate WACC incorrectly by using book values instead of market values. The cost of equity must be calculated (not given), often using CAPM: Re = Rf + β(Rm - Rf). Ignoring the tax shield on debt (the 1 - Tc term) overstates WACC. Also: WACC varies by company and industry; it's not fixed."
+  },
+  {
+    "term": "Internal Rate of Return (IRR)",
+    "domain": "Investment / Project Finance",
+    "definition": "The discount rate at which the Net Present Value (NPV) of a project equals zero. In simpler terms: the rate of return an investment is expected to generate. IRR is expressed as a percentage and is used to compare projects and investments across different time horizons.",
+    "whyItMatters": "PE firms quote their fund performance as 'we returned 1.8x MOIC (multiple of invested capital) at a 22% IRR.' Corporations compare capex projects by IRR: a project with 18% IRR is preferred over one with 12% IRR (assuming risk is similar). IRR is also the 'true' return of a loan or bond—different from coupon rate due to timing of cash flows.",
+    "formula": "IRR is found by solving: 0 = ∑[Cash Flows at time t / (1 + IRR)^t]. For a simple case: invest $100 today, receive $125 in 1 year. IRR = 25%. For multi-year: requires iterative calculation.",
+    "example": "A startup investment: $1M invested today. Year 3: exit at $8M valuation. IRR calculation: 0 = -1M + 8M/(1+IRR)^3. Solving: IRR ≈ 100% (tripling in 3 years). Compare to a real estate investment: $1M today, $200K/year rental income for 10 years, then sale at $1.5M. IRR ≈ 15%.",
+    "interviewTrap": "IRR has flaws: it can be misleading when project cash flows have non-standard timing (changing from negative to positive to negative). It also assumes reinvestment of interim cash flows at the IRR rate—unrealistic for high-IRR projects. NPV is theoretically superior but IRR is market standard. Also: comparing IRRs across different risk profiles ('this startup IRR is 100%, this bond is 6%') is dangerous—risk-adjusted returns matter."
+  },
+  {
+    "term": "Moat (Economic Moat)",
+    "domain": "Investing / Strategy",
+    "definition": "A durable competitive advantage that allows a company to maintain high margins and defend market position against competitors. Like a medieval castle's moat prevents invasion, an economic moat prevents margin compression. Types: brand (Apple), switching costs (enterprise software), network effects (Facebook), cost advantage (Costco).",
+    "whyItMatters": "Investors like Buffett focus on companies with wide moats because they generate returns above cost of capital for decades. A company without a moat is a 'commodity'—competitors will drive returns to zero eventually. Startups are often 'moat-less'; the question for early-stage investing is: can this company build a moat before capital runs out?",
+    "formula": "No formula, but qualitative assessment: (Competitive advantage lifetime) × (annual return on capital) = investor value. A 10-year moat with 25% ROIC is more valuable than a 3-year moat with 30% ROIC.",
+    "example": "Coca-Cola: brand moat—consumers choose Coke despite similar chemistry to Pepsi, allowing higher margins. Microsoft Office: switching costs—organizations invested 20 years in Excel templates, VBA macros, training; replacing is expensive. Amazon: cost moat—logistics infrastructure and AWS revenues subsidize retail, pricing competitors out.",
+    "interviewTrap": "Candidates often mistake revenue size for moat. A large market share means nothing if competitors can steal share. Also, past success doesn't indicate future moat—Blockbuster had market dominance but no moat against Netflix (streaming technology). Ask: if we dropped prices 50%, would customers stay? If yes: likely moat. If no: probably commodity."
+  }
+]

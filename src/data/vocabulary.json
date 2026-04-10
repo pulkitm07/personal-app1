@@ -1,0 +1,75 @@
+[
+  {
+    "word": "Cogent",
+    "pronunciation": "KOH-junt",
+    "etymology": "Latin 'cogere' (to drive together) + '-ent' (able to). Originally meant 'able to compel assent'—an argument so compelling it forces agreement.",
+    "definition": "Clear, logical, and convincing; an argument or statement that compels belief through force of reasoning rather than emotion. Characterized by precision and irrefutable logic.",
+    "examples": [
+      "The consultant's cogent analysis of market dynamics persuaded the board to pivot the entire product strategy.",
+      "While her presentation was polished, the legal team found her argument lacked cogent reasoning on the liability clause.",
+      "His cogent critique of the financial model forced us to recalculate every assumption—we couldn't dismiss a single point."
+    ],
+    "synonyms": ["compelling", "convincing", "persuasive", "logical", "sound"],
+    "antonyms": ["specious", "fallacious", "weak", "unconvincing"],
+    "usageNote": "Use 'cogent' when the force comes from logic, not charisma. 'He gave a charismatic speech' vs. 'He made a cogent argument.' In corporate writing, 'cogent' signals rigor. Avoid overusing; it carries weight and should be reserved for arguments that truly are airtight."
+  },
+  {
+    "word": "Perspicacious",
+    "pronunciation": "pur-spih-KAY-shus",
+    "etymology": "Latin 'perspicere' (to look through, see clearly) + '-acious' (inclined to). Originally referred to literal visual acuteness; evolved to mean acute perception and understanding.",
+    "definition": "Having keen insight, sharp judgment, and the ability to perceive things others miss. Describes someone with penetrating mental clarity and the capacity to make shrewd assessments.",
+    "examples": [
+      "The CFO's perspicacious observation about cash flow timing caught an error the entire finance team had missed for three quarters.",
+      "Her perspicacious reading of competitor behavior allowed her to anticipate the market shift six months ahead of others.",
+      "A perspicacious founder recognizes that consumer resistance isn't price-based but rooted in positioning confusion."
+    ],
+    "synonyms": ["discerning", "astute", "perceptive", "sagacious", "shrewd"],
+    "antonyms": ["obtuse", "dull", "myopic", "undiscerning"],
+    "usageNote": "'Perspicacious' is deeper than 'smart.' Smart people know facts. Perspicacious people see hidden patterns and implications. It suggests almost preternatural insight. Use when describing strategic insights, not technical competence. Never use it casually—it implies seeing what others cannot."
+  },
+  {
+    "word": "Nascent",
+    "pronunciation": "NAY-sunt",
+    "etymology": "Latin 'nascens' (being born) from 'nasci' (to be born). Literally refers to the moment of emergence.",
+    "definition": "Just coming into existence or beginning to grow; in an early stage of development. Often used to describe industries, movements, or capabilities that are emerging but not yet mature.",
+    "examples": [
+      "The AI-driven recruitment space is nascent—tools exist but best practices and ROI benchmarks haven't solidified.",
+      "In 2005, the smartphone market was nascent; iPhone would define the category in 2007.",
+      "The company's East Asian operations are still nascent; profitability is 3-5 years away.",
+      "ESG investing was nascent in 2010; by 2020, it commanded trillions in AUM."
+    ],
+    "synonyms": ["emerging", "incipient", "fledgling", "budding", "developing"],
+    "antonyms": ["mature", "established", "advanced"],
+    "usageNote": "Use 'nascent' when something has clear potential but is genuinely early-stage. Don't use for truly speculative ideas ('We're in the nascent stage of cold fusion')—that's too early. Use for things that already show proof points. 'This market is nascent but the unit economics work.' In finance pitches, describe your addressable market as 'nascent' only if you can cite early players proving the model."
+  },
+  {
+    "word": "Obfuscate",
+    "pronunciation": "ob-FUS-kate",
+    "etymology": "Latin 'obfuscare' (to darken, obscure) from 'ob-' (toward) + 'fuscare' (to darken).",
+    "definition": "To deliberately make something unclear, obscure, or confusing; to hide the truth through complexity or deliberate opacity. Can be accidental (poor writing) or intentional (legal maneuvering).",
+    "examples": [
+      "The company's press release used jargon to obfuscate the fact that revenue growth had slowed to single digits.",
+      "The seller's lawyer tried to obfuscate the pending litigation in a footnote buried on page 87 of the SPA.",
+      "Don't let technical complexity obfuscate the fundamental business risk—get clarity on the unit economics.",
+      "Some analysts obfuscate their incorrect thesis with statistical rigor rather than admitting the model was flawed."
+    ],
+    "synonyms": ["obscure", "confuse", "cloud", "muddy", "conceal"],
+    "antonyms": ["clarify", "illuminate", "simplify", "elucidate"],
+    "usageNote": "'Obfuscate' carries judgment—it implies intentional obscuring. Use 'unclear' if unintentional, 'obfuscate' if deliberate. In due diligence, if a seller is deliberately hiding facts, note: 'Management attempted to obfuscate the declining market share.' In writing, strive for clarity; never obfuscate to seem impressive."
+  },
+  {
+    "word": "Circumlocution",
+    "pronunciation": "SER-kum-loh-KYO-shun",
+    "etymology": "Latin 'circumlocutio' (circum- = around + loqui = to speak). Literally: speaking around something.",
+    "definition": "The use of unnecessarily long and complicated expressions; talking around a subject without directly stating it. Often used to disguise, hedge, or delay the point.",
+    "examples": [
+      "Instead of saying 'We missed the revenue target,' the CFO engaged in circumlocution: 'We achieved meaningful progress against certain operational vectors while market headwinds necessitated tactical recalibration.'",
+      "The investor's circumlocution in her email—lengthy praise followed by vague concerns—signaled she was about to pass on the Series A.",
+      "Politicians are experts in circumlocution, avoiding direct answers through elaborate explanation.",
+      "The contract's circumlocution around payment terms made it impossible to know when we'd actually get paid."
+    ],
+    "synonyms": ["roundabout", "indirection", "verbosity", "verboseness", "periphrasis"],
+    "antonyms": ["directness", "clarity", "precision", "conciseness"],
+    "usageNote": "Circumlocution is often unconscious—complexity masquerading as sophistication. In corporate life, detect it: if someone takes three sentences to state something expressible in one, they might be hedging or hiding. When writing, cut circumlocution ruthlessly. 'We need to optimize resource allocation' → 'We're cutting costs.' Circumlocution is the enemy of clarity and trust."
+  }
+]
