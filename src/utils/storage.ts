@@ -77,6 +77,19 @@ export const storage = {
       localStorage.setItem(`progress_${type}`, JSON.stringify(progress));
     }
   },
+
+  getSleepEntries(): { date: string; hours: number }[] {
+    try {
+      const stored = localStorage.getItem('sleep_entries');
+      return stored ? JSON.parse(stored) : [];
+    } catch {
+      return [];
+    }
+  },
+
+  setSleepEntries(entries: { date: string; hours: number }[]): void {
+    localStorage.setItem('sleep_entries', JSON.stringify(entries));
+  },
 };
 
 export function getTodayDate(): string {

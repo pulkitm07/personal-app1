@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+﻿import { useEffect, useState } from 'react';
 import { QuoteSection } from '../components/Home/QuoteSection';
 import { ChecklistSection, initializeDefaultTasks } from '../components/Home/ChecklistSection';
 import { MarketsSection } from '../components/Home/MarketsSection';
@@ -86,3 +86,4 @@ export function HomePage() {
     </div>
   );
 }
+

@@ -1,11 +1,11 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { Layout } from './components/Layout/Layout';
 import { HomePage } from './pages/HomePage';
 import { NewsPage } from './pages/NewsPage';
 import { LearnPage } from './pages/LearnPage';
-import { LawsPage } from './pages/LawsPage';
 import { SettingsPage } from './pages/SettingsPage';
+import { SleepPage } from './pages/SleepPage';
 
 function App() {
   const [currentPage, setCurrentPage] = useState('home');
@@ -18,8 +18,8 @@ function App() {
         return <NewsPage />;
       case 'learn':
         return <LearnPage />;
-      case 'laws':
-        return <LawsPage />;
+      case 'sleep':
+        return <SleepPage />;
       case 'settings':
         return <SettingsPage />;
       default:
@@ -37,3 +37,4 @@ function App() {
 }
 
 export default App;
+

@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
+﻿import { useEffect, useState } from 'react';
 import { Card, SkeletonCard } from '../components/UI/Card';
-import { ExternalLink } from 'lucide-react';
+import { ExternalLink, RefreshCw } from 'lucide-react';
 import { fetchGeopoliticalNews, fetchFinanceNews } from '../services/newsService';
 import { formatRelativeTime } from '../utils/storage';
 import type { NewsArticle } from '../types';
@@ -31,7 +31,7 @@ export function NewsPage() {
     <Card className="h-full flex flex-col">
       <div className="flex-1 space-y-3">
         <div className="flex items-start justify-between gap-2">
-          <span className="text-xs px-2 py-1 rounded bg-[#0C3B6E]/10 text-[#0C3B6E] dark:bg-[#4A90E2]/20 dark:text-[#4A90E2]">
+          <span className="text-xs px-2 py-1 rounded bg-accent/10 text-accent dark:bg-accent/20 dark:text-accent">
             {article.category}
           </span>
           <span className="text-xs text-gray-500 dark:text-gray-500">
@@ -55,7 +55,7 @@ export function NewsPage() {
             href={article.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-xs text-[#0C3B6E] dark:text-[#4A90E2] hover:underline flex items-center gap-1"
+            className="text-xs text-accent dark:text-accent hover:underline flex items-center gap-1"
           >
             Read full story
             <ExternalLink size={12} />
@@ -85,10 +85,17 @@ export function NewsPage() {
             ))}
           </div>
         ) : (
-          <Card>
+          <Card className="flex flex-col items-center justify-center p-8 text-center space-y-4">
             <p className="text-gray-600 dark:text-gray-400">
-              No geopolitical news available at the moment.
+              News feeds are loading — tap the refresh button to try again.
             </p>
+            <button 
+              onClick={loadNews} 
+              className="flex items-center gap-2 px-4 py-2 bg-accent/10 hover:bg-accent/20 text-accent dark:bg-accent/10 dark:hover:bg-accent/20 dark:text-accent rounded-lg transition-colors"
+            >
+              <RefreshCw size={16} />
+              Refresh Feeds
+            </button>
           </Card>
         )}
       </section>
@@ -99,11 +106,11 @@ export function NewsPage() {
             Finance & Consulting News
           </h2>
           {keyInsight && (
-            <Card className="bg-[#0C3B6E]/5 dark:bg-[#4A90E2]/10 border-[#0C3B6E]/20 dark:border-[#4A90E2]/20">
+            <Card className="bg-accent/5 dark:bg-accent/10 border-accent/20 dark:border-accent/20">
               <div className="flex items-start gap-3">
-                <div className="shrink-0 w-1 h-12 bg-[#0C3B6E] dark:bg-[#4A90E2] rounded-full" />
+                <div className="shrink-0 w-1 h-12 bg-accent dark:bg-accent rounded-full" />
                 <div>
-                  <p className="text-xs font-medium text-[#0C3B6E] dark:text-[#4A90E2] mb-1">
+                  <p className="text-xs font-medium text-accent dark:text-accent mb-1">
                     TODAY'S KEY INSIGHT
                   </p>
                   <p className="text-sm text-gray-900 dark:text-white leading-relaxed">
@@ -128,13 +135,21 @@ export function NewsPage() {
             ))}
           </div>
         ) : (
-          <Card>
+          <Card className="flex flex-col items-center justify-center p-8 text-center space-y-4">
             <p className="text-gray-600 dark:text-gray-400">
-              No finance news available at the moment.
+              News feeds are loading — tap the refresh button to try again.
             </p>
+            <button 
+              onClick={loadNews} 
+              className="flex items-center gap-2 px-4 py-2 bg-accent/10 hover:bg-accent/20 text-accent dark:bg-accent/10 dark:hover:bg-accent/20 dark:text-accent rounded-lg transition-colors"
+            >
+              <RefreshCw size={16} />
+              Refresh Feeds
+            </button>
           </Card>
         )}
       </section>
     </div>
   );
 }
+

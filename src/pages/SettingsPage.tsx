@@ -1,4 +1,4 @@
-import { Card } from '../components/UI/Card';
+﻿import { Card } from '../components/UI/Card';
 import { useTheme } from '../contexts/ThemeContext';
 import { Moon, Sun, Monitor } from 'lucide-react';
 
@@ -33,7 +33,7 @@ export function SettingsPage() {
                     onClick={() => updateSettings({ theme: value as any })}
                     className={`flex flex-col items-center gap-2 p-3 rounded-lg border-2 transition-all ${
                       settings.theme === value
-                        ? 'border-[#0C3B6E] dark:border-[#4A90E2] bg-[#0C3B6E]/5 dark:bg-[#4A90E2]/10'
+                        ? 'border-accent dark:border-accent bg-accent/5 dark:bg-accent/10'
                         : 'border-gray-200 dark:border-gray-800 hover:border-gray-300 dark:hover:border-gray-700'
                     }`}
                   >
@@ -97,7 +97,7 @@ export function SettingsPage() {
                 }
                 className={`relative w-12 h-6 rounded-full transition-colors ${
                   settings.morningNotification
-                    ? 'bg-[#0C3B6E] dark:bg-[#4A90E2]'
+                    ? 'bg-accent dark:bg-accent'
                     : 'bg-gray-300 dark:bg-gray-700'
                 }`}
               >
@@ -126,7 +126,7 @@ export function SettingsPage() {
                 }
                 className={`relative w-12 h-6 rounded-full transition-colors ${
                   settings.eveningNotification
-                    ? 'bg-[#0C3B6E] dark:bg-[#4A90E2]'
+                    ? 'bg-accent dark:bg-accent'
                     : 'bg-gray-300 dark:bg-gray-700'
                 }`}
               >
@@ -155,3 +155,4 @@ export function SettingsPage() {
     </div>
   );
 }
+

@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+﻿import { ReactNode } from 'react';
 
 interface CardProps {
   children: ReactNode;
@@ -26,3 +26,4 @@ export function SkeletonCard() {
     </Card>
   );
 }
+

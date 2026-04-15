@@ -1,4 +1,4 @@
-import { Card } from '../UI/Card';
+﻿import { Card } from '../UI/Card';
 import type { Quote } from '../../types';
 
 interface QuoteSectionProps {
@@ -22,3 +22,4 @@ export function QuoteSection({ quote }: QuoteSectionProps) {
     </Card>
   );
 }
+

@@ -23,11 +23,15 @@
 @layer utilities {
   .accent-navy {
     --accent-color: #0C3B6E;
-    --accent-color-dark: #4A90E2;
+  }
+  .dark.accent-navy {
+    --accent-color: #4A90E2;
   }
 
   .accent-amber {
     --accent-color: #D97706;
-    --accent-color-dark: #F59E0B;
+  }
+  .dark.accent-amber {
+    --accent-color: #F59E0B;
   }
 }

@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Check, Plus, X, GripVertical } from 'lucide-react';
+﻿import { useState } from 'react';
+import { Check, Plus, X, GripVertical, Pencil } from 'lucide-react';
 import { Card } from '../UI/Card';
 import type { ChecklistTask } from '../../types';
 
@@ -27,13 +27,14 @@ const defaultHabitsTasks = [
   'Watch YouTube video (learning)',
   'College studies',
   'Other studies / reading',
-  'Track sleep time',
   'Typing practice',
   'AI & research work',
 ];
 
 export function ChecklistSection({ tasks, onUpdateTasks }: ChecklistSectionProps) {
   const [newTaskText, setNewTaskText] = useState('');
+  const [editingTaskId, setEditingTaskId] = useState<string | null>(null);
+  const [editTaskText, setEditTaskText] = useState('');
 
   const contentTasks = tasks.filter((t) => t.column === 'content');
   const habitsTasks = tasks.filter((t) => t.column === 'habits');
@@ -52,6 +53,27 @@ export function ChecklistSection({ tasks, onUpdateTasks }: ChecklistSectionProps
 
   const deleteTask = (taskId: string) => {
     onUpdateTasks(tasks.filter((t) => t.id !== taskId));
+  };
+
+  const startEditTask = (task: ChecklistTask) => {
+    setEditingTaskId(task.id);
+    setEditTaskText(task.text);
+  };
+
+  const saveEditTask = () => {
+    if (!editTaskText.trim()) return;
+    onUpdateTasks(
+      tasks.map((t) =>
+        t.id === editingTaskId ? { ...t, text: editTaskText.trim() } : t
+      )
+    );
+    setEditingTaskId(null);
+    setEditTaskText('');
+  };
+
+  const cancelEditTask = () => {
+    setEditingTaskId(null);
+    setEditTaskText('');
   };
 
   const addTask = () => {
@@ -74,7 +96,7 @@ export function ChecklistSection({ tasks, onUpdateTasks }: ChecklistSectionProps
     <div className="group flex items-center gap-2 py-2 px-2 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-900/50 transition-colors">
       <button
         onClick={() => toggleTask(task.id)}
-        className="shrink-0 w-5 h-5 rounded border-2 border-gray-300 dark:border-gray-600 flex items-center justify-center transition-all hover:border-[#0C3B6E] dark:hover:border-[#4A90E2]"
+        className="shrink-0 w-5 h-5 rounded border-2 border-gray-300 dark:border-gray-600 flex items-center justify-center transition-all hover:border-accent dark:hover:border-accent"
         style={{
           backgroundColor: task.completed ? 'currentColor' : 'transparent',
           borderColor: task.completed ? 'currentColor' : undefined,
@@ -83,23 +105,54 @@ export function ChecklistSection({ tasks, onUpdateTasks }: ChecklistSectionProps
         {task.completed && <Check size={14} className="text-white" />}
       </button>
 
-      <span
-        className={`flex-1 text-[15px] ${
-          task.completed
-            ? 'line-through text-gray-400 dark:text-gray-600'
-            : 'text-gray-900 dark:text-gray-100'
-        }`}
-      >
-        {task.text}
-      </span>
+      {editingTaskId === task.id ? (
+        <div className="flex-1 flex items-center gap-2">
+          <input
+            type="text"
+            className="flex-1 px-2 py-1 text-[15px] bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded focus:outline-none focus:border-accent dark:focus:border-accent"
+            value={editTaskText}
+            onChange={(e) => setEditTaskText(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') saveEditTask();
+              if (e.key === 'Escape') cancelEditTask();
+            }}
+            autoFocus
+          />
+          <button onClick={saveEditTask} className="text-green-600 hover:text-green-700 p-1">
+            <Check size={16} />
+          </button>
+          <button onClick={cancelEditTask} className="text-gray-400 hover:text-red-500 p-1">
+            <X size={16} />
+          </button>
+        </div>
+      ) : (
+        <>
+          <span
+            onDoubleClick={() => startEditTask(task)}
+            className={`flex-1 text-[15px] cursor-pointer ${
+              task.completed
+                ? 'line-through text-gray-400 dark:text-gray-600'
+                : 'text-gray-900 dark:text-gray-100'
+            }`}
+          >
+            {task.text}
+          </span>
 
-      {!task.isDefault && (
-        <button
-          onClick={() => deleteTask(task.id)}
-          className="shrink-0 opacity-0 group-hover:opacity-100 text-gray-400 hover:text-red-500 transition-all"
-        >
-          <X size={16} />
-        </button>
+          <div className="shrink-0 opacity-0 group-hover:opacity-100 flex items-center gap-1 transition-all">
+            <button
+              onClick={() => startEditTask(task)}
+              className="text-gray-400 hover:text-accent dark:hover:text-accent transition-colors p-1"
+            >
+              <Pencil size={14} />
+            </button>
+            <button
+              onClick={() => deleteTask(task.id)}
+              className="text-gray-400 hover:text-red-500 transition-colors p-1"
+            >
+              <X size={16} />
+            </button>
+          </div>
+        </>
       )}
     </div>
   );
@@ -117,7 +170,7 @@ export function ChecklistSection({ tasks, onUpdateTasks }: ChecklistSectionProps
         </div>
         <div className="w-full h-2 bg-gray-200 dark:bg-gray-800 rounded-full overflow-hidden">
           <div
-            className="h-full bg-[#0C3B6E] dark:bg-[#4A90E2] transition-all duration-300"
+            className="h-full bg-accent dark:bg-accent transition-all duration-300"
             style={{ width: `${progressPercent}%` }}
           />
         </div>
@@ -152,11 +205,11 @@ export function ChecklistSection({ tasks, onUpdateTasks }: ChecklistSectionProps
               onChange={(e) => setNewTaskText(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && addTask()}
               placeholder="Add a new task..."
-              className="flex-1 px-3 py-2 text-[15px] bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0C3B6E] dark:focus:ring-[#4A90E2]"
+              className="flex-1 px-3 py-2 text-[15px] bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent dark:focus:ring-accent"
             />
             <button
               onClick={addTask}
-              className="shrink-0 p-2 bg-[#0C3B6E] dark:bg-[#4A90E2] text-white rounded-lg hover:opacity-90 transition-opacity"
+              className="shrink-0 p-2 bg-accent dark:bg-accent text-white rounded-lg hover:opacity-90 transition-opacity"
             >
               <Plus size={20} />
             </button>
@@ -194,3 +247,4 @@ export function initializeDefaultTasks(): ChecklistTask[] {
 
   return tasks;
 }
+

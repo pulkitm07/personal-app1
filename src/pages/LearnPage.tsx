@@ -1,10 +1,10 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { Card } from '../components/UI/Card';
-import { ChevronDown, ChevronUp } from 'lucide-react';
 import gitaData from '../data/gita.json';
 import psychologyData from '../data/psychology.json';
 import financeData from '../data/finance-terms.json';
 import vocabularyData from '../data/vocabulary.json';
+import lawsData from '../data/laws.json';
 
 // ─── GITA DATA ────────────────────────────────────────────────────────────────
 const gitaVerses = gitaData as any[];
@@ -44,7 +44,7 @@ const caseStudy = {
   country: 'USA',
   industry: 'Real Estate / PropTech',
   story: `August 2019. WeWork files its S-1 — the document that was supposed to crown Adam Neumann as the next Steve Jobs and validate SoftBank's $10.65 billion bet. Instead, it detonated a bomb under the company.\n\nThe S-1 revealed what insiders had long whispered: WeWork was not a tech company. It was a real estate arbitrage business dressed in Silicon Valley clothing — signing long-term office leases, subdividing the space, and subletting it to startups and corporates at a premium. This model works fine. The problem was the valuation. At $47 billion, WeWork was priced like a software platform with infinite scale and near-zero marginal cost. In reality, every new member required expensive physical buildout. Revenue was $1.8 billion. Losses were $1.9 billion. The company was literally losing more than it earned.\n\nThen came the personal revelations. Neumann had trademarked the word "We" and sold it back to WeWork for $5.9 million. He had taken a $500 million personal credit line secured against his company stock. He had purchased properties that he then leased back to WeWork — at a profit to himself. The S-1 contained a governance structure that gave him 20 votes per share versus 1 for regular investors. The IPO was yanked. Neumann was removed as CEO in September 2019 — but given a $1.7 billion exit package to leave.`,
-  diagnosis: `WeWork's collapse had one root cause wearing several masks: the conflation of growth with value creation. The company was expanding its losses as fast as its revenue — a structure that only works if you eventually reach profitability at scale, which WeWork's unit economics made mathematically implausible. A single WeWork location took 24–36 months to reach profitability. The company was opening locations faster than existing ones matured. SoftBank's capital enabled the delusion. Neumann's charisma sold it. And a bull market in private tech valuations meant nobody ran the basic arithmetic until the IPO forced transparency. The moment the S-1 made the numbers public, the story collapsed.`,
+  diagnosis: `WeWork's collapse had one root cause wearing several masks: the conflation of growth with value creation. The company was expanding its losses as fast as its revenue — a structure that only works if you eventually reach profitability at scale, which WeWork's unit economics made mathematically implausible. A single WeWork location took 24â€“36 months to reach profitability. The company was opening locations faster than existing ones matured. SoftBank's capital enabled the delusion. Neumann's charisma sold it. And a bull market in private tech valuations meant nobody ran the basic arithmetic until the IPO forced transparency. The moment the S-1 made the numbers public, the story collapsed.`,
   lessons: [
     `Revenue growth without unit economics is not a business model — it is an accelerating liability. Before being impressed by any company's top-line growth, ask: does each new unit of revenue come with a clear path to positive contribution margin? WeWork's per-location economics were well understood internally. They were simply not discussed externally.`,
     `Governance structure is a leading indicator of risk, not a footnote. Neumann's 20-to-1 voting rights meant no board or investor could check his behaviour. When you evaluate any company — as an investor, employee, or analyst — read the governance section of the filing as carefully as the financial statements. Who can say no to the CEO? If the answer is nobody, the financial risk is compounded by a structural one.`,
@@ -53,27 +53,20 @@ const caseStudy = {
 };
 
 // ─── COLLAPSIBLE SECTION ─────────────────────────────────────────────────────
-function Section({ title, children, defaultOpen = true }: { title: string; children: React.ReactNode; defaultOpen?: boolean }) {
-  const [open, setOpen] = useState(defaultOpen);
+function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <div className="mb-8">
-      <button
-        onClick={() => setOpen(!open)}
-        className="w-full flex items-center justify-between mb-4 group"
-      >
-        <h2 className="text-lg lg:text-xl font-medium text-gray-900 dark:text-white group-hover:text-[#0C3B6E] dark:group-hover:text-[#4A90E2] transition-colors">
-          {title}
-        </h2>
-        {open ? <ChevronUp size={20} className="text-gray-400" /> : <ChevronDown size={20} className="text-gray-400" />}
-      </button>
-      {open && children}
+    <div className="mb-8 animate-fade-in transition-all">
+      <h2 className="text-xl lg:text-2xl font-medium text-gray-900 dark:text-white mb-6">
+        {title}
+      </h2>
+      {children}
     </div>
   );
 }
 
 function Label({ children }: { children: React.ReactNode }) {
   return (
-    <p className="text-[10px] font-medium tracking-widest uppercase text-[#0C3B6E] dark:text-[#4A90E2] mb-1.5">
+    <p className="text-[10px] font-medium tracking-widest uppercase text-accent dark:text-accent mb-1.5">
       {children}
     </p>
   );
@@ -98,7 +91,7 @@ function GitaSection() {
             <div className="space-y-4">
               {/* Ref */}
               <p className="text-xs font-mono text-amber-600 dark:text-amber-400 tracking-widest uppercase">
-                Chapter {verse.chapter} · Verse {verse.verse}
+                Chapter {verse.chapter} Â· Verse {verse.verse}
               </p>
 
               {/* Sanskrit */}
@@ -188,7 +181,7 @@ function PsychologySection() {
           <div className="space-y-2">
             {c.related.map((r, i) => (
               <div key={i} className="flex gap-2 text-sm text-gray-600 dark:text-gray-400">
-                <span className="text-[#0C3B6E] dark:text-[#4A90E2] shrink-0">→</span>
+                <span className="text-accent dark:text-accent shrink-0">→</span>
                 <span>{r}</span>
               </div>
             ))}
@@ -218,7 +211,7 @@ function FinanceTermsSection() {
           <Card key={i}>
             <div className="mb-4">
               <h3 className="text-lg font-medium text-gray-900 dark:text-white">{term.term}</h3>
-              <p className="text-xs font-mono text-[#0C3B6E] dark:text-[#4A90E2] mt-1">{term.domain}</p>
+              <p className="text-xs font-mono text-accent dark:text-accent mt-1">{term.domain}</p>
             </div>
 
             <Field label="Definition">{term.definition}</Field>
@@ -234,7 +227,7 @@ function FinanceTermsSection() {
             <Field label="Real Example">{term.example}</Field>
 
             <div>
-              <Label>Interview Trap ⚠️</Label>
+              <Label>Interview Trap ⚠️</Label>
               <div className="bg-red-50 dark:bg-red-950/30 border border-red-100 dark:border-red-900/50 rounded-lg p-3">
                 <p className="text-sm text-red-700 dark:text-red-300 leading-relaxed">{term.interviewTrap}</p>
               </div>
@@ -266,7 +259,7 @@ function VocabularySection() {
           <Card key={i}>
             <div className="mb-3 pb-3 border-b border-gray-100 dark:border-gray-800">
               <h3 className="text-xl font-medium text-gray-900 dark:text-white">{word.word}</h3>
-              <p className="text-xs font-mono text-[#0C3B6E] dark:text-[#4A90E2] mt-1">{word.pronunciation}</p>
+              <p className="text-xs font-mono text-accent dark:text-accent mt-1">{word.pronunciation}</p>
             </div>
 
             <Field label="Etymology">{word.etymology}</Field>
@@ -310,14 +303,14 @@ function BookSummarySection() {
       <Card>
         {/* Header */}
         <div className="flex gap-5 mb-6 pb-6 border-b border-gray-100 dark:border-gray-800">
-          <div className="w-16 h-22 bg-gradient-to-br from-[#0C3B6E] to-[#1a5ca8] rounded-lg flex items-center justify-center text-white text-xs text-center p-2 shrink-0 font-medium leading-tight" style={{height: '88px'}}>
+          <div className="w-16 h-22 bg-gradient-to-br from-accent to-[#1a5ca8] rounded-lg flex items-center justify-center text-white text-xs text-center p-2 shrink-0 font-medium leading-tight" style={{height: '88px'}}>
             {b.title.split(' ').slice(0, 3).join(' ')}
           </div>
           <div>
             <h3 className="text-xl font-medium text-gray-900 dark:text-white">{b.title}</h3>
             <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">{b.author}</p>
             <div className="flex gap-2 mt-2 flex-wrap">
-              <span className="text-xs px-2 py-1 rounded-full bg-[#0C3B6E]/10 text-[#0C3B6E] dark:bg-[#4A90E2]/20 dark:text-[#4A90E2]">
+              <span className="text-xs px-2 py-1 rounded-full bg-accent/10 text-accent dark:bg-accent/20 dark:text-accent">
                 {b.category}
               </span>
               <span className="text-xs px-2 py-1 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400">
@@ -349,7 +342,7 @@ function BookSummarySection() {
         </div>
 
         {/* Action */}
-        <div className="bg-gradient-to-r from-[#0C3B6E]/10 to-transparent dark:from-[#0C3B6E]/20 border border-[#0C3B6E]/20 rounded-lg p-4">
+        <div className="bg-gradient-to-r from-accent/10 to-transparent dark:from-accent/20 border border-accent/20 rounded-lg p-4">
           <Label>One Thing to Do Today</Label>
           <p className="text-sm font-medium text-gray-900 dark:text-white leading-relaxed">{b.action}</p>
         </div>
@@ -371,7 +364,7 @@ function CaseStudySection() {
         <div className="p-6 border-b border-gray-100 dark:border-gray-800 bg-gradient-to-br from-gray-50 to-white dark:from-gray-900 dark:to-[#1a1a1a]">
           <div className="flex items-center gap-3 mb-3">
             <span className={`text-xs px-2 py-1 rounded font-medium ${typeBg}`}>{typeLabel}</span>
-            <span className="text-xs text-gray-500 dark:text-gray-500 font-mono">{c.founded} · {c.country} · {c.industry}</span>
+            <span className="text-xs text-gray-500 dark:text-gray-500 font-mono">{c.founded} Â· {c.country} Â· {c.industry}</span>
           </div>
           <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">{c.company}</h3>
           <p className="text-base text-gray-600 dark:text-gray-400 italic">{c.headline}</p>
@@ -391,7 +384,7 @@ function CaseStudySection() {
           {/* Diagnosis */}
           <div>
             <Label>The Diagnosis</Label>
-            <div className="border-l-4 border-[#0C3B6E] dark:border-[#4A90E2] pl-4 bg-gray-50 dark:bg-gray-900/50 rounded-r-lg py-3 pr-3">
+            <div className="border-l-4 border-accent dark:border-accent pl-4 bg-gray-50 dark:bg-gray-900/50 rounded-r-lg py-3 pr-3">
               <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">{c.diagnosis}</p>
             </div>
           </div>
@@ -414,23 +407,114 @@ function CaseStudySection() {
   );
 }
 
+// ─── LAWS SECTION ─────────────────────────────────────────────────────────────
+const laws = lawsData as any[];
+const categoryConfig: Record<string, any> = {
+  corporate: { label: 'Corporate Law', bg: 'bg-green-100 dark:bg-green-900/30', text: 'text-green-700 dark:text-green-300', border: 'border-l-green-500' },
+  constitutional: { label: 'Constitutional Law', bg: 'bg-blue-100 dark:bg-blue-900/30', text: 'text-blue-700 dark:text-blue-300', border: 'border-l-blue-500' },
+  criminal: { label: 'Criminal Law', bg: 'bg-red-100 dark:bg-red-900/30', text: 'text-red-700 dark:text-red-300', border: 'border-l-red-500' },
+  landmark: { label: 'Landmark Case', bg: 'bg-amber-100 dark:bg-amber-900/30', text: 'text-amber-700 dark:text-amber-300', border: 'border-l-amber-500' }
+};
+
+function LawCard({ law }: { law: typeof laws[0] }) {
+  const config = categoryConfig[law.category] || categoryConfig.corporate;
+  return (
+    <Card className={`border-l-4 ${config.border} !p-0 overflow-hidden`}>
+      <div className="p-5 border-b border-gray-100 dark:border-gray-800">
+        <span className={`inline-block text-xs px-2 py-1 rounded font-medium mb-3 ${config.bg} ${config.text}`}>
+          {config.label}
+        </span>
+        <h3 className="text-base font-medium text-gray-900 dark:text-white leading-snug mb-1.5">{law.title}</h3>
+        <p className="text-xs text-gray-500 dark:text-gray-500 font-mono leading-relaxed">{law.reference}</p>
+      </div>
+      <div className="p-5 space-y-4">
+        <div><Label>What Is This?</Label><p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">{law.whatIsThis}</p></div>
+        <div><Label>Why Does This Exist?</Label><p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">{law.whyExists}</p></div>
+        <div>
+          <Label>Real Example</Label>
+          <div className="bg-gray-50 dark:bg-gray-900/50 rounded-lg p-3 border border-gray-100 dark:border-gray-800">
+            <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">{law.example}</p>
+          </div>
+        </div>
+        <div><Label>What This Means for You</Label><p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">{law.meansForYou}</p></div>
+        <div className="bg-gradient-to-r from-accent/5 to-transparent dark:from-accent/10 border-l-2 border-accent dark:border-accent pl-3 py-2 pr-2 rounded-r-lg">
+          <p className="text-xs font-mono text-accent dark:text-accent mb-1 uppercase tracking-wider">One Line Summary</p>
+          <p className="text-sm text-gray-900 dark:text-white font-medium leading-relaxed italic">"{law.oneLine}"</p>
+        </div>
+      </div>
+    </Card>
+  );
+}
+
+function LawsSection() {
+  const dayOfYear = Math.floor((new Date().getTime() - new Date(new Date().getFullYear(), 0, 0).getTime()) / (1000 * 60 * 60 * 24));
+  const categories = ['constitutional', 'corporate', 'criminal', 'landmark'] as const;
+  const lawsByCategory = categories.map((cat) => {
+    const categoryLaws = laws.filter((l: any) => l.category === cat);
+    const index = dayOfYear % categoryLaws.length;
+    return categoryLaws[index];
+  });
+
+  return (
+    <Section title="Law of the Day">
+      <div className="grid md:grid-cols-2 gap-6">
+        {lawsByCategory.map((law: any, i: number) => (
+          <LawCard key={i} law={law} />
+        ))}
+      </div>
+    </Section>
+  );
+}
+
 // ─── MAIN EXPORT ──────────────────────────────────────────────────────────────
 export function LearnPage() {
+  const [activeTab, setActiveTab] = useState('gita');
+
+  const tabs = [
+    { id: 'gita', label: 'Bhagavad Gita' },
+    { id: 'psychology', label: 'Psychology' },
+    { id: 'finance', label: 'Finance' },
+    { id: 'vocab', label: 'Vocabulary' },
+    { id: 'books', label: 'Books' },
+    { id: 'case-studies', label: 'Case Studies' },
+    { id: 'laws', label: 'Laws' },
+  ];
+
   return (
     <div className="max-w-7xl mx-auto">
-      <div className="mb-8">
+      <div className="mb-6">
         <h1 className="text-xl lg:text-2xl font-medium text-gray-900 dark:text-white">Learn</h1>
         <p className="text-sm text-gray-500 dark:text-gray-500 mt-1">
           {new Date().toLocaleDateString('en-IN', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
         </p>
       </div>
 
-      <GitaSection />
-      <PsychologySection />
-      <FinanceTermsSection />
-      <VocabularySection />
-      <BookSummarySection />
-      <CaseStudySection />
+      <div className="flex overflow-x-auto gap-2 mb-6 pb-2 scrollbar-hide">
+        {tabs.map(tab => (
+          <button
+            key={tab.id}
+            onClick={() => setActiveTab(tab.id)}
+            className={`px-4 py-2 rounded-full whitespace-nowrap text-sm font-medium transition-colors ${
+               activeTab === tab.id
+                ? 'bg-accent text-white'
+                : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700'
+            }`}
+          >
+            {tab.label}
+          </button>
+        ))}
+      </div>
+
+      <div className="mt-8">
+        {activeTab === 'gita' && <GitaSection />}
+        {activeTab === 'psychology' && <PsychologySection />}
+        {activeTab === 'finance' && <FinanceTermsSection />}
+        {activeTab === 'vocab' && <VocabularySection />}
+        {activeTab === 'books' && <BookSummarySection />}
+        {activeTab === 'case-studies' && <CaseStudySection />}
+        {activeTab === 'laws' && <LawsSection />}
+      </div>
     </div>
   );
 }
+

@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
+﻿import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 import type { UserSettings } from '../types';
 
 interface ThemeContextType {
@@ -77,3 +77,4 @@ export function useTheme() {
   }
   return context;
 }
+

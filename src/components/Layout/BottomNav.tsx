@@ -1,4 +1,4 @@
-import { Home, Newspaper, BookOpen, Scale, Settings } from 'lucide-react';
+﻿import { Home, Newspaper, BookOpen, Settings, Moon } from 'lucide-react';
 import { useTheme } from '../../contexts/ThemeContext';
 
 interface BottomNavProps {
@@ -10,7 +10,7 @@ const navItems = [
   { id: 'home', icon: Home },
   { id: 'news', icon: Newspaper },
   { id: 'learn', icon: BookOpen },
-  { id: 'laws', icon: Scale },
+  { id: 'sleep', icon: Moon },
   { id: 'settings', icon: Settings },
 ];
 
@@ -30,7 +30,7 @@ export function BottomNav({ currentPage, onNavigate }: BottomNavProps) {
               className={`flex-1 py-3 flex items-center justify-center transition-colors ${
                 isActive
                   ? settings.accentColor === 'navy'
-                    ? 'text-[#0C3B6E] dark:text-[#4A90E2]'
+                    ? 'text-accent dark:text-accent'
                     : 'text-[#D97706] dark:text-[#F59E0B]'
                   : 'text-gray-600 dark:text-gray-400'
               }`}
@@ -43,3 +43,4 @@ export function BottomNav({ currentPage, onNavigate }: BottomNavProps) {
     </nav>
   );
 }
+

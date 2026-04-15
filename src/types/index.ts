@@ -113,6 +113,11 @@ export interface ChecklistTask {
   completed: boolean;
 }
 
+export interface SleepEntry {
+  date: string;
+  hours: number;
+}
+
 export interface DailyContent {
   date: string;
   quote: Quote;

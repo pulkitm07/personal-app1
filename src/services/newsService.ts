@@ -1,18 +1,21 @@
 import type { NewsArticle } from '../types';
 
-const NEWS_API_URL = 'https://newsapi.org/v2';
-const API_KEY = import.meta.env.VITE_NEWS_API_KEY;
+const RSS2JSON_API = 'https://api.rss2json.com/v1/api.json';
 
-const GEOPOLITICAL_SOURCES = [
-  'the-times-of-india',
-  'bbc-news',
-  'reuters',
+const GEOPOLITICAL_FEEDS = [
+  'https://feeds.bbci.co.uk/news/world/rss.xml',
+  'https://feeds.bbci.co.uk/news/world/south_asia/rss.xml',
+  'https://timesofindia.indiatimes.com/rssfeeds/296589292.cms',
+  'https://www.thehindu.com/news/national/feeder/default.rss',
+  'https://feeds.feedburner.com/ndtvnews-india-news',
 ];
 
-const FINANCE_SOURCES = [
-  'bloomberg',
-  'the-wall-street-journal',
-  'financial-times',
+const FINANCE_FEEDS = [
+  'https://economictimes.indiatimes.com/markets/rssfeeds/1977021501.cms',
+  'https://economictimes.indiatimes.com/news/economy/rssfeeds/1373380680.cms',
+  'https://www.moneycontrol.com/rss/latestnews.xml',
+  'https://www.thehindubusinessline.com/markets/feeder/default.rss',
+  'https://www.livemint.com/rss/markets',
 ];
 
 const GEOPOLITICAL_KEYWORDS = [
@@ -49,7 +52,7 @@ function categorizeArticle(title: string, description: string): string {
   if (text.includes('international') || text.includes('diplomatic') || text.includes('foreign')) {
     return 'Geopolitics';
   }
-  if (text.includes('economy') || text.includes('GDP') || text.includes('trade')) {
+  if (text.includes('economy') || text.includes('gdp') || text.includes('trade')) {
     return 'Global Economy';
   }
   if (text.includes('policy') || text.includes('regulation')) {
@@ -65,10 +68,10 @@ function categorizeFinanceArticle(title: string, description: string): string {
   if (text.includes('market') || text.includes('stock') || text.includes('sensex') || text.includes('nifty')) {
     return 'Markets';
   }
-  if (text.includes('IPO') || text.includes('merger') || text.includes('acquisition')) {
+  if (text.includes('ipo') || text.includes('merger') || text.includes('acquisition')) {
     return 'M&A';
   }
-  if (text.includes('RBI') || text.includes('Fed') || text.includes('rate')) {
+  if (text.includes('rbi') || text.includes('fed') || text.includes('rate')) {
     return 'Central Banks';
   }
   if (text.includes('startup') || text.includes('funding')) {
@@ -78,41 +81,64 @@ function categorizeFinanceArticle(title: string, description: string): string {
   return 'Finance';
 }
 
-export async function fetchGeopoliticalNews(): Promise<NewsArticle[]> {
+async function fetchRssFeed(url: string, categoryGenerator: (title: string, desc: string) => string): Promise<NewsArticle[]> {
   try {
-    const yesterday = new Date();
-    yesterday.setDate(yesterday.getDate() - 1);
-    const from = yesterday.toISOString().split('T')[0];
-
-    const response = await fetch(
-      `${NEWS_API_URL}/everything?q=(${GEOPOLITICAL_KEYWORDS.join(' OR ')})&sources=${GEOPOLITICAL_SOURCES.join(',')}&from=${from}&sortBy=publishedAt&language=en&apiKey=${API_KEY}`
-    );
-
+    const encodedUrl = encodeURIComponent(url);
+    const response = await fetch(`${RSS2JSON_API}?rss_url=${encodedUrl}`);
     const data = await response.json();
 
-    if (!data.articles || data.status !== 'ok') {
+    if (data.status !== 'ok' || !data.items) {
       return [];
     }
 
-    return data.articles
-      .filter((article: any) => {
-        if (!article.title || !article.description) return false;
-        const text = `${article.title} ${article.description}`.toLowerCase();
-        return !text.includes('sport') &&
-               !text.includes('celebrity') &&
-               !text.includes('entertainment');
-      })
-      .slice(0, 5)
-      .map((article: any) => ({
-        title: article.title,
-        source: article.source.name,
-        publishedAt: article.publishedAt,
-        category: categorizeArticle(article.title, article.description),
-        summary: article.description,
-        url: article.url,
-      }));
+    let sourceName = data.feed?.title || 'News Source';
+
+    return data.items.map((item: any) => {
+      // Basic text cleanup
+      const desc = item.description?.replace(/<[^>]+>/g, '') || '';
+      return {
+        title: item.title,
+        source: sourceName,
+        publishedAt: item.pubDate,
+        category: categoryGenerator(item.title, desc),
+        summary: desc,
+        url: item.link,
+      };
+    });
   } catch (error) {
-    console.error('Error fetching geopolitical news:', error);
+    // Fail silently intentionally as per requirement
+    return [];
+  }
+}
+
+export async function fetchGeopoliticalNews(): Promise<NewsArticle[]> {
+  try {
+    const promises = GEOPOLITICAL_FEEDS.map(url => fetchRssFeed(url, categorizeArticle));
+    const results = await Promise.all(promises);
+    
+    // Flatten
+    let articles = results.flat();
+    
+    // Filter by keywords
+    articles = articles.filter(article => {
+      const text = `${article.title} ${article.summary}`.toLowerCase();
+      // Must contain at least one keyword
+      return GEOPOLITICAL_KEYWORDS.some(kw => text.includes(kw.toLowerCase()));
+    });
+    
+    // Exclusion filters (like original app)
+    articles = articles.filter(article => {
+      const text = `${article.title} ${article.summary}`.toLowerCase();
+      return !text.includes('sport') &&
+             !text.includes('celebrity') &&
+             !text.includes('entertainment');
+    });
+
+    // Sort by pubDate descending
+    articles.sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
+
+    return articles;
+  } catch (error) {
     return [];
   }
 }
@@ -122,40 +148,25 @@ export async function fetchFinanceNews(): Promise<{
   keyInsight: string;
 }> {
   try {
-    const yesterday = new Date();
-    yesterday.setDate(yesterday.getDate() - 1);
-    const from = yesterday.toISOString().split('T')[0];
+    const promises = FINANCE_FEEDS.map(url => fetchRssFeed(url, categorizeFinanceArticle));
+    const results = await Promise.all(promises);
+    
+    let articles = results.flat();
+    
+    // Filter by keywords
+    articles = articles.filter(article => {
+      const text = `${article.title} ${article.summary}`.toLowerCase();
+      // Must contain at least one keyword
+      return FINANCE_KEYWORDS.some(kw => text.includes(kw.toLowerCase()));
+    });
 
-    const response = await fetch(
-      `${NEWS_API_URL}/everything?q=(${FINANCE_KEYWORDS.join(' OR ')})&sources=${FINANCE_SOURCES.join(',')}&from=${from}&sortBy=publishedAt&language=en&apiKey=${API_KEY}`
-    );
-
-    const data = await response.json();
-
-    if (!data.articles || data.status !== 'ok') {
-      return { articles: [], keyInsight: '' };
-    }
-
-    const articles = data.articles
-      .filter((article: any) => {
-        if (!article.title || !article.description) return false;
-        return true;
-      })
-      .slice(0, 5)
-      .map((article: any) => ({
-        title: article.title,
-        source: article.source.name,
-        publishedAt: article.publishedAt,
-        category: categorizeFinanceArticle(article.title, article.description),
-        summary: article.description,
-        url: article.url,
-      }));
+    // Sort by pubDate descending
+    articles.sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
 
     const keyInsight = generateKeyInsight(articles);
 
     return { articles, keyInsight };
   } catch (error) {
-    console.error('Error fetching finance news:', error);
     return { articles: [], keyInsight: '' };
   }
 }

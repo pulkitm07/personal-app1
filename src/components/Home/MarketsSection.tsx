@@ -1,4 +1,4 @@
-import { Card, SkeletonCard } from '../UI/Card';
+﻿import { Card, SkeletonCard } from '../UI/Card';
 import { TrendingUp, TrendingDown } from 'lucide-react';
 import type { MarketData } from '../../types';
 
@@ -120,3 +120,4 @@ export function MarketsSection({ markets, loading }: MarketsSectionProps) {
     </div>
   );
 }
+

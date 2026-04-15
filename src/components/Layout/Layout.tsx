@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+﻿import { ReactNode } from 'react';
 import { Sidebar } from './Sidebar';
 import { BottomNav } from './BottomNav';
 
@@ -31,3 +31,4 @@ export function Layout({ children, currentPage, onNavigate }: LayoutProps) {
     </div>
   );
 }
+

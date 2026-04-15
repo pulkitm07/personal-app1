@@ -1,4 +1,4 @@
-import { Home, Newspaper, BookOpen, Scale, Settings } from 'lucide-react';
+﻿import { Home, Newspaper, BookOpen, Settings, Moon } from 'lucide-react';
 import { useTheme } from '../../contexts/ThemeContext';
 
 interface SidebarProps {
@@ -10,7 +10,7 @@ const navItems = [
   { id: 'home', label: 'Home', icon: Home },
   { id: 'news', label: 'News', icon: Newspaper },
   { id: 'learn', label: 'Learn', icon: BookOpen },
-  { id: 'laws', label: 'Laws', icon: Scale },
+  { id: 'sleep', label: 'Sleep', icon: Moon },
   { id: 'settings', label: 'Settings', icon: Settings },
 ];
 
@@ -34,7 +34,7 @@ export function Sidebar({ currentPage, onNavigate }: SidebarProps) {
               className={`w-full flex items-center gap-3 px-4 py-3 transition-colors ${
                 isActive
                   ? settings.accentColor === 'navy'
-                    ? 'bg-[#0C3B6E]/10 text-[#0C3B6E] dark:bg-[#0C3B6E]/20 dark:text-[#4A90E2]'
+                    ? 'bg-accent/10 text-accent dark:bg-accent/20 dark:text-accent'
                     : 'bg-[#D97706]/10 text-[#D97706] dark:bg-[#D97706]/20 dark:text-[#F59E0B]'
                   : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
               }`}
@@ -59,3 +59,4 @@ export function Sidebar({ currentPage, onNavigate }: SidebarProps) {
     </aside>
   );
 }
+
