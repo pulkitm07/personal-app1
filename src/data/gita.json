@@ -1,56 +1,74 @@
 [
   {
-    "chapter": 2,
-    "verse": 47,
-    "sanskrit": "कर्मण्येवाधिकारस्ते मा फलेषु कदाचन। मा कर्मफलहेतुर्भूर्मा ते सङ्गोऽस्त्वकर्मणि॥",
-    "transliteration": "Karmanye vadhikaras te, ma phalesu kadachana, ma karma-phala-hetur bhur, ma te sango 'stv akarmani",
-    "translation": "You have a right to perform your prescribed duty, but you are not entitled to the fruits of action. Never consider yourself the cause of the results of your activities, and never be attached to not doing your duty.",
-    "explanation": "CONTEXT: Arjuna has just learned that Krishna is the source of all knowledge and power. He has been overwhelmed by doubt about fighting his cousins in the Mahabharata war. Krishna now introduces him to the cornerstone philosophy of action without attachment.\n\nTHE PHILOSOPHY: This verse encodes the concept of Nishkama Karma—action performed without desire for personal reward or consequence. The key insight: distinguish sharply between duty (dharma) and its fruits (phala). Your responsibility is action itself; results flow according to cosmic law. This isn't passivity—it's the opposite. It's doing your job excellently while remaining psychologically detached from whether you succeed or fail. This breaks the cycle of desire→action→attachment→suffering.\n\nFOR YOUR LIFE: In consulting, you execute strategy flawlessly regardless of whether the client succeeds. In finance, you make the best investment decision available and accept the outcome. In law, you argue your case with full rigor but don't identify with the verdict. The practical benefit: detachment from results removes anxiety and ego. You perform better because you're not desperate. This applies to exams, pitches, negotiations—anything where outcome uncertainty normally causes paralysis.",
-    "carryToday": "Do your work completely, care about the execution, stop caring about the result."
-  },
-  {
-    "chapter": 2,
-    "verse": 48,
-    "sanskrit": "योगः कर्मसु कौशलम्।",
-    "transliteration": "Yoga karmasu kaushalam",
-    "translation": "Yoga is skill in action.",
-    "explanation": "CONTEXT: Continuing Krishna's instruction to Arjuna, this verse condenses one of the Gita's central themes into a single line. Yoga here doesn't mean meditation or physical postures—it means excellence, harmony, and skillful engagement.\n\nTHE PHILOSOPHY: Yoga (derived from 'yuj', meaning to join or balance) refers to equilibrium—a balanced state of mind that produces superior performance. When you're attached to results, your judgment clouds. When you're detached, you see clearly and act precisely. This is yoga. The ancient Vedic concept predates modern psychology by 3000+ years: emotional regulation enables expert performance. This is exactly what cognitive psychology now calls 'flow state'—the condition where expertise meets challenge without anxiety or boredom.\n\nFOR YOUR LIFE: A consultant delivering bad news to a client needs yoga—remaining balanced, neither defensive nor overly apologetic. A trader spotting a trade setup needs yoga—executing it calmly despite fear of loss. A founder pitching to VCs needs yoga—communicating conviction without desperation. The skill isn't the knowledge (stock analysis, case frameworks, pitch deck). The skill is maintaining inner balance while deploying that knowledge under pressure.",
-    "carryToday": "Excellence is not just what you do—it's the mental calm with which you do it."
-  },
-  {
-    "chapter": 2,
-    "verse": 49,
-    "sanskrit": "बुद्धियुक्तो जहातीह उभे सुकृतदुष्कृते। तस्माद्योगाय युज्यस्व योगः कर्मसु कौशलम्॥",
-    "transliteration": "Buddhi-yukto jahateeha ubhe sukrita-duskrite, tasmad yoga-ya yujyasva yoga karmasu kaushalam",
-    "translation": "One who is intelligently engaged in yoga, grounded in wisdom, abandons both good and bad deeds in this world. Therefore, strive for yoga—yoga is skill in action.",
-    "explanation": "CONTEXT: Krishna is now moving from abstract principle to practical application. Arjuna must understand that this wisdom isn't theoretical—it directly changes how decisions should be made and executed in the real world.\n\nTHE PHILOSOPHY: 'Buddhi' = intelligence, wisdom. When your intellect is yoked to the yoga principle (balanced, result-detached action), you transcend the binary of success/failure, praise/blame, good karma/bad karma. You neither celebrate victories nor despair at defeats. You neither pursue only 'good' actions nor avoid 'bad' ones—you execute the right action in context, knowing the universe will handle results. This is actually radical pragmatism: the wisest person acts without being imprisoned by outcome categories.\n\nFOR YOUR LIFE: A lawyer doesn't say 'I only take winning cases' (attachment to good karma) or 'I avoid difficult cases' (fear of bad karma). They take the case duty demands and argue it supremely. An analyst doesn't get euphoric on bull markets or depressed on bear markets—they trade/invest according to the framework. A founder doesn't pivot just because one product failed (bad karma label) nor persist just because one succeeded (good karma label). Wisdom means: action is determined by current context and duty, not by your emotional coding of past outcomes.",
-    "carryToday": "A wise person acts according to duty, not according to their judgment of success or failure."
-  },
-  {
-    "chapter": 3,
-    "verse": 35,
-    "sanskrit": "श्रेयान्स्वधर्मो विगुणः परधर्मात्स्वनुष्ठितात्। स्वधर्मे निधनं श्रेयः परधर्मो भयावहः॥",
-    "transliteration": "Shrayan sva-dharmo vigunam para-dharmat sv-anusthitat, sva-dharme nidhanan shreyah para-dharmo bhayavahah",
-    "translation": "It is far better to discharge one's own prescribed duty, even though it may be faulty, than to attempt the duty of another, no matter how perfectly it may be executed. It is better to die in one's own duty than to live by another's duty.",
-    "explanation": "CONTEXT: Arjuna's fundamental doubt is: should he fight? His kshatriya (warrior) dharma says yes. His personal affection and moral squeamishness say no. He's tempted by the 'cleaner' path of renunciation or non-violence (taking on the dharma of a sage or a pacifist). Krishna now addresses this directly.\n\nTHE PHILOSOPHY: Dharma is not universal morality. It's context-specific duty based on role, station, and capability. Your dharma depends on who you are, what time it is, and what you're trained to do. Attempting someone else's dharma—no matter how noble—is spiritual incompetence and eventually leads to failure. This isn't relativism (anything goes). It's role-based ethics. A soldier's dharma includes fighting; a sage's includes renunciation. Mixing them destroys both. The Stoics said similar: Epictetus taught that you have a role to play in the cosmic drama; excellence means playing that role supremely.\n\nFOR YOUR LIFE: You're a finance professional. Your dharma includes making investments, analyzing risks, sometimes delivering hard truths. It's not the dharma of a spiritual guru (detachment from wealth), nor a therapist (unconditional acceptance), nor a politician (everyone's friend). Execute your specific dharma excellently rather than imitating someone else's. Specialization beats generalized decency. This applies to career choice, professional identity, and integrity.",
-    "carryToday": "Your duty, done imperfectly, is better than another's duty done perfectly."
+    "chapter": 1,
+    "verse": 1,
+    "sanskrit": "धृतराष्ट्र उवाच। धर्मक्षेत्रे कुरुक्षेत्रे समवेता युयुत्सवः। मामकाः पाण्डवाश्चैव किमकुर्वत सञ्जय॥",
+    "transliteration": "dhritarashtra uvaca: dharma-kshetre kuru-kshetre samaveta yuyutsavah, mamakah pandavas caiva kim akurvata sanjaya",
+    "translation": "Dhritarashtra said: O Sanjaya, after my sons and the sons of Pandu assembled in the place of pilgrimage at Kurukshetra, desiring to fight, what did they do?",
+    "explanation": "CONTEXT: The blind King Dhritarashtra asks his secretary, Sanjaya, for a field report. Sanjaya has been granted 'divine vision' to see the battle from afar. This is the 'data collection' phase of the epic.\n\nTHE PHILOSOPHY: The setting is 'Dharma-kshetra' (the field of righteousness). This implies that life itself is a field of moral conflict. The King’s question 'What did they do?' reveals his anxiety. He isn't asking about the weather; he’s asking if the 'Field of Dharma' will influence his sons to settle or fight. It highlights the tension between 'Mamakah' (mine/ego) and 'Pandavas' (the righteous).\n\nFOR YOUR LIFE: Every organization and every project is a 'Dharma-kshetra'—a place where values and interests collide. Dhritarashtra’s blindness is metaphorical: he is blinded by 'Mamakah' (my team, my profit, my ego). When you are too attached to 'your' side, you lose the ability to see the objective truth of the situation. Always ask: Am I seeing the field clearly, or am I seeing it through the lens of 'mine'?",
+    "carryToday": "The first step to failure is seeing the world only through the lens of your own interests."
   },
   {
     "chapter": 1,
-    "verse": 47,
-    "sanskrit": "अर्जुन उवाच। सेनयोरुभयोर्मध्ये रथं स्थापय मे अच्युत। यावदेतान्निरीक्षेऽहं योद्धुकामानवस्थितान्। कैर्मया सह योद्धव्यमस्मिन्रणसमुद्यमे॥",
-    "transliteration": "Arjuna uvaca: Senayor ubhayor madhye ratham sthapaya me achyuta, yavad etan nirikshe'ham yoddhukaman avasthitan, kairmaya saha yoddhavyam asmin rana samudyame",
-    "translation": "Arjuna said: O infallible Krishna, please position my chariot between the two armies so that I may see those who desire to fight with me, and with whom I must contend in this great battle.",
-    "explanation": "CONTEXT: This is the opening of the Bhagavad Gita itself. Arjuna, standing on his chariot between two armies, asks Krishna to place the chariot in the center so he can observe his enemies before battle begins. What seems like a simple military tactic is actually a profound moment—Arjuna is about to face a crisis of conscience that will lead to enlightenment.\n\nTHE PHILOSOPHY: The chariot metaphor runs throughout the Upanishads and Gita. The chariot represents the body, the horses are the senses, the charioteer is the intellect, and the passenger (Arjuna) is the true self (atman). Arjuna's request to Krishna—'position me so I can see'—is really a spiritual request for clarity before action. In Vedantic tradition, ignorance isn't stupidity; it's lack of vision. The moment before a major decision, wisdom demands you see the full situation before acting.\n\nFOR YOUR LIFE: Before executing any major decision—taking a job, starting a company, making a large investment—pause and truly see. Look at all stakeholders, all consequences, all alternatives. Arjuna's impulse to rush into battle parallels your impulse to rush into decisions. The Gita teaches: look first. Think. Then act with total commitment. This applies to career pivots, hiring decisions, product launches, and personal relationships.",
-    "carryToday": "Before you act, position yourself to see the entire landscape clearly."
+    "verse": 2,
+    "sanskrit": "सञ्जय उवाच। दृष्ट्वा तु पाण्डवानीकं व्यूढं दुर्योधनस्तदा। आचार्यमुपसङ्गम्य राजा वचनमब्रवीत्॥",
+    "transliteration": "sanjaya uvaca: dristva tu pandavanikam vyudham duryodhanas tada, acaryam upasangamya raja vacanam abravit",
+    "translation": "Sanjaya said: O King, after looking over the army arranged in military formation by the sons of Pandu, King Duryodhana went to his teacher and spoke the following words.",
+    "explanation": "CONTEXT: Duryodhana, the leader of the opposing force, sees the enemy's formation. Despite having a larger army, he feels an immediate pang of insecurity and rushes to his teacher, Dronacharya.\n\nTHE PHILOSOPHY: Insecurity often masquerades as 'checking in.' Duryodhana is a 'Raja' (King), yet he seeks external validation the moment he sees the opposition’s competence ('Vyudham'—expertly arranged). It shows that external power (numbers) cannot compensate for internal doubt.\n\nFOR YOUR LIFE: When a competitor launches a superior 'formation' (product or strategy), watch your first instinct. Do you rush to blame your 'teachers' (mentors/consultants) or do you analyze the formation? Duryodhana’s reaction is political, not strategic. High-level performance requires you to look at the 'enemy's' strength without losing your internal center.",
+    "carryToday": "Don't let a competitor's discipline shake your confidence; let it sharpen your strategy."
   },
   {
-    "chapter": 2,
+    "chapter": 1,
     "verse": 3,
-    "sanskrit": "क्लैब्यं मा स्म गमः पार्थ नैतत्त्वय्युपपद्यते। क्षुद्रं हृदयदौर्बल्यं त्यक्त्वोत्तिष्ठ परन्तप॥",
-    "transliteration": "Klaibyam ma sma gamah partha naitatt vayy upapadyate, kshudram hridaya-daurbalyam tyaktvotthistha parantapa",
-    "translation": "O son of Pritha, do not yield to this degrading impotence. It does not befit you. Shake off this petty faintheartedness and rise up, O chastiser of the enemy!",
-    "explanation": "CONTEXT: Arjuna has just told Krishna he cannot fight because he'll be killing relatives. He's thrown down his bow and announced he won't fight. This is despair disguised as morality. Krishna's response is not to debate the ethics, but to call out the mental weakness.\n\nTHE PHILOSOPHY: Klaibyam = cowardice, weakness, degradation. Krishna identifies Arjuna's paralysis not as high morality but as a failure of nerve. The Gita's hardest teaching: sometimes your anxiety, your attachment, your 'kindness' is actually cowardice. You tell yourself you're being ethical when you're actually being weak. This distinction—between genuine ethics and rationalized weakness—is crucial. The person who quits because 'the system is broken' (ethical posture) might actually be fleeing because success is uncertain (weakness). Krishna demands Arjuna examine his own mind.\n\nFOR YOUR LIFE: When you hesitate to make a hard decision—fire a non-performer, raise prices, negotiate firmly, leave a stagnant relationship—listen to yourself. Are you being ethical or being weak? Often we confuse them. Genuine ethics sometimes demands discomfort. Weakness masquerades as principle. Learn the difference. This is emotional maturity. Krishna is saying: cowardice and compassion can wear the same mask. Only self-honesty reveals which one you're actually wearing.",
-    "carryToday": "Question your hesitations. Are they wisdom or are they fear wearing wisdom's clothes?"
+    "sanskrit": "पश्यैतां पाण्डुपुत्राणामाचार्य महतीं चमूम्। व्यूढां द्रुपदपुत्रेण तव शिष्येण धीमता॥",
+    "transliteration": "pasyaitam pandu-putranam acarya mahatim camum, vyudham drupada-putrena tava sisyena dhimata",
+    "translation": "O my teacher, behold the great army of the sons of Pandu, so expertly arranged by your intelligent disciple, the son of Drupada.",
+    "explanation": "CONTEXT: Duryodhana points out the enemy's commander to Dronacharya. Crucially, the enemy commander was Dronacharya’s own student. \n\nTHE PHILOSOPHY: This is a masterclass in passive-aggression. Duryodhana is subtly insulting his teacher by reminding him that his own student ('tava sisyena') is now his greatest threat. He is using psychological manipulation to ensure Dronacharya doesn't show leniency in the coming fight.\n\nFOR YOUR LIFE: In professional settings, beware of the 'Duryodhana'—the colleague who uses subtle guilt or past mistakes to manipulate your performance. Conversely, recognize that your 'students' (juniors/proteges) will eventually challenge you. A 'Dhimata' (intelligent) leader accepts this as the natural order of growth, rather than viewing it as a personal betrayal.",
+    "carryToday": "Focus on the threat, not the politics of who created it."
+  },
+  {
+    "chapter": 1,
+    "verse": 4,
+    "sanskrit": "अत्र शूरा महेष्वासा भीमार्जुनसमा युधि। युयुधानो विराटश्च द्रुपदश्च महारथः॥",
+    "transliteration": "atra sura mahesv-asa bhimarjuna-sama yudhi, yuyudhano viratas ca drupadas ca maha-rathah",
+    "translation": "Here in this army are many heroic bowmen equal in fighting to Bhima and Arjuna: great fighters like Yuyudhana, Virata and Drupada.",
+    "explanation": "CONTEXT: Duryodhana begins listing the enemy’s 'Top Talent.' \n\nTHE PHILOSOPHY: This is the 'Market Analysis' phase. Duryodhana is acknowledging the 'Maha-rathas' (great charioteers—those capable of fighting 10,000 men alone). He is sizing up the competition with begrudging respect.\n\nFOR YOUR LIFE: Never underestimate the competition. A proper leader performs a 'SWOT' analysis that doesn't ignore the 'Strengths' of the opponent. Duryodhana knows that on the field, talent ('Sura') and equipment ('Mahesv-asa'—great bows) are the variables that matter. In your field, know who the 'Bhima and Arjuna' of the rival firm are. Respecting their skill is the first step to neutralizing it.",
+    "carryToday": "Know your competition’s roster as well as you know your own."
+  },
+  {
+    "chapter": 1,
+    "verse": 5,
+    "sanskrit": "धृष्टकेतुश्चेकितानः काशिराजश्च वीर्यवान्। पुरुजित्कुन्तिभोजश्च शैब्यश्च नरपुङ्गवः॥",
+    "transliteration": "dhristaketush cekitanah kashirajashca viryavan, purujit kuntibhojashca shaibyashca narapungavah",
+    "translation": "There are also great, heroic, powerful fighters like Dhrishtaketu, Chekitana, Kasiraja, Purujit, Kuntibhoja and Shaibya.",
+    "explanation": "CONTEXT: Duryodhana continues his inventory of the Pandava army's heavy hitters. He is noting not just individual strength, but the 'Viryavan' (power) and 'Narapungavah' (heroism among men) of the allied forces.\n\nTHE PHILOSOPHY: This listing represents the 'External Audit.' In any conflict, you must recognize that your opponent is not a monolith; they are a collection of specific assets, alliances, and strengths. Duryodhana’s meticulousness shows he is well-informed but increasingly anxious.\n\nFOR YOUR LIFE: In a high-stakes negotiation or a market entry, don't just look at the 'Company.' Look at the board members, the lead engineers, and the key stakeholders. Understanding the specific 'heroes' on the other side prevents you from being blindsided by a particular expertise you didn't account for.",
+    "carryToday": "Precision in identifying your opposition's strengths is the first step in building your own defense."
+  },
+  {
+    "chapter": 1,
+    "verse": 6,
+    "sanskrit": "युधामन्युश्च विक्रान्त उत्तमौजाश्च वीर्यवान्। सौभद्रो द्रौपदेयाश्च सर्व एव महारथाः॥",
+    "transliteration": "yudhamanyushca vikranta uttamaujashca viryavan, saubhadro draupadeyashca sarva eva maha-rathah",
+    "translation": "There are the mighty Yudhamanyu, the very powerful Uttamauja, the son of Subhadra and the sons of Draupadi. All these warriors are great chariot fighters.",
+    "explanation": "CONTEXT: Duryodhana completes his assessment of the enemy's roster. He highlights the next generation of warriors (Abhimanyu and the sons of Draupadi), acknowledging that the enemy has both veteran experience and youthful vigor.\n\nTHE PHILOSOPHY: The term 'Maha-ratha' is a specific technical grade for a warrior. It signifies a standardized level of excellence. Duryodhana is acknowledging that the entire frontline of the enemy meets the highest industry standards of the time.\n\nFOR YOUR LIFE: Youthful energy ('Saubhadro') combined with 'Maha-ratha' training is a lethal combination in any industry. In your career, never dismiss the 'juniors' on a rival team. Disruption often comes from the younger, hungrier players who have been trained by the masters. Treat every 'Maha-ratha' on the field with equal strategic seriousness.",
+    "carryToday": "Never underestimate the 'sons' of your rivals; pedigree and hunger are a dangerous mix."
+  },
+  {
+    "chapter": 1,
+    "verse": 7,
+    "sanskrit": "अस्माकं तु विशिष्टा ये तान्निबोध द्विजोत्तम। नायका मम सैन्यस्य संज्ञार्थं तान्ब्रवीमि ते॥",
+    "transliteration": "asmakam tu vishishta ye tan nibodha dwijottama, nayaka mama sainyasya samjnartham tan bravimi te",
+    "translation": "But for your information, O best of the brahmans, let me tell you about the captains who are especially qualified to lead my own military force.",
+    "explanation": "CONTEXT: Having sized up the enemy, Duryodhana now turns to his own side. He shifts from 'threat assessment' to 'internal resource management.'\n\nTHE PHILOSOPHY: 'Samjnartham' means 'for the sake of information' or 'to remind you.' Duryodhana is essentially giving a pep talk to his own general while simultaneously trying to boost his own flagging confidence by reciting his own strengths.\n\nFOR YOUR LIFE: When the competition looks daunting, it is vital to audit your own 'Nayakas' (leaders). Remind yourself and your team of your unique value proposition. This isn't just vanity; it's a necessary recalibration of morale. Know your 'Specially Qualified' assets and ensure they know they are recognized.",
+    "carryToday": "Audit your own strengths as rigorously as you audit your competitors'."
+  },
+  {
+    "chapter": 1,
+    "verse": 8,
+    "sanskrit": "भवान्भीष्मश्च कर्णश्च कृपश्च समितिञ्जयः। अश्वत्थामा विकर्णश्च सौमदत्तिस्तथैव च॥",
+    "transliteration": "bhavan bhishmashca karnashca kripashca samitinjayah, ashvatthama vikarnashca saumadattis tathaiva ca",
+    "translation": "There are personalities like you, Bhishma, Karna, Kripa, Ashvatthama, Vikarna and the son of Somadatta called Bhurishrava, who are always victorious in battle.",
+    "explanation": "CONTEXT: Duryodhana lists his 'Dream Team.' This includes the invincible Bhishma and the peerless Karna. He calls them 'Samitinjayah'—those who are always victorious.\n\nTHE PHILOSOPHY: Even with the greatest talent on his side, Duryodhana's tone is one of desperate reassurance. He is leaning on 'legacy' names. It shows that having the best talent on paper doesn't automatically grant peace of mind if the cause itself is shaky.\n\nFOR YOUR LIFE: You can hire the best consultants, the best lawyers, and the best talent, but if the core mission is flawed, you will still feel the need to constantly list their credentials to justify your position. True confidence comes from the alignment of talent and 'Dharma' (purpose), not just the talent itself.",
+    "carryToday": "Legacy talent is a shield, but it isn't a substitute for a clear conscience."
   }
 ]

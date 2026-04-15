@@ -1,10 +1,11 @@
-﻿import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Card } from '../components/UI/Card';
 import gitaData from '../data/gita.json';
 import psychologyData from '../data/psychology.json';
 import financeData from '../data/finance-terms.json';
 import vocabularyData from '../data/vocabulary.json';
 import lawsData from '../data/laws.json';
+import { fetchDailyGitaVerses, fetchDailyPsychologyConcepts } from '../services/aiService';
 
 // ─── GITA DATA ────────────────────────────────────────────────────────────────
 const gitaVerses = gitaData as any[];
@@ -83,10 +84,35 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
 
 // ─── GITA SECTION ─────────────────────────────────────────────────────────────
 function GitaSection() {
+  const [selectedVerses, setSelectedVerses] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchDailyGitaVerses().then(data => {
+      setSelectedVerses(data);
+      setLoading(false);
+    });
+  }, []);
+
+  if (loading) {
+    return (
+      <Section title="Bhagavad Gita — Today's Verses">
+        <div className="flex justify-center items-center py-20 min-h-[400px]">
+          <div className="flex flex-col items-center gap-4">
+            <div className="w-8 h-8 border-4 border-amber-500 border-t-transparent rounded-full animate-spin"></div>
+            <p className="text-sm font-medium text-amber-600 dark:text-amber-400 animate-pulse">
+              OpenAI is curating today's verses...
+            </p>
+          </div>
+        </div>
+      </Section>
+    );
+  }
+
   return (
     <Section title="Bhagavad Gita — Today's Verses">
       <div className="space-y-6">
-        {gitaVerses.map((verse, i) => (
+        {selectedVerses.map((verse, i) => (
           <Card key={i} className="border-l-4 border-l-amber-500 dark:border-l-amber-400">
             <div className="space-y-4">
               {/* Ref */}
@@ -147,47 +173,72 @@ function GitaSection() {
 
 // ─── PSYCHOLOGY SECTION ───────────────────────────────────────────────────────
 function PsychologySection() {
-  const dayOfYear = Math.floor(
-    (new Date().getTime() - new Date(new Date().getFullYear(), 0, 0).getTime()) /
-      (1000 * 60 * 60 * 24)
-  );
-  const conceptIndex = dayOfYear % psychologyList.length;
-  const c = psychologyList[conceptIndex];
+  const [selectedConcepts, setSelectedConcepts] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchDailyPsychologyConcepts().then(data => {
+      setSelectedConcepts(data);
+      setLoading(false);
+    });
+  }, []);
+
+  if (loading) {
+    return (
+      <Section title="Psychology Concepts">
+        <div className="flex justify-center items-center py-20 min-h-[400px]">
+          <div className="flex flex-col items-center gap-4">
+            <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+            <p className="text-sm font-medium text-blue-600 dark:text-blue-400 animate-pulse">
+              OpenAI is generating today's psychological principles...
+            </p>
+          </div>
+        </div>
+      </Section>
+    );
+  }
 
   return (
-    <Section title="Psychology Concept">
-      <Card>
-        <div className="mb-5">
-          <h3 className="text-xl font-medium text-gray-900 dark:text-white">{c.name}</h3>
-          <p className="text-sm text-gray-500 dark:text-gray-500 font-mono mt-1">
-            {c.originator}, {c.year}
-          </p>
-        </div>
+    <Section title="Psychology Concepts">
+      <div className="space-y-6">
+        {selectedConcepts.map((c, idx) => (
+          <Card key={idx}>
+            <div className="mb-5">
+              <span className={`inline-block text-[10px] font-bold tracking-widest uppercase px-2 py-1 rounded mb-3 ${c.category === 'business' ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300' : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400'}`}>
+                {c.category === 'business' ? 'Business Application' : 'General Psychology'}
+              </span>
+              <h3 className="text-xl font-medium text-gray-900 dark:text-white">{c.name}</h3>
+              <p className="text-sm text-gray-500 dark:text-gray-500 font-mono mt-1">
+                {c.originator}, {c.year}
+              </p>
+            </div>
 
-        <Field label="What It Is">{c.definition}</Field>
+            <Field label="What It Is">{c.definition}</Field>
 
-        <div className="mb-4">
-          <Label>The Original Research</Label>
-          <div className="bg-gray-50 dark:bg-gray-900/50 rounded-lg p-4 border border-gray-100 dark:border-gray-800">
-            <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">{c.research}</p>
-          </div>
-        </div>
-
-        <Field label="In Your Professional Life">{c.professional}</Field>
-        <Field label="How to Use It">{c.howToUse}</Field>
-
-        <div>
-          <Label>Related Concepts</Label>
-          <div className="space-y-2">
-            {c.related.map((r, i) => (
-              <div key={i} className="flex gap-2 text-sm text-gray-600 dark:text-gray-400">
-                <span className="text-accent dark:text-accent shrink-0">→</span>
-                <span>{r}</span>
+            <div className="mb-4">
+              <Label>The Original Research</Label>
+              <div className="bg-gray-50 dark:bg-gray-900/50 rounded-lg p-4 border border-gray-100 dark:border-gray-800">
+                <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">{c.research}</p>
               </div>
-            ))}
-          </div>
-        </div>
-      </Card>
+            </div>
+
+            <Field label="In Your Professional Life">{c.professional}</Field>
+            <Field label="How to Use It">{c.howToUse}</Field>
+
+            <div>
+              <Label>Related Concepts</Label>
+              <div className="space-y-2">
+                {c.related.map((r: string, i: number) => (
+                  <div key={i} className="flex gap-2 text-sm text-gray-600 dark:text-gray-400">
+                    <span className="text-accent dark:text-accent shrink-0">→</span>
+                    <span>{r}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </Card>
+        ))}
+      </div>
     </Section>
   );
 }
@@ -198,15 +249,16 @@ function FinanceTermsSection() {
     (new Date().getTime() - new Date(new Date().getFullYear(), 0, 0).getTime()) /
       (1000 * 60 * 60 * 24)
   );
-  const startIndex = (dayOfYear * 2) % financeTermsList.length;
+  const startIndex = (dayOfYear * 3) % financeTermsList.length;
   const selectedTerms = [
     financeTermsList[startIndex],
     financeTermsList[(startIndex + 1) % financeTermsList.length],
+    financeTermsList[(startIndex + 2) % financeTermsList.length],
   ];
 
   return (
     <Section title="Finance Terms">
-      <div className="grid md:grid-cols-2 gap-5">
+      <div className="grid md:grid-cols-3 gap-5">
         {selectedTerms.map((term, i) => (
           <Card key={i}>
             <div className="mb-4">

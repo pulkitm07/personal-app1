@@ -3,6 +3,7 @@
     "name": "Dunning-Kruger Effect",
     "originator": "Kruger & Dunning",
     "year": 1999,
+    "category": "general",
     "definition": "A cognitive bias in which individuals with low ability at a task overestimate their ability, while individuals with high ability underestimate theirs relative to others. Empirically: the incompetent are maximally confident in their competence, while the expert is often self-doubtful.",
     "research": "Kruger & Dunning conducted four studies with undergraduate students on logical reasoning, humor, and grammar. In Study 1, participants scoring in the 12th percentile estimated themselves in the 62nd percentile. They found that confidence peaked among the lowest performers and troughed among high performers—a systematic inversion.",
     "professional": "In consulting, the junior analyst who did one market study confidently pitches sweeping market conclusions. The 20-year partner speaks with caveats and uncertainty. In trading, the novice convinced they've found the 'secret pattern' risks more than the seasoned trader who knows how many edge cases destroy certainty. In corporate hiring, the overconfident candidate often outperforms in interviews but underperforms on the job.",
@@ -13,9 +14,24 @@
     ]
   },
   {
+    "name": "Cognitive Dissonance",
+    "originator": "Leon Festinger",
+    "year": 1957,
+    "category": "general",
+    "definition": "The mental discomfort experienced by someone who holds two or more contradictory beliefs. Humans naturally strive for internal consistency, so when inconsistency occurs, individuals become psychologically uncomfortable and are motivated to reduce this dissonance by altering a belief or rationalizing the behavior.",
+    "research": "In Festinger's classic 1959 experiment, participants performed a boring task and were paid either $1 or $20 to tell the next participant the task was enjoyable. Those paid $1 later reported actually liking the task more than those paid $20 to reduce the mental conflict of lying for so little.",
+    "professional": "In business, this explains why team members double down on bad decisions after publicly backing them. If a manager heavily champions a software tool that turns out to be terrible, admitting it conflicts with their self-identity as a smart decision-maker. Instead of abandoning the tool, they rationalize its flaws.",
+    "howToUse": "Recognize when you are rationalizing a bad situation just to protect your ego. Ask yourself: \"If I were forced to take the opposite stance, what evidence would I see?\" In marketing, highlight the gap between a customer's desired identity and their current behavior to motivate a purchase.",
+    "related": [
+      "Confirmation Bias — seeking information that confirms existing beliefs",
+      "Choice-Supportive Bias — retroactively assigning positive attributes to an option one has selected"
+    ]
+  },
+  {
     "name": "Sunk Cost Fallacy",
     "originator": "Thaler, Kahneman & Tversky",
     "year": 1985,
+    "category": "general",
     "definition": "The tendency to continue investing in a failing project or relationship because of previously invested resources (time, money, effort) rather than evaluating future costs and benefits. Costs already incurred cannot be recovered; therefore, rational decision-making should ignore them entirely.",
     "research": "Thaler's 1985 study presented scenarios: 'You've spent $100 on a concert ticket. You later realize you don't want to go. Do you go anyway?' Most people said yes (sunk cost bias). When asked 'If you hadn't bought the ticket, would you pay $100 for this concert?' many said no—revealing the inconsistency.",
     "professional": "A portfolio manager holds a losing stock because 'we're down 40%, can't sell now—we'll recover.' A founder refuses to pivot despite 18 months of failed user acquisition because 'we've spent $2M on this technology.' A lawyer continues a case that's becoming unwinnable because the client has already paid $500K in legal fees. All are ignoring future value.",
@@ -29,6 +45,7 @@
     "name": "Availability Heuristic",
     "originator": "Tversky & Kahneman",
     "year": 1973,
+    "category": "general",
     "definition": "A cognitive shortcut where people assess the probability of an outcome based on how easily examples come to mind rather than on actual statistical likelihood. Recent, vivid, or emotionally resonant events dominate judgment.",
     "research": "Tversky & Kahneman asked: 'Are there more English words starting with K or words with K as the third letter?' Most said starting with K (wrong—K is more common in third position). But starting-with-K words are easier to retrieve from memory, so they seemed more frequent. This reveals systematic probability misjudgment based on mental ease.",
     "professional": "After a major market crash, investors overestimate the probability of another crash (vivid memory). After a hire failed, you overestimate the failure rate of similar hires (availability). After seeing one startup's explosive growth, you overestimate how common that outcome is. In RFPs, you overweight the last vendor conversation or the most dramatic pitch.",
@@ -42,6 +59,7 @@
     "name": "Confirmation Bias",
     "originator": "Wason",
     "year": 1960,
+    "category": "general",
     "definition": "The tendency to search for, favor, and recall information that confirms preexisting beliefs or hypotheses while giving disproportionately less consideration to alternative possibilities. It distorts reasoning across all domains—from science to medicine to investing.",
     "research": "Wason's 2-4-6 task: subjects are shown the sequence 2-4-6 and asked to discover the rule. Most hypothesize 'even numbers' or 'add 2.' When testing, they generate sequences that confirm their hypothesis (e.g., 4-6-8) rather than attempting to falsify it (e.g., 1-2-3 or 3-5-7). The actual rule was simply 'numbers in ascending order.'",
     "professional": "A thesis that 'emerging markets will outperform' causes an analyst to cite supportive data points while dismissing contradictory ones. A founder convinced their product is 'viral' interprets user signups as evidence and attrition as anomalies. An M&A banker convinced a deal is 'strategic' dismisses red flags as solvable. This is why conviction and confirmation bias are nearly indistinguishable.",
@@ -55,6 +73,7 @@
     "name": "Hindsight Bias",
     "originator": "Fischhoff",
     "year": 1975,
+    "category": "general",
     "definition": "The tendency to perceive past events as more predictable than they actually were. After an outcome is known, people routinely assert 'I knew it all along,' when in fact, their prediction probability was lower before the event. This distorts learning from history.",
     "research": "Fischhoff asked participants to rate the probability of various historical events before revealing the outcome. After revealing the outcome, he asked them to recall their earlier probability estimate. Recalled estimates were significantly higher than actual estimates—the 'I knew it all along' effect.",
     "professional": "After a stock crashes, analysts say 'obvious poor fundamentals' even though the same analysts were bullish pre-crash. After a startup fails, everyone says 'the market didn't need it,' but the same people who say this often invested or joined the startup at earlier stages. After a hire fails, you remember all 'early warning signs' you actually dismissed.",
@@ -62,6 +81,48 @@
     "related": [
       "Outcome Bias — judging decision quality by its outcome rather than the quality of reasoning at the time",
       "Memory Bias — selectively recalling information that aligns with current beliefs"
+    ]
+  },
+  {
+    "name": "The Decoy Effect",
+    "originator": "Huber, Payne & Puto",
+    "year": 1982,
+    "category": "business",
+    "definition": "A phenomenon where consumers will tend to have a specific change in preference between two options when also presented with a third option that is asymmetrically dominated.",
+    "research": "In a famous experiment by Dan Ariely using Economist subscriptions: Web-only ($59), Print-only ($125), and Web+Print ($125). The Print-only is the 'decoy'. When present, 84% chose Web+Print. When removed, 68% chose Web-only. The decoy shifted preference to the more expensive option.",
+    "professional": "In pricing strategies, SaaS tiers often include a 'decoy' tier that makes the target tier look like a better value. If offering a basic package for $50 and pro for $100, adding a 'pro plus' for $110 that offers vastly fewer additions makes the $100 option look like a no-brainer.",
+    "howToUse": "When designing pricing pages or presenting proposals to clients, don't just present the option you want them to buy. Present three options: the budget option, the target option, and an asymmetrically dominated decoy (similarly priced to the target, but clearly inferior).",
+    "related": [
+      "Anchoring — relying heavily on the first piece of information offered",
+      "Framing Effect — reacting to a choice depending on how it is presented"
+    ]
+  },
+  {
+    "name": "Loss Aversion",
+    "originator": "Kahneman & Tversky",
+    "year": 1979,
+    "category": "business",
+    "definition": "The psychological principle that the pain of losing is psychologically twice as powerful as the pleasure of gaining. People will work much harder to avoid a penalty than to acquire an identical reward.",
+    "research": "Kahneman and Tversky demonstrated this in Prospect Theory. When subjects were given a choice between a 100% chance to gain $50 vs a 50% chance to gain $100, they chose the sure gain. But when facing a 100% chance to lose $50 vs a 50% chance to lose $100, they gambled. They were risk-averse for gains but risk-seeking to avoid losses.",
+    "professional": "In sales, telling a client 'you will lose $100,000 a year by not using this' is significantly more effective than 'you will save $100,000'. In employee motivation, a 'threat' of losing a nominal bonus usually drives more immediate compliance than offering the same amount as a new reward.",
+    "howToUse": "Frame your business propositions in terms of what the stakeholder stands to lose by maintaining the status quo, rather than just what they will gain by changing. Highlight the hidden costs of inaction. Emphasize the loss of market share, time, or capital.",
+    "related": [
+      "Endowment Effect — assigning more value to things merely because you own them",
+      "Status Quo Bias — preference for the current baseline"
+    ]
+  },
+  {
+    "name": "The Halo Effect",
+    "originator": "Edward Thorndike",
+    "year": 1920,
+    "category": "business",
+    "definition": "A type of cognitive bias in which our overall impression of a person influences how we feel and think about their character. Essentially, your overall impression ('He is nice!') impacts your evaluations of that person's specific traits ('He is also smart!').",
+    "research": "Thorndike asked commanding officers to evaluate their soldiers. He found high cross-correlation between evaluations of differing traits: soldiers rated highly for physical appearance were also rated highly for intelligence and leadership, despite no objective correlation.",
+    "professional": "In marketing, a company that has one incredibly successful product (like the iPod) will see increased sales across totally unrelated product lines because the brand itself is elevated. In hiring, an interviewer who likes a candidate's alma mater will unconsciously rate their technical skills higher than deserved.",
+    "howToUse": "In personal branding, heavily index on your strongest, most visible attribute first. That positive initial impression will bleed into how people perceive your other skills. As an evaluator or hiring manager, use highly structured, blind, or compartmentalized rubrics to avoid this bias.",
+    "related": [
+      "Horn Effect — a negative impression bleeding into overall evaluation",
+      "Affect Heuristic — relying on emotions during decision-making"
     ]
   }
 ]
