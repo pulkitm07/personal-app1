@@ -18,7 +18,21 @@ export function SleepPage() {
 
   const loadEntries = () => {
     const loaded = storage.getSleepEntries();
-    setEntries(loaded);
+    // Aggressive exact-string deduplication to eliminate any rogue entries
+    const uniqueEntries: SleepEntry[] = [];
+    const seenDays = new Set();
+    
+    for (const entry of loaded) {
+      if (!seenDays.has(entry.date)) {
+        seenDays.add(entry.date);
+        uniqueEntries.push(entry);
+      }
+    }
+    
+    setEntries(uniqueEntries);
+    if (uniqueEntries.length !== loaded.length) {
+      storage.setSleepEntries(uniqueEntries);
+    }
   };
 
   const handleSave = (e: React.FormEvent) => {
@@ -28,7 +42,14 @@ export function SleepPage() {
     const numHours = parseFloat(Number(hours).toFixed(1));
     const newEntries = [...entries];
     
-    newEntries.push({ id: Date.now().toString(), date, hours: numHours });
+    // Exact string match ensures zero timezone bug duplication
+    const existingIndex = newEntries.findIndex(entry => entry.date === date);
+
+    if (existingIndex >= 0) {
+      newEntries[existingIndex].hours = numHours;
+    } else {
+      newEntries.push({ date, hours: numHours });
+    }
 
     // Sort entries descending by date
     newEntries.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
@@ -56,12 +77,12 @@ export function SleepPage() {
 
   const getTodayHours = () => {
     const today = getTodayDate();
-    const sum = entries.filter(e => e.date === today).reduce((acc, curr) => acc + curr.hours, 0);
-    return parseFloat(sum.toFixed(1));
+    const entry = entries.find(e => e.date === today);
+    return entry ? entry.hours : 0;
   };
 
   const startEdit = (entry: SleepEntry) => {
-    setEditingId(entry.id || entry.date);
+    setEditingId(entry.date);
     setEditHours(entry.hours.toString());
   };
 
@@ -70,7 +91,7 @@ export function SleepPage() {
     const numHours = parseFloat(Number(editHours).toFixed(1));
     
     const newEntries = entries.map(e => 
-      (e.id || e.date) === editingId ? { ...e, hours: numHours } : e
+      e.date === editingId ? { ...e, hours: numHours } : e
     );
     
     storage.setSleepEntries(newEntries);
@@ -78,8 +99,8 @@ export function SleepPage() {
     setEditingId(null);
   };
 
-  const deleteEntry = (idToDelete: string) => {
-    const newEntries = entries.filter(e => (e.id || e.date) !== idToDelete);
+  const deleteEntry = (dateToDelete: string) => {
+    const newEntries = entries.filter(e => e.date !== dateToDelete);
     storage.setSleepEntries(newEntries);
     setEntries(newEntries);
   };
@@ -172,12 +193,12 @@ export function SleepPage() {
         ) : (
           <div className="space-y-2">
             {entries.slice(0, 7).map(entry => (
-              <div key={entry.id || entry.date} className="group flex items-center justify-between p-3 rounded-lg bg-gray-50 dark:bg-gray-900/50">
+              <div key={entry.date} className="group flex items-center justify-between p-3 rounded-lg bg-gray-50 dark:bg-gray-900/50">
                 <span className="font-medium text-gray-700 dark:text-gray-300 w-28">
                   {new Date(entry.date).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}
                 </span>
                 
-                {editingId === (entry.id || entry.date) ? (
+                {editingId === entry.date ? (
                   <div className="flex flex-1 items-center justify-end gap-2 pr-2">
                     <input
                       type="number"
@@ -210,7 +231,7 @@ export function SleepPage() {
                       <button onClick={() => startEdit(entry)} className="text-gray-400 hover:text-accent dark:hover:text-accent transition-colors p-1">
                         <Pencil size={14} />
                       </button>
-                      <button onClick={() => deleteEntry(entry.id || entry.date)} className="text-gray-400 hover:text-red-500 transition-colors p-1">
+                      <button onClick={() => deleteEntry(entry.date)} className="text-gray-400 hover:text-red-500 transition-colors p-1">
                         <Trash2 size={14} />
                       </button>
                     </div>
