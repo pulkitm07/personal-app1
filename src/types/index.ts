@@ -114,6 +114,7 @@ export interface ChecklistTask {
 }
 
 export interface SleepEntry {
+  id?: string;
   date: string;
   hours: number;
 }
