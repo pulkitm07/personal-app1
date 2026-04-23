@@ -39,7 +39,7 @@ async function callOpenAI(prompt: string, cacheKey: string, dateStr: string, fal
         'Authorization': `Bearer ${API_KEY}`
       },
       body: JSON.stringify({
-        model: 'gpt-4o-mini',
+        model: 'gpt-4o',
         messages: [{ role: 'user', content: prompt }],
         temperature: 0.8
       })
@@ -175,4 +175,69 @@ Keys needed:
       if (!memory.includes(data.company)) appendMemory('cases', [data.company]);
     }
     return data;
+}
+
+export async function fetchDailyFinanceTerm(): Promise<any[]> {
+  const dateStr = new Date().toDateString();
+  const memory = getMemory('finance');
+  
+  const prompt = `Generate 3 completely distinct advanced finance or economic terms.
+CRITICAL: Do not generate any of these previously shown terms: ${memory.join(', ')}.
+Return ONLY a strictly valid JSON array of 3 objects. Do not include markdown blocks.
+Keys needed: 
+"term" (string), "domain" (string), "definition" (string), "whyItMatters" (string), "formula" (string, or "N/A"), "example" (string), "interviewTrap" (string).`;
+
+  const data = await callOpenAI(prompt, 'daily_finance_cache', dateStr, async () => {
+    const fallback = await import('../data/finance-terms.json');
+    return fallback.default.slice(0, 3);
+  });
+  
+  if (data && data.length === 3 && data[0].term) {
+    const newItems = data.map((t: any) => t.term);
+    if (!memory.includes(newItems[0])) appendMemory('finance', newItems);
+  }
+  return data;
+}
+
+export async function fetchDailyVocabulary(): Promise<any[]> {
+  const dateStr = new Date().toDateString();
+  const memory = getMemory('vocab');
+  
+  const prompt = `Generate 3 completely distinct advanced vocabulary words suitable for professional/executive use.
+CRITICAL: Do not generate any of these previously shown words: ${memory.join(', ')}.
+Return ONLY a strictly valid JSON array of 3 objects. Do not include markdown blocks.
+Keys needed: 
+"word" (string), "pronunciation" (string), "etymology" (string), "definition" (string), "examples" (array of exactly 2 string examples), "synonyms" (array of exactly 2 strings), "antonyms" (array of exactly 2 strings), "usageNote" (string).`;
+
+  const data = await callOpenAI(prompt, 'daily_vocab_cache', dateStr, async () => {
+    const fallback = await import('../data/vocabulary.json');
+    return fallback.default.slice(0, 3);
+  });
+  
+  if (data && data.length === 3 && data[0].word) {
+    const newItems = data.map((w: any) => w.word);
+    if (!memory.includes(newItems[0])) appendMemory('vocab', newItems);
+  }
+  return data;
+}
+
+export async function fetchDailyLaw(): Promise<any> {
+  const dateStr = new Date().toDateString();
+  const memory = getMemory('laws');
+  
+  const prompt = `Generate 1 fundamental law, landmark case, or legal principle that everyone should know.
+CRITICAL: Do not generate any of these previously shown laws: ${memory.join(', ')}.
+Return ONLY a strictly valid JSON object representing ONE law/case. Do not include markdown blocks.
+Keys needed: 
+"category" (string: exactly "corporate", "constitutional", "criminal", or "landmark"), "title" (string), "reference" (string), "whatIsThis" (string), "whyExists" (string), "example" (string), "meansForYou" (string), "oneLine" (string).`;
+
+  const data = await callOpenAI(prompt, 'daily_law_cache', dateStr, async () => {
+    const fallback = await import('../data/laws.json');
+    return fallback.default[0];
+  });
+  
+  if (data && data.title) {
+    if (!memory.includes(data.title)) appendMemory('laws', [data.title]);
+  }
+  return data;
 }

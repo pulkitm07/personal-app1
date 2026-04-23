@@ -5,7 +5,7 @@ import psychologyData from '../data/psychology.json';
 import financeData from '../data/finance-terms.json';
 import vocabularyData from '../data/vocabulary.json';
 import lawsData from '../data/laws.json';
-import { fetchDailyGitaVerses, fetchDailyPsychologyConcepts, fetchDailyBookSummary, fetchDailyCaseStudy } from '../services/aiService';
+import { fetchDailyGitaVerses, fetchDailyPsychologyConcepts, fetchDailyBookSummary, fetchDailyCaseStudy, fetchDailyFinanceTerm, fetchDailyVocabulary, fetchDailyLaw } from '../services/aiService';
 
 // ─── GITA DATA ────────────────────────────────────────────────────────────────
 const gitaVerses = gitaData as any[];
@@ -225,7 +225,7 @@ function FinanceTermsSection() {
   return (
     <Section title="Finance Terms">
       <div className="grid md:grid-cols-3 gap-5">
-        {selectedTerms.map((term, i) => (
+        {selectedTermsData.map((term, i) => (
           <Card key={i}>
             <div className="mb-4">
               <h3 className="text-lg font-medium text-gray-900 dark:text-white">{term.term}</h3>
@@ -273,7 +273,7 @@ function VocabularySection() {
   return (
     <Section title="Vocabulary Builder">
       <div className="grid md:grid-cols-3 gap-5">
-        {selectedWords.map((word, i) => (
+        {selectedWordsData.map((word, i) => (
           <Card key={i}>
             <div className="mb-3 pb-3 border-b border-gray-100 dark:border-gray-800">
               <h3 className="text-xl font-medium text-gray-900 dark:text-white">{word.word}</h3>
