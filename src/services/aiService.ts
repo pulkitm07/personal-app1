@@ -1,4 +1,7 @@
 const API_KEY = import.meta.env.VITE_OPENAI_API_KEY;
+if (!API_KEY) {
+  console.error("CRITICAL ERROR: VITE_OPENAI_API_KEY is not defined in your environment variables! The AI will permanently fail and use offline fallbacks. Please add VITE_OPENAI_API_KEY to your Vercel settings.");
+}
 
 type CacheEntry<T> = {
   date: string;
@@ -72,7 +75,7 @@ Return ONLY a strictly valid JSON array of 3 objects. Do not include markdown bl
 Keys needed: 
 "chapter" (number), "verse" (number), "sanskrit" (string), "transliteration" (string), "translation" (string), "explanation" (string combining CONTEXT, THE PHILOSOPHY, and FOR YOUR LIFE paragraphs), "carryToday" (string, a short practical action).`;
 
-  const data = await callOpenAI(prompt, 'daily_gita_v5', dateStr, async () => {
+  const data = await callOpenAI(prompt, 'daily_gita_v6', dateStr, async () => {
     const fallback = await import('../data/gita.json');
     return fallback.default.slice(0, 3);
   });
@@ -94,7 +97,7 @@ Return ONLY a strictly valid JSON array of 2 objects. Do not include markdown bl
 Keys needed: 
 "name" (string), "originator" (string), "year" (number), "category" (string: exactly "general" or "business"), "definition" (string), "research" (string), "professional" (string), "howToUse" (string), "related" (array of exactly 2 strings).`;
 
-  const data = await callOpenAI(prompt, 'daily_psych_v5', dateStr, async () => {
+  const data = await callOpenAI(prompt, 'daily_psych_v6', dateStr, async () => {
     const fallback = await import('../data/psychology.json');
     return [
       fallback.default.find((c: any) => c.category === 'general'),
@@ -119,7 +122,7 @@ Return ONLY a strictly valid JSON object representing ONE book. Do not include m
 Keys needed: 
 "title" (string), "author" (string), "category" (string), "year" (number), "summary" (string), "highlights" (array of exactly 5 string highlights), "action" (string "One Thing to Do Today").`;
   
-    const data = await callOpenAI(prompt, 'daily_book_v5', dateStr, async () => {
+    const data = await callOpenAI(prompt, 'daily_book_v6', dateStr, async () => {
       return {
         title: 'Thinking, Fast and Slow',
         author: 'Daniel Kahneman',
@@ -153,7 +156,7 @@ Return ONLY a strictly valid JSON object representing ONE company case study. Do
 Keys needed: 
 "company" (string), "type" (string: exactly "rise", "fall", or "comeback"), "headline" (string), "founded" (number), "country" (string), "industry" (string), "story" (string), "diagnosis" (string), "lessons" (array of exactly 3 strings).`;
   
-    const data = await callOpenAI(prompt, 'daily_case_v5', dateStr, async () => {
+    const data = await callOpenAI(prompt, 'daily_case_v6', dateStr, async () => {
       return {
         company: 'WeWork',
         type: 'fall',
@@ -187,7 +190,7 @@ Return ONLY a strictly valid JSON array of 3 objects. Do not include markdown bl
 Keys needed: 
 "term" (string), "domain" (string), "definition" (string), "whyItMatters" (string), "formula" (string, or "N/A"), "example" (string), "interviewTrap" (string).`;
 
-  const data = await callOpenAI(prompt, 'daily_finance_v5', dateStr, async () => {
+  const data = await callOpenAI(prompt, 'daily_finance_v6', dateStr, async () => {
     const fallback = await import('../data/finance-terms.json');
     return fallback.default.slice(0, 3);
   });
@@ -209,7 +212,7 @@ Return ONLY a strictly valid JSON array of 3 objects. Do not include markdown bl
 Keys needed: 
 "word" (string), "pronunciation" (string), "etymology" (string), "definition" (string), "examples" (array of exactly 2 string examples), "synonyms" (array of exactly 2 strings), "antonyms" (array of exactly 2 strings), "usageNote" (string).`;
 
-  const data = await callOpenAI(prompt, 'daily_vocab_v5', dateStr, async () => {
+  const data = await callOpenAI(prompt, 'daily_vocab_v6', dateStr, async () => {
     const fallback = await import('../data/vocabulary.json');
     return fallback.default.slice(0, 3);
   });
@@ -231,7 +234,7 @@ Return ONLY a strictly valid JSON object representing ONE law/case. Do not inclu
 Keys needed: 
 "category" (string: exactly "corporate", "constitutional", "criminal", or "landmark"), "title" (string), "reference" (string), "whatIsThis" (string), "whyExists" (string), "example" (string), "meansForYou" (string), "oneLine" (string).`;
 
-  const data = await callOpenAI(prompt, 'daily_law_v5', dateStr, async () => {
+  const data = await callOpenAI(prompt, 'daily_law_v6', dateStr, async () => {
     const fallback = await import('../data/laws.json');
     return fallback.default[0];
   });
