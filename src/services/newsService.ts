@@ -5,11 +5,11 @@ const RSS2JSON = 'https://api.rss2json.com/v1/api.json';
 // ── Feed lists ────────────────────────────────────────────────────────────────
 
 const GEOPOLITICAL_FEEDS = [
-  'https://feeds.bbci.co.uk/news/world/rss.xml',
+  'https://feeds.bbci.co.uk/news/world/rss.xml', // BBC
   'https://rss.nytimes.com/services/xml/rss/nyt/World.xml',
-  'https://www.aljazeera.com/xml/rss/all.xml',
+  'https://www.aljazeera.com/xml/rss/all.xml', // Al Jazeera
   'https://timesofindia.indiatimes.com/rssfeeds/296589292.cms',
-  'https://www.thehindu.com/news/international/feeder/default.rss',
+  'https://www.thehindu.com/news/international/feeder/default.rss', // The Hindu
   'https://feeds.a.dj.com/rss/RSSWorldNews.xml', // WSJ World
   'https://www.ft.com/world?format=rss', // FT World
   'https://www.foreignaffairs.com/rss.xml', // Foreign Affairs
@@ -17,28 +17,33 @@ const GEOPOLITICAL_FEEDS = [
   'https://thegeopolitics.com/feed/', // The Geopolitics
   'https://www.economist.com/international/rss.xml', // The Economist
   'https://worldview.stratfor.com/rss/all/rss.xml', // Stratfor
+  'https://news.google.com/rss/search?q=source:reuters+world&hl=en-US&gl=US&ceid=US:en', // Reuters (via Google News RSS)
+  'https://news.google.com/rss/search?q=source:associated+press+world&hl=en-US&gl=US&ceid=US:en', // AP (via Google News RSS)
 ];
 
 const FINANCE_FEEDS = [
-  'https://economictimes.indiatimes.com/markets/rssfeeds/1977021501.cms',
+  'https://economictimes.indiatimes.com/markets/rssfeeds/1977021501.cms', // Economic Times
   'https://economictimes.indiatimes.com/news/economy/rssfeeds/1373380680.cms',
-  'https://www.moneycontrol.com/rss/latestnews.xml',
+  'https://www.moneycontrol.com/rss/latestnews.xml', // Moneycontrol
   'https://www.thehindubusinessline.com/markets/feeder/default.rss',
-  'https://www.livemint.com/rss/markets',
+  'https://www.livemint.com/rss/markets', // Mint
   'https://feeds.a.dj.com/rss/RSSMarketsMain.xml', // WSJ Markets
   'https://feeds.a.dj.com/rss/WSJcomUSBusiness.xml', // WSJ Business
   'https://www.ft.com/markets?format=rss', // FT Markets
   'https://feeds.bloomberg.com/markets/news.rss', // Bloomberg Markets
+  'https://news.google.com/rss/search?q=source:reuters+business+markets&hl=en-US&gl=US&ceid=US:en', // Reuters Business
 ];
 
-// Consulting: mix of dedicated management publications + active business feeds
-// filtered by consulting keywords
 const CONSULTING_FEEDS: { url: string; skipKeywordFilter: boolean }[] = [
   // Dedicated management/consulting publications — accept all articles from these
   { url: 'https://hbr.org/resources/rss/topics/managing-organizations', skipKeywordFilter: true },
   { url: 'https://hbr.org/resources/rss/topics/leadership', skipKeywordFilter: true },
   { url: 'https://www.strategy-business.com/rss/', skipKeywordFilter: true },
   { url: 'https://www.ft.com/management?format=rss', skipKeywordFilter: true }, // FT Management
+  { url: 'https://sloanreview.mit.edu/feed/', skipKeywordFilter: true }, // MIT Sloan
+  { url: 'https://www.mckinsey.com/insights/rss', skipKeywordFilter: true }, // McKinsey Insights
+  { url: 'https://www.economist.com/business/rss.xml', skipKeywordFilter: true }, // The Economist Business
+  { url: 'https://fortune.com/feed/', skipKeywordFilter: false }, // Fortune (Filter applied)
   // General business feeds — filter by consulting keywords
   { url: 'https://economictimes.indiatimes.com/news/company/corporate-trends/rssfeeds/13357270.cms', skipKeywordFilter: false },
   { url: 'https://www.livemint.com/rss/companies', skipKeywordFilter: false },
