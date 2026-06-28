@@ -12,6 +12,11 @@ const GEOPOLITICAL_FEEDS = [
   'https://www.thehindu.com/news/international/feeder/default.rss',
   'https://feeds.a.dj.com/rss/RSSWorldNews.xml', // WSJ World
   'https://www.ft.com/world?format=rss', // FT World
+  'https://www.foreignaffairs.com/rss.xml', // Foreign Affairs
+  'https://thediplomat.com/feed/', // The Diplomat
+  'https://thegeopolitics.com/feed/', // The Geopolitics
+  'https://www.economist.com/international/rss.xml', // The Economist
+  'https://worldview.stratfor.com/rss/all/rss.xml', // Stratfor
 ];
 
 const FINANCE_FEEDS = [
