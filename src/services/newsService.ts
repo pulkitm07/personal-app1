@@ -10,6 +10,8 @@ const GEOPOLITICAL_FEEDS = [
   'https://www.aljazeera.com/xml/rss/all.xml',
   'https://timesofindia.indiatimes.com/rssfeeds/296589292.cms',
   'https://www.thehindu.com/news/international/feeder/default.rss',
+  'https://feeds.a.dj.com/rss/RSSWorldNews.xml', // WSJ World
+  'https://www.ft.com/world?format=rss', // FT World
 ];
 
 const FINANCE_FEEDS = [
@@ -18,6 +20,10 @@ const FINANCE_FEEDS = [
   'https://www.moneycontrol.com/rss/latestnews.xml',
   'https://www.thehindubusinessline.com/markets/feeder/default.rss',
   'https://www.livemint.com/rss/markets',
+  'https://feeds.a.dj.com/rss/RSSMarketsMain.xml', // WSJ Markets
+  'https://feeds.a.dj.com/rss/WSJcomUSBusiness.xml', // WSJ Business
+  'https://www.ft.com/markets?format=rss', // FT Markets
+  'https://feeds.bloomberg.com/markets/news.rss', // Bloomberg Markets
 ];
 
 // Consulting: mix of dedicated management publications + active business feeds
@@ -27,6 +33,7 @@ const CONSULTING_FEEDS: { url: string; skipKeywordFilter: boolean }[] = [
   { url: 'https://hbr.org/resources/rss/topics/managing-organizations', skipKeywordFilter: true },
   { url: 'https://hbr.org/resources/rss/topics/leadership', skipKeywordFilter: true },
   { url: 'https://www.strategy-business.com/rss/', skipKeywordFilter: true },
+  { url: 'https://www.ft.com/management?format=rss', skipKeywordFilter: true }, // FT Management
   // General business feeds — filter by consulting keywords
   { url: 'https://economictimes.indiatimes.com/news/company/corporate-trends/rssfeeds/13357270.cms', skipKeywordFilter: false },
   { url: 'https://www.livemint.com/rss/companies', skipKeywordFilter: false },
