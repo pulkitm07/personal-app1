@@ -118,6 +118,8 @@ export function HomePage() {
   const [consultingNews, setConsultingNews] = useState<NewsArticle[]>([]);
   const [keyInsight, setKeyInsight] = useState<string>('');
   const [markets, setMarkets] = useState<MarketData | null>(null);
+  const [marketsFetchedAt, setMarketsFetchedAt] = useState<number | null>(null);
+  const [marketsIsStale, setMarketsIsStale] = useState(false);
   const [newsLoading, setNewsLoading] = useState(true);
   const [marketsLoading, setMarketsLoading] = useState(true);
 
@@ -144,7 +146,9 @@ export function HomePage() {
       fetchConsultingNews(),
     ]);
 
-    setMarkets(marketData);
+    setMarkets(marketData.data);
+    setMarketsFetchedAt(marketData.fetchedAt);
+    setMarketsIsStale(marketData.isStale);
     setMarketsLoading(false);
 
     setGeoNews(geo);
@@ -185,7 +189,12 @@ export function HomePage() {
       />
 
       {/* 5. Market Rates */}
-      <MarketsSection markets={markets} loading={marketsLoading} />
+      <MarketsSection
+        markets={markets}
+        fetchedAt={marketsFetchedAt}
+        isStale={marketsIsStale}
+        loading={marketsLoading}
+      />
     </div>
   );
 }
