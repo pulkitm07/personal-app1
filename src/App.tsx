@@ -1,11 +1,8 @@
-﻿import { useState } from 'react';
+import { useState } from 'react';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { Layout } from './components/Layout/Layout';
 import { HomePage } from './pages/HomePage';
-import { NewsPage } from './pages/NewsPage';
-import { LearnPage } from './pages/LearnPage';
 import { SettingsPage } from './pages/SettingsPage';
-import { SleepPage } from './pages/SleepPage';
 
 function App() {
   const [currentPage, setCurrentPage] = useState('home');
@@ -14,12 +11,6 @@ function App() {
     switch (currentPage) {
       case 'home':
         return <HomePage />;
-      case 'news':
-        return <NewsPage />;
-      case 'learn':
-        return <LearnPage />;
-      case 'sleep':
-        return <SleepPage />;
       case 'settings':
         return <SettingsPage />;
       default:
@@ -37,4 +28,3 @@ function App() {
 }
 
 export default App;
-

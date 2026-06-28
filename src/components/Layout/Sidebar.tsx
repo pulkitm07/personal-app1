@@ -1,4 +1,4 @@
-﻿import { Home, Newspaper, BookOpen, Settings, Moon } from 'lucide-react';
+import { Home, Settings } from 'lucide-react';
 import { useTheme } from '../../contexts/ThemeContext';
 
 interface SidebarProps {
@@ -8,9 +8,6 @@ interface SidebarProps {
 
 const navItems = [
   { id: 'home', label: 'Home', icon: Home },
-  { id: 'news', label: 'News', icon: Newspaper },
-  { id: 'learn', label: 'Learn', icon: BookOpen },
-  { id: 'sleep', label: 'Sleep', icon: Moon },
   { id: 'settings', label: 'Settings', icon: Settings },
 ];
 
@@ -59,4 +56,3 @@ export function Sidebar({ currentPage, onNavigate }: SidebarProps) {
     </aside>
   );
 }
-

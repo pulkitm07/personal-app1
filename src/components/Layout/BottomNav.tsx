@@ -1,4 +1,4 @@
-﻿import { Home, Newspaper, BookOpen, Settings, Moon } from 'lucide-react';
+import { Home, Settings } from 'lucide-react';
 import { useTheme } from '../../contexts/ThemeContext';
 
 interface BottomNavProps {
@@ -8,9 +8,6 @@ interface BottomNavProps {
 
 const navItems = [
   { id: 'home', icon: Home },
-  { id: 'news', icon: Newspaper },
-  { id: 'learn', icon: BookOpen },
-  { id: 'sleep', icon: Moon },
   { id: 'settings', icon: Settings },
 ];
 
@@ -43,4 +40,3 @@ export function BottomNav({ currentPage, onNavigate }: BottomNavProps) {
     </nav>
   );
 }
-
