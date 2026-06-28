@@ -1,13 +1,23 @@
-﻿import { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Card, SkeletonCard } from '../components/UI/Card';
 import { ExternalLink, RefreshCw } from 'lucide-react';
-import { fetchGeopoliticalNews, fetchFinanceNews } from '../services/newsService';
+import { fetchGeopoliticalNews, fetchFinanceNews, fetchConsultingNews } from '../services/newsService';
 import { formatRelativeTime } from '../utils/storage';
 import type { NewsArticle } from '../types';
 
+type NewsTab = 'geopolitical' | 'financial' | 'consulting';
+
+const TABS: { id: NewsTab; label: string }[] = [
+  { id: 'geopolitical', label: 'Geopolitical' },
+  { id: 'financial',    label: 'Financial' },
+  { id: 'consulting',   label: 'Consulting' },
+];
+
 export function NewsPage() {
+  const [activeTab, setActiveTab] = useState<NewsTab>('geopolitical');
   const [geoNews, setGeoNews] = useState<NewsArticle[]>([]);
   const [finNews, setFinNews] = useState<NewsArticle[]>([]);
+  const [consultingNews, setConsultingNews] = useState<NewsArticle[]>([]);
   const [keyInsight, setKeyInsight] = useState<string>('');
   const [loading, setLoading] = useState(true);
 
@@ -17,13 +27,15 @@ export function NewsPage() {
 
   const loadNews = async () => {
     setLoading(true);
-    const [geo, fin] = await Promise.all([
+    const [geo, fin, consulting] = await Promise.all([
       fetchGeopoliticalNews(),
       fetchFinanceNews(),
+      fetchConsultingNews(),
     ]);
     setGeoNews(geo);
     setFinNews(fin.articles);
     setKeyInsight(fin.keyInsight);
+    setConsultingNews(consulting);
     setLoading(false);
   };
 
@@ -34,7 +46,7 @@ export function NewsPage() {
           <span className="text-xs px-2 py-1 rounded bg-accent/10 text-accent dark:bg-accent/20 dark:text-accent">
             {article.category}
           </span>
-          <span className="text-xs text-gray-500 dark:text-gray-500">
+          <span className="text-xs text-gray-500 dark:text-gray-500 shrink-0">
             {formatRelativeTime(article.publishedAt)}
           </span>
         </div>
@@ -65,91 +77,91 @@ export function NewsPage() {
     </Card>
   );
 
+  const EmptyState = () => (
+    <Card className="flex flex-col items-center justify-center p-8 text-center space-y-4">
+      <p className="text-gray-600 dark:text-gray-400">
+        News feeds are loading — tap the refresh button to try again.
+      </p>
+      <button
+        onClick={loadNews}
+        className="flex items-center gap-2 px-4 py-2 bg-accent/10 hover:bg-accent/20 text-accent dark:bg-accent/10 dark:hover:bg-accent/20 dark:text-accent rounded-lg transition-colors"
+      >
+        <RefreshCw size={16} />
+        Refresh Feeds
+      </button>
+    </Card>
+  );
+
+  const activeArticles =
+    activeTab === 'geopolitical' ? geoNews :
+    activeTab === 'financial'    ? finNews :
+    consultingNews;
+
   return (
-    <div className="max-w-7xl mx-auto space-y-8">
-      <section>
-        <h2 className="text-lg lg:text-xl font-medium mb-4 text-gray-900 dark:text-white">
-          Geopolitical News
-        </h2>
+    <div className="max-w-7xl mx-auto space-y-6">
+      {/* Header */}
+      <div className="flex items-center justify-between flex-wrap gap-3">
+        <h1 className="text-xl lg:text-2xl font-medium text-gray-900 dark:text-white">News</h1>
+        <button
+          onClick={loadNews}
+          disabled={loading}
+          className="flex items-center gap-2 text-sm px-3 py-1.5 rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors disabled:opacity-50"
+        >
+          <RefreshCw size={14} className={loading ? 'animate-spin' : ''} />
+          Refresh
+        </button>
+      </div>
 
-        {loading ? (
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {Array.from({ length: 3 }).map((_, i) => (
-              <SkeletonCard key={i} />
-            ))}
-          </div>
-        ) : geoNews.length > 0 ? (
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {geoNews.map((article, index) => (
-              <NewsCard key={index} article={article} />
-            ))}
-          </div>
-        ) : (
-          <Card className="flex flex-col items-center justify-center p-8 text-center space-y-4">
-            <p className="text-gray-600 dark:text-gray-400">
-              News feeds are loading — tap the refresh button to try again.
-            </p>
-            <button 
-              onClick={loadNews} 
-              className="flex items-center gap-2 px-4 py-2 bg-accent/10 hover:bg-accent/20 text-accent dark:bg-accent/10 dark:hover:bg-accent/20 dark:text-accent rounded-lg transition-colors"
-            >
-              <RefreshCw size={16} />
-              Refresh Feeds
-            </button>
-          </Card>
-        )}
-      </section>
+      {/* Tabs */}
+      <div className="flex gap-2">
+        {TABS.map(tab => (
+          <button
+            key={tab.id}
+            onClick={() => setActiveTab(tab.id)}
+            className={`px-4 py-2 rounded-full whitespace-nowrap text-sm font-medium transition-colors ${
+              activeTab === tab.id
+                ? 'bg-accent text-white'
+                : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700'
+            }`}
+          >
+            {tab.label}
+          </button>
+        ))}
+      </div>
 
-      <section>
-        <div className="mb-4">
-          <h2 className="text-lg lg:text-xl font-medium mb-3 text-gray-900 dark:text-white">
-            Finance & Consulting News
-          </h2>
-          {keyInsight && (
-            <Card className="bg-accent/5 dark:bg-accent/10 border-accent/20 dark:border-accent/20">
-              <div className="flex items-start gap-3">
-                <div className="shrink-0 w-1 h-12 bg-accent dark:bg-accent rounded-full" />
-                <div>
-                  <p className="text-xs font-medium text-accent dark:text-accent mb-1">
-                    TODAY'S KEY INSIGHT
-                  </p>
-                  <p className="text-sm text-gray-900 dark:text-white leading-relaxed">
-                    {keyInsight}
-                  </p>
-                </div>
-              </div>
-            </Card>
-          )}
+      {/* Key insight banner for Financial tab */}
+      {activeTab === 'financial' && keyInsight && !loading && (
+        <Card className="bg-accent/5 dark:bg-accent/10 border-accent/20 dark:border-accent/20">
+          <div className="flex items-start gap-3">
+            <div className="shrink-0 w-1 h-12 bg-accent dark:bg-accent rounded-full" />
+            <div>
+              <p className="text-xs font-medium text-accent dark:text-accent mb-1">
+                TODAY'S KEY INSIGHT
+              </p>
+              <p className="text-sm text-gray-900 dark:text-white leading-relaxed">
+                {keyInsight}
+              </p>
+            </div>
+          </div>
+        </Card>
+      )}
+
+      {/* Articles grid */}
+      {loading ? (
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {Array.from({ length: 6 }).map((_, i) => (
+            <SkeletonCard key={i} />
+          ))}
         </div>
-
-        {loading ? (
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {Array.from({ length: 3 }).map((_, i) => (
-              <SkeletonCard key={i} />
-            ))}
-          </div>
-        ) : finNews.length > 0 ? (
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {finNews.map((article, index) => (
-              <NewsCard key={index} article={article} />
-            ))}
-          </div>
-        ) : (
-          <Card className="flex flex-col items-center justify-center p-8 text-center space-y-4">
-            <p className="text-gray-600 dark:text-gray-400">
-              News feeds are loading — tap the refresh button to try again.
-            </p>
-            <button 
-              onClick={loadNews} 
-              className="flex items-center gap-2 px-4 py-2 bg-accent/10 hover:bg-accent/20 text-accent dark:bg-accent/10 dark:hover:bg-accent/20 dark:text-accent rounded-lg transition-colors"
-            >
-              <RefreshCw size={16} />
-              Refresh Feeds
-            </button>
-          </Card>
-        )}
-      </section>
+      ) : activeArticles.length > 0 ? (
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {activeArticles.map((article, index) => (
+            <NewsCard key={index} article={article} />
+          ))}
+        </div>
+      ) : (
+        <EmptyState />
+      )}
     </div>
   );
 }
-

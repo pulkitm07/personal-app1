@@ -211,7 +211,7 @@ function PsychologySection() {
 
 // ─── FINANCE TERMS SECTION ────────────────────────────────────────────────────
 function FinanceTermsSection() {
-  const [selectedTerms, setSelectedTerms] = useState<any[]>([]);
+  const [selectedTerms, setSelectedTerms] = useState<Record<string, unknown>[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -274,7 +274,7 @@ function FinanceTermsSection() {
 }
 // ─── VOCABULARY SECTION ───────────────────────────────────────────────────────
 function VocabularySection() {
-  const [selectedWords, setSelectedWords] = useState<any[]>([]);
+  const [selectedWords, setSelectedWords] = useState<Record<string, unknown>[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -508,7 +508,7 @@ function CaseStudySection() {
 }
 
 // ─── LAWS SECTION ─────────────────────────────────────────────────────────────
-const categoryConfig: Record<string, any> = {
+const categoryConfig: Record<string, { label: string; bg: string; text: string; border: string }> = {
   corporate: { label: 'Corporate Law', bg: 'bg-green-100 dark:bg-green-900/30', text: 'text-green-700 dark:text-green-300', border: 'border-l-green-500' },
   constitutional: { label: 'Constitutional Law', bg: 'bg-blue-100 dark:bg-blue-900/30', text: 'text-blue-700 dark:text-blue-300', border: 'border-l-blue-500' },
   criminal: { label: 'Criminal Law', bg: 'bg-red-100 dark:bg-red-900/30', text: 'text-red-700 dark:text-red-300', border: 'border-l-red-500' },
@@ -516,7 +516,7 @@ const categoryConfig: Record<string, any> = {
 };
 
 function LawsSection() {
-  const [law, setLaw] = useState<any>(null);
+  const [law, setLaw] = useState<Record<string, unknown> | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

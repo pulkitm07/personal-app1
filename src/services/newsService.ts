@@ -108,7 +108,7 @@ async function fetchFeed(
     const data = await res.json();
     if (data.status !== 'ok' || !Array.isArray(data.items)) return [];
     const source: string = data.feed?.title || 'News';
-    return data.items.map((item: any) => {
+    return data.items.map((item: { title?: string; pubDate?: string; link?: string; description?: string }) => {
       const desc = (item.description ?? '').replace(/<[^>]+>/g, '').trim();
       return {
         title: item.title ?? '',

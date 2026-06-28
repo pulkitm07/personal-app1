@@ -21,6 +21,11 @@ function relativeTime(epochMs: number | null): string {
   return `Updated ${diffHr}h ago`;
 }
 
+function formatValue(value: number, prefix: string, fractionDigits = 2): string {
+  if (!value || value === 0) return '—';
+  return `${prefix}${value.toLocaleString('en-IN', { maximumFractionDigits: fractionDigits })}`;
+}
+
 export function MarketsSection({ markets, fetchedAt, isStale, loading }: MarketsSectionProps) {
   if (loading) {
     return (
@@ -74,12 +79,12 @@ export function MarketsSection({ markets, fetchedAt, isStale, loading }: Markets
       ) : (
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
           {[
-            { label: 'Bitcoin',   symbol: 'BTC',   value: markets.btc.price,     change: markets.btc.change24h,  prefix: '$' },
-            { label: 'Ethereum',  symbol: 'ETH',   value: markets.eth.price,     change: markets.eth.change24h,  prefix: '$' },
-            { label: 'Solana',    symbol: 'SOL',   value: markets.sol.price,     change: markets.sol.change24h,  prefix: '$' },
-            { label: 'USD/INR',   symbol: 'FOREX', value: markets.usdInr.rate,   change: markets.usdInr.change,  prefix: '₹' },
-            { label: 'Sensex',    symbol: 'BSE',   value: markets.sensex.value,  change: markets.sensex.change,  prefix: ''  },
-            { label: 'Nifty 50',  symbol: 'NSE',   value: markets.nifty.value,   change: markets.nifty.change,   prefix: ''  },
+            { label: 'Bitcoin',  symbol: 'BTC',   value: markets.btc.price,    change: markets.btc.change24h,  prefix: '$' },
+            { label: 'Ethereum', symbol: 'ETH',   value: markets.eth.price,    change: markets.eth.change24h,  prefix: '$' },
+            { label: 'Solana',   symbol: 'SOL',   value: markets.sol.price,    change: markets.sol.change24h,  prefix: '$' },
+            { label: 'USD/INR',  symbol: 'FOREX', value: markets.usdInr.rate,  change: markets.usdInr.change,  prefix: '₹' },
+            { label: 'Sensex',   symbol: 'BSE',   value: markets.sensex.value, change: markets.sensex.change,  prefix: ''  },
+            { label: 'Nifty 50', symbol: 'NSE',   value: markets.nifty.value,  change: markets.nifty.change,   prefix: ''  },
           ].map((item) => (
             <Card key={item.symbol} className="!p-3">
               <div className="space-y-2">
@@ -89,22 +94,25 @@ export function MarketsSection({ markets, fetchedAt, isStale, loading }: Markets
                 </div>
                 <div>
                   <p className="text-base font-medium text-gray-900 dark:text-white">
-                    {item.prefix}
-                    {item.value.toLocaleString('en-IN', { maximumFractionDigits: 2 })}
+                    {formatValue(item.value, item.prefix)}
                   </p>
-                  <div
-                    className={`flex items-center gap-1 text-xs ${
-                      item.change >= 0
-                        ? 'text-green-600 dark:text-green-500'
-                        : 'text-red-600 dark:text-red-500'
-                    }`}
-                  >
-                    {item.change >= 0 ? <TrendingUp size={12} /> : <TrendingDown size={12} />}
-                    <span>
-                      {item.change >= 0 ? '+' : ''}
-                      {item.change.toFixed(2)}%
-                    </span>
-                  </div>
+                  {item.value > 0 ? (
+                    <div
+                      className={`flex items-center gap-1 text-xs ${
+                        item.change >= 0
+                          ? 'text-green-600 dark:text-green-500'
+                          : 'text-red-600 dark:text-red-500'
+                      }`}
+                    >
+                      {item.change >= 0 ? <TrendingUp size={12} /> : <TrendingDown size={12} />}
+                      <span>
+                        {item.change >= 0 ? '+' : ''}
+                        {item.change.toFixed(2)}%
+                      </span>
+                    </div>
+                  ) : (
+                    <p className="text-xs text-gray-400 dark:text-gray-600">Unavailable</p>
+                  )}
                 </div>
               </div>
             </Card>

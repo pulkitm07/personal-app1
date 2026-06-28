@@ -1,5 +1,5 @@
-﻿import { useState } from 'react';
-import { Check, Plus, X, GripVertical, Pencil } from 'lucide-react';
+import { useState } from 'react';
+import { Check, Plus, X, Pencil } from 'lucide-react';
 import { Card } from '../UI/Card';
 import type { ChecklistTask } from '../../types';
 

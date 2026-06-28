@@ -13,7 +13,7 @@ function getMemory(domain: string): string[] {
   try {
     const mem = localStorage.getItem(`ai_memory_${domain}`);
     return mem ? JSON.parse(mem) : [];
-  } catch (e) {
+  } catch {
     return [];
   }
 }
@@ -25,13 +25,13 @@ function appendMemory(domain: string, items: string[]) {
 }
 
 // Helper for AI Calls
-async function callOpenAI(prompt: string, cacheKey: string, dateStr: string, fallbackFn: () => Promise<any>) {
+async function callOpenAI(prompt: string, cacheKey: string, dateStr: string, fallbackFn: () => Promise<unknown>) {
   const cached = localStorage.getItem(cacheKey);
   if (cached) {
     try {
-      const parsed: CacheEntry<any> = JSON.parse(cached);
+      const parsed: CacheEntry<unknown> = JSON.parse(cached);
       if (parsed.date === dateStr) return parsed.data;
-    } catch(e) {}
+    } catch { /* ignore invalid cache */ }
   }
 
   try {
@@ -65,7 +65,7 @@ async function callOpenAI(prompt: string, cacheKey: string, dateStr: string, fal
   }
 }
 
-export async function fetchDailyGitaVerses(): Promise<any[]> {
+export async function fetchDailyGitaVerses(): Promise<unknown[]> {
   const dateStr = new Date().toDateString();
   const memory = getMemory('gita');
   
@@ -87,13 +87,13 @@ Keys needed:
   });
   
   if (data && data.length === 3 && typeof data[0].chapter === 'number') {
-    const newItems = data.map((v: any) => `Chap${v.chapter}Verse${v.verse}`);
+    const newItems = data.map((v: Record<string, unknown>) => `Chap${v.chapter}Verse${v.verse}`);
     if (!memory.includes(newItems[0])) appendMemory('gita', newItems);
   }
   return data;
 }
 
-export async function fetchDailyPsychologyConcepts(): Promise<any[]> {
+export async function fetchDailyPsychologyConcepts(): Promise<unknown[]> {
   const dateStr = new Date().toDateString();
   const memory = getMemory('psych');
   
@@ -106,8 +106,8 @@ Keys needed:
   const data = await callOpenAI(prompt, 'daily_psych_v7', dateStr, async () => {
     const fallback = await import('../data/psychology.json');
     const dayOfYear = Math.floor((new Date().getTime() - new Date(new Date().getFullYear(), 0, 0).getTime()) / (1000 * 60 * 60 * 24));
-    const general = fallback.default.filter((c: any) => c.category === 'general');
-    const business = fallback.default.filter((c: any) => c.category === 'business');
+    const general = fallback.default.filter((c: Record<string, unknown>) => c.category === 'general');
+    const business = fallback.default.filter((c: Record<string, unknown>) => c.category === 'business');
     return [
       general[dayOfYear % (general.length || 1)],
       business[dayOfYear % (business.length || 1)]
@@ -115,13 +115,13 @@ Keys needed:
   });
   
   if (data && data.length === 2 && data[0].name) {
-    const newItems = data.map((c: any) => c.name);
+    const newItems = data.map((c: Record<string, unknown>) => c.name);
     if (!memory.includes(newItems[0])) appendMemory('psych', newItems);
   }
   return data;
 }
 
-export async function fetchDailyBookSummary(): Promise<any> {
+export async function fetchDailyBookSummary(): Promise<unknown> {
     const dateStr = new Date().toDateString();
     const memory = getMemory('books');
     
@@ -155,7 +155,7 @@ Keys needed:
     return data;
 }
 
-export async function fetchDailyCaseStudy(): Promise<any> {
+export async function fetchDailyCaseStudy(): Promise<unknown> {
     const dateStr = new Date().toDateString();
     const memory = getMemory('cases');
     
@@ -189,7 +189,7 @@ Keys needed:
     return data;
 }
 
-export async function fetchDailyFinanceTerm(): Promise<any[]> {
+export async function fetchDailyFinanceTerm(): Promise<unknown[]> {
   const dateStr = new Date().toDateString();
   const memory = getMemory('finance');
   
@@ -211,13 +211,13 @@ Keys needed:
   });
   
   if (data && data.length === 3 && data[0].term) {
-    const newItems = data.map((t: any) => t.term);
+    const newItems = data.map((t: Record<string, unknown>) => t.term);
     if (!memory.includes(newItems[0])) appendMemory('finance', newItems);
   }
   return data;
 }
 
-export async function fetchDailyVocabulary(): Promise<any[]> {
+export async function fetchDailyVocabulary(): Promise<unknown[]> {
   const dateStr = new Date().toDateString();
   const memory = getMemory('vocab');
   
@@ -239,13 +239,13 @@ Keys needed:
   });
   
   if (data && data.length === 3 && data[0].word) {
-    const newItems = data.map((w: any) => w.word);
+    const newItems = data.map((w: Record<string, unknown>) => w.word);
     if (!memory.includes(newItems[0])) appendMemory('vocab', newItems);
   }
   return data;
 }
 
-export async function fetchDailyLaw(): Promise<any> {
+export async function fetchDailyLaw(): Promise<unknown> {
   const dateStr = new Date().toDateString();
   const memory = getMemory('laws');
   

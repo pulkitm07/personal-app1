@@ -30,7 +30,7 @@ export function SettingsPage() {
                 ].map(({ value, label, icon: Icon }) => (
                   <button
                     key={value}
-                    onClick={() => updateSettings({ theme: value as any })}
+                    onClick={() => updateSettings({ theme: value as 'light' | 'dark' | 'system' })}
                     className={`flex flex-col items-center gap-2 p-3 rounded-lg border-2 transition-all ${
                       settings.theme === value
                         ? 'border-accent dark:border-accent bg-accent/5 dark:bg-accent/10'
@@ -55,7 +55,7 @@ export function SettingsPage() {
                 ].map(({ value, label, color }) => (
                   <button
                     key={value}
-                    onClick={() => updateSettings({ accentColor: value as any })}
+                    onClick={() => updateSettings({ accentColor: value as 'navy' | 'amber' })}
                     className={`flex items-center gap-3 p-3 rounded-lg border-2 transition-all ${
                       settings.accentColor === value
                         ? 'border-gray-900 dark:border-gray-100'
