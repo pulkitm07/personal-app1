@@ -17,7 +17,7 @@ export function Sidebar({ currentPage, onNavigate }: SidebarProps) {
   return (
     <aside className="hidden md:flex md:flex-col bg-white dark:bg-[#1a1a1a] border-r border-gray-200 dark:border-gray-800 md:w-12 lg:w-56 fixed left-0 top-0 h-screen transition-all duration-200">
       <div className="p-4 border-b border-gray-200 dark:border-gray-800 lg:block hidden">
-        <h1 className="text-xl font-medium">Daily</h1>
+        <h1 className="text-xl font-medium">DAILY NEWS</h1>
       </div>
 
       <nav className="flex-1 py-4">

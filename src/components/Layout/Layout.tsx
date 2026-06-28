@@ -1,4 +1,4 @@
-﻿import { ReactNode } from 'react';
+import { ReactNode } from 'react';
 import { Sidebar } from './Sidebar';
 import { BottomNav } from './BottomNav';
 
@@ -15,7 +15,7 @@ export function Layout({ children, currentPage, onNavigate }: LayoutProps) {
 
       <div className="md:ml-12 lg:ml-56 pb-16 md:pb-0">
         <header className="md:hidden sticky top-0 bg-white dark:bg-[#1a1a1a] border-b border-gray-200 dark:border-gray-800 px-4 py-3 flex items-center justify-between z-40">
-          <h1 className="text-lg font-medium">Daily</h1>
+          <h1 className="text-lg font-medium">DAILY NEWS</h1>
           <p className="text-sm text-gray-600 dark:text-gray-400">
             {new Date().toLocaleDateString('en-IN', {
               month: 'short',

@@ -1,4 +1,4 @@
-﻿import { Card } from '../components/UI/Card';
+import { Card } from '../components/UI/Card';
 import { useTheme } from '../contexts/ThemeContext';
 import { Moon, Sun, Monitor } from 'lucide-react';
 
@@ -145,10 +145,10 @@ export function SettingsPage() {
             About
           </h2>
           <p className="text-sm text-gray-600 dark:text-gray-400">
-            Daily v1.0.0
+            DAILY NEWS v1.0.0
           </p>
           <p className="text-xs text-gray-500 dark:text-gray-500 mt-1">
-            Your personal daily dashboard for self-improvement
+            Your personal daily news and self-improvement dashboard
           </p>
         </Card>
       </div>

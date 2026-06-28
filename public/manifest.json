@@ -1,7 +1,7 @@
 {
-  "name": "Daily",
-  "short_name": "Daily",
-  "description": "Your personal daily dashboard for self-improvement",
+  "name": "DAILY NEWS",
+  "short_name": "DAILY NEWS",
+  "description": "Your personal daily news and self-improvement dashboard",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
