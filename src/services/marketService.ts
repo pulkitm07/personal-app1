@@ -1,6 +1,6 @@
 import type { MarketData } from '../types';
 
-const CACHE_KEY = 'market_data_cache_v2';  // bumped version to evict old stale cache
+const CACHE_KEY = 'market_data_cache_v3';  // bumped version
 const CACHE_TTL_MS = 30 * 60 * 1000;      // 30 minutes
 const STALE_WARN_MS = 2 * 60 * 60 * 1000; // 2 hours — warn user if older
 
@@ -122,62 +122,47 @@ async function fetchForex(): Promise<MarketData['usdInr']> {
 }
 
 async function fetchIndianMarkets(): Promise<{ sensex: MarketData['sensex']; nifty: MarketData['nifty'] }> {
-  // Use stooq.com CSV API — CORS-friendly, returns live/delayed Indian index data
-  const fetchStooq = async (symbol: string): Promise<{ value: number; change: number } | null> => {
+  // Use Yahoo Finance v8 chart API via allorigins proxy to bypass CORS
+  const fetchYahooProxy = async (symbol: string): Promise<{ value: number; change: number } | null> => {
     try {
-      const res = await fetch(`https://stooq.com/q/l/?s=${symbol}&f=sd2t2ohlcvn&h&e=csv`);
+      const targetUrl = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(symbol)}?interval=1d&range=2d`;
+      const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(targetUrl)}`;
+      
+      const res = await fetch(proxyUrl);
       if (!res.ok) return null;
-      const text = await res.text();
-      const lines = text.trim().split('\n');
-      if (lines.length < 2) return null;
-      const parts = lines[1].split(',');
-      // CSV columns: Symbol,Date,Time,Open,High,Low,Close,Volume,Name
-      const close = parseFloat(parts[6]);
-      const open = parseFloat(parts[3]);
-      if (isNaN(close) || isNaN(open) || close === 0) return null;
-      const change = ((close - open) / open) * 100;
-      return { value: close, change: parseFloat(change.toFixed(2)) };
-    } catch {
-      return null;
-    }
-  };
-
-  // Try fetching both concurrently
-  const [sensexData, niftyData] = await Promise.all([
-    fetchStooq('^bsesn'),   // Sensex symbol on stooq
-    fetchStooq('^nsei'),    // Nifty 50 symbol on stooq
-  ]);
-
-  // If stooq fails, try Yahoo Finance via cors-anywhere or similar approach
-  const fetchYahoo = async (symbol: string): Promise<{ value: number; change: number } | null> => {
-    try {
-      // Yahoo Finance v8 chart API - sometimes accessible from browsers
-      const encoded = encodeURIComponent(symbol);
-      const res = await fetch(
-        `https://query1.finance.yahoo.com/v8/finance/chart/${encoded}?interval=1d&range=2d`,
-        { headers: { 'User-Agent': 'Mozilla/5.0' } }
-      );
-      if (!res.ok) return null;
+      
       const data = await res.json();
       const result = data?.chart?.result?.[0];
       if (!result) return null;
+      
       const closes: number[] = result?.indicators?.quote?.[0]?.close ?? [];
       const validCloses = closes.filter((v: number | null) => v != null && !isNaN(v));
-      if (validCloses.length < 2) return null;
+      if (validCloses.length === 0) return null;
+      
       const latest = validCloses[validCloses.length - 1];
-      const prev = validCloses[validCloses.length - 2];
-      const change = ((latest - prev) / prev) * 100;
+      let change = 0;
+      
+      if (validCloses.length >= 2) {
+        const prev = validCloses[validCloses.length - 2];
+        change = ((latest - prev) / prev) * 100;
+      } else {
+        // Fallback if only 1 day of data is available: use chartPreviousClose
+        const prevClose = result.meta?.chartPreviousClose;
+        if (prevClose) {
+          change = ((latest - prevClose) / prevClose) * 100;
+        }
+      }
+      
       return { value: parseFloat(latest.toFixed(2)), change: parseFloat(change.toFixed(2)) };
     } catch {
       return null;
     }
   };
 
-  let sensex = sensexData;
-  let nifty = niftyData;
-
-  if (!sensex) sensex = await fetchYahoo('^BSESN');
-  if (!nifty) nifty = await fetchYahoo('^NSEI');
+  const [sensex, nifty] = await Promise.all([
+    fetchYahooProxy('^BSESN'),
+    fetchYahooProxy('^NSEI'),
+  ]);
 
   return {
     sensex: sensex ?? { value: 0, change: 0 },
