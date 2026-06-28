@@ -1,13 +1,13 @@
 import type { MarketData } from '../types';
 
-const CACHE_KEY = 'market_data_cache_v4';  // bumped version
+const CACHE_KEY = 'market_data_cache_v5';  // bumped version
 const CACHE_TTL_MS = 30 * 60 * 1000;      // 30 minutes
 const STALE_WARN_MS = 2 * 60 * 60 * 1000; // 2 hours — warn user if older
 
 export interface MarketResult {
   data: MarketData | null;
-  fetchedAt: number | null;  // epoch ms when data was fetched
-  isStale: boolean;          // true if >2h old (show warning)
+  fetchedAt: number | null;
+  isStale: boolean;
   fromCache: boolean;
 }
 
@@ -35,13 +35,40 @@ function writeCache(data: MarketData): number {
   try {
     localStorage.setItem(CACHE_KEY, JSON.stringify({ data, fetchedAt }));
   } catch {
-    // localStorage full — ignore, still return the timestamp
+    // ignore
   }
   return fetchedAt;
 }
 
 function clearCache() {
   try { localStorage.removeItem(CACHE_KEY); } catch { /* ignore */ }
+}
+
+// ── Yahoo Proxy Helper ─────────────────────────────────────────────────────────
+
+async function fetchYahooProxy(symbol: string): Promise<{ value: number; change: number } | null> {
+  try {
+    const res = await fetch(`/api/yahoo?symbol=${encodeURIComponent(symbol)}`);
+    if (!res.ok) return null;
+    
+    const data = await res.json();
+    const result = data?.chart?.result?.[0];
+    if (!result) return null;
+    
+    const latest = result.meta?.regularMarketPrice;
+    const prevClose = result.meta?.chartPreviousClose;
+    
+    if (latest == null || isNaN(latest)) return null;
+
+    let change = 0;
+    if (prevClose && !isNaN(prevClose) && prevClose !== 0) {
+      change = ((latest - prevClose) / prevClose) * 100;
+    }
+    
+    return { value: parseFloat(latest.toFixed(2)), change: parseFloat(change.toFixed(2)) };
+  } catch {
+    return null;
+  }
 }
 
 // ── Fetch live data ────────────────────────────────────────────────────────────
@@ -64,7 +91,7 @@ async function fetchCrypto(): Promise<{ btc: MarketData['btc']; eth: MarketData[
   } catch { /* fall through */ }
 
   try {
-    // Fallback: CoinGecko public API
+    // Fallback: CoinGecko
     const res = await fetch(
       'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,solana&vs_currencies=usd&include_24hr_change=true'
     );
@@ -82,21 +109,13 @@ async function fetchCrypto(): Promise<{ btc: MarketData['btc']; eth: MarketData[
 }
 
 async function fetchForex(): Promise<MarketData['usdInr']> {
-  // Primary: exchangerate-api with key
-  try {
-    const key = import.meta.env.VITE_EXCHANGE_RATE_API_KEY;
-    if (key) {
-      const res = await fetch(`https://v6.exchangerate-api.com/v6/${key}/pair/USD/INR`);
-      if (res.ok) {
-        const data = await res.json();
-        if (data?.conversion_rate) {
-          return { rate: data.conversion_rate, change: 0 };
-        }
-      }
-    }
-  } catch { /* fall through */ }
+  // Use our reliable Yahoo Proxy to get a real live change% instead of flat 0.00%
+  const yahooData = await fetchYahooProxy('INR=X');
+  if (yahooData) {
+    return { rate: yahooData.value, change: yahooData.change };
+  }
 
-  // Fallback: open.er-api.com (free, no key)
+  // Fallback: open.er-api.com
   try {
     const res = await fetch('https://open.er-api.com/v6/latest/USD');
     if (res.ok) {
@@ -107,54 +126,10 @@ async function fetchForex(): Promise<MarketData['usdInr']> {
     }
   } catch { /* fall through */ }
 
-  // Second fallback: fawazahmed0 currency API
-  try {
-    const res = await fetch('https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/usd.json');
-    if (res.ok) {
-      const data = await res.json();
-      if (data?.usd?.inr) {
-        return { rate: data.usd.inr, change: 0 };
-      }
-    }
-  } catch { /* fall through */ }
-
   return { rate: 0, change: 0 };
 }
 
 async function fetchIndianMarkets(): Promise<{ sensex: MarketData['sensex']; nifty: MarketData['nifty'] }> {
-  // Use Vercel Serverless Function to proxy Yahoo Finance and bypass CORS
-  const fetchYahooProxy = async (symbol: string): Promise<{ value: number; change: number } | null> => {
-    try {
-      const res = await fetch(`/api/yahoo?symbol=${encodeURIComponent(symbol)}`);
-      if (!res.ok) return null;
-      
-      const data = await res.json();
-      const result = data?.chart?.result?.[0];
-      if (!result) return null;
-      
-      const closes: number[] = result?.indicators?.quote?.[0]?.close ?? [];
-      const validCloses = closes.filter((v: number | null) => v != null && !isNaN(v));
-      if (validCloses.length === 0) return null;
-      
-      const latest = validCloses[validCloses.length - 1];
-      let change = 0;
-      
-      if (validCloses.length >= 2) {
-        const prev = validCloses[validCloses.length - 2];
-        change = ((latest - prev) / prev) * 100;
-      } else {
-        const prevClose = result.meta?.chartPreviousClose;
-        if (prevClose) {
-          change = ((latest - prevClose) / prevClose) * 100;
-        }
-      }
-      
-      return { value: parseFloat(latest.toFixed(2)), change: parseFloat(change.toFixed(2)) };
-    } catch {
-      return null;
-    }
-  };
-
   const [sensex, nifty] = await Promise.all([
     fetchYahooProxy('^BSESN'),
     fetchYahooProxy('^NSEI'),
@@ -219,7 +194,7 @@ export async function fetchMarketData(): Promise<MarketResult> {
     return {
       data: cached.data,
       fetchedAt: cached.fetchedAt,
-      isStale: true,   // always stale warning when we couldn't refresh
+      isStale: true,
       fromCache: true,
     };
   }
