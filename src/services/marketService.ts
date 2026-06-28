@@ -1,8 +1,8 @@
 import type { MarketData } from '../types';
 
-const CACHE_KEY = 'market_data_cache_v5';  // bumped version
-const CACHE_TTL_MS = 30 * 60 * 1000;      // 30 minutes
-const STALE_WARN_MS = 2 * 60 * 60 * 1000; // 2 hours — warn user if older
+const CACHE_KEY = 'market_data_cache_v6';
+const CACHE_TTL_MS = 30 * 60 * 1000;
+const STALE_WARN_MS = 2 * 60 * 60 * 1000;
 
 export interface MarketResult {
   data: MarketData | null;
@@ -44,78 +44,30 @@ function clearCache() {
   try { localStorage.removeItem(CACHE_KEY); } catch { /* ignore */ }
 }
 
-// ── Yahoo Proxy Helper ─────────────────────────────────────────────────────────
-
-async function fetchYahooProxy(symbol: string): Promise<{ value: number; change: number } | null> {
-  try {
-    const res = await fetch(`/api/yahoo?symbol=${encodeURIComponent(symbol)}`);
-    if (!res.ok) return null;
-    
-    const data = await res.json();
-    const result = data?.chart?.result?.[0];
-    if (!result) return null;
-    
-    const latest = result.meta?.regularMarketPrice;
-    const prevClose = result.meta?.chartPreviousClose;
-    
-    if (latest == null || isNaN(latest)) return null;
-
-    let change = 0;
-    if (prevClose && !isNaN(prevClose) && prevClose !== 0) {
-      change = ((latest - prevClose) / prevClose) * 100;
-    }
-    
-    return { value: parseFloat(latest.toFixed(2)), change: parseFloat(change.toFixed(2)) };
-  } catch {
-    return null;
-  }
-}
-
 // ── Fetch live data ────────────────────────────────────────────────────────────
 
 async function fetchCrypto(): Promise<{ btc: MarketData['btc']; eth: MarketData['eth']; sol: MarketData['sol'] } | null> {
   try {
-    // Primary: Binance
-    const res = await fetch('https://api.binance.com/api/v3/ticker/24hr?symbols=["BTCUSDT","ETHUSDT","SOLUSDT"]');
-    if (res.ok) {
-      const data = await res.json();
-      const parse = (symbol: string) => {
-        const item = data.find((d: { symbol: string; lastPrice: string; priceChangePercent: string }) => d.symbol === symbol);
-        return item ? { price: parseFloat(item.lastPrice), change24h: parseFloat(item.priceChangePercent) } : null;
-      };
-      const btc = parse('BTCUSDT');
-      const eth = parse('ETHUSDT');
-      const sol = parse('SOLUSDT');
-      if (btc && eth && sol) return { btc, eth, sol };
-    }
-  } catch { /* fall through */ }
-
-  try {
-    // Fallback: CoinGecko
+    // Step 1: Use CoinGecko's free public endpoint with no authentication
     const res = await fetch(
       'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,solana&vs_currencies=usd&include_24hr_change=true'
     );
     if (res.ok) {
       const data = await res.json();
       return {
-        btc: { price: data.bitcoin?.usd ?? 0, change24h: data.bitcoin?.usd_24h_change ?? 0 },
-        eth: { price: data.ethereum?.usd ?? 0, change24h: data.ethereum?.usd_24h_change ?? 0 },
-        sol: { price: data.solana?.usd ?? 0, change24h: data.solana?.usd_24h_change ?? 0 },
+        btc: { price: data.bitcoin?.usd ?? null, change24h: data.bitcoin?.usd_24h_change ?? null },
+        eth: { price: data.ethereum?.usd ?? null, change24h: data.ethereum?.usd_24h_change ?? null },
+        sol: { price: data.solana?.usd ?? null, change24h: data.solana?.usd_24h_change ?? null },
       };
     }
-  } catch { /* fall through */ }
-
+  } catch {
+    // Return null immediately on failure instead of hardcoded fallbacks
+  }
   return null;
 }
 
 async function fetchForex(): Promise<MarketData['usdInr']> {
-  // Use our reliable Yahoo Proxy to get a real live change% instead of flat 0.00%
-  const yahooData = await fetchYahooProxy('INR=X');
-  if (yahooData) {
-    return { rate: yahooData.value, change: yahooData.change };
-  }
-
-  // Fallback: open.er-api.com
+  // Step 2: Use open.er-api.com free no-key endpoint
   try {
     const res = await fetch('https://open.er-api.com/v6/latest/USD');
     if (res.ok) {
@@ -124,9 +76,34 @@ async function fetchForex(): Promise<MarketData['usdInr']> {
         return { rate: data.rates.INR, change: 0 };
       }
     }
-  } catch { /* fall through */ }
-
+  } catch {
+    // Return empty on failure
+  }
   return { rate: 0, change: 0 };
+}
+
+async function fetchYahooProxy(symbol: string): Promise<{ value: number; change: number } | null> {
+  // Step 3: Use Yahoo Finance Proxy Endpoint
+  try {
+    const targetUrl = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(symbol)}?interval=1d&range=1d`;
+    // We proxy it through our Vercel API to bypass CORS
+    const res = await fetch(`/api/yahoo?symbol=${encodeURIComponent(symbol)}`);
+    if (!res.ok) return null;
+    
+    const data = await res.json();
+    const result = data?.chart?.result?.[0];
+    if (!result) return null;
+    
+    // Extract regularMarketPrice and regularMarketChangePercent from the response
+    const latest = result.meta?.regularMarketPrice;
+    let change = result.meta?.regularMarketChangePercent ?? 0;
+    
+    if (latest == null || isNaN(latest)) return null;
+    
+    return { value: parseFloat(latest.toFixed(2)), change: parseFloat(change.toFixed(2)) };
+  } catch {
+    return null;
+  }
 }
 
 async function fetchIndianMarkets(): Promise<{ sensex: MarketData['sensex']; nifty: MarketData['nifty'] }> {
@@ -160,7 +137,6 @@ async function fetchLive(): Promise<MarketData | null> {
       nifty: indian.nifty,
     };
   } catch (err) {
-    console.error('marketService: fetchLive failed', err);
     return null;
   }
 }
@@ -168,6 +144,15 @@ async function fetchLive(): Promise<MarketData | null> {
 // ── Public API ────────────────────────────────────────────────────────────────
 
 export async function fetchMarketData(): Promise<MarketResult> {
+  // Step 5: Clear localStorage market cache
+  try {
+    localStorage.removeItem('market_cache');
+    // Also clearing the older cache keys just to be thoroughly sure
+    localStorage.removeItem('market_data_cache_v3');
+    localStorage.removeItem('market_data_cache_v4');
+    localStorage.removeItem('market_data_cache_v5');
+  } catch {}
+
   const now = Date.now();
   const cached = readCache();
 
