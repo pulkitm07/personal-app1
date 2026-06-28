@@ -95,7 +95,7 @@ function NewsSection({ title, articles, loading, onRefresh, keyInsight }: NewsSe
       ) : (
         <Card className="flex flex-col items-center justify-center p-8 text-center space-y-4">
           <p className="text-gray-600 dark:text-gray-400">
-            News feeds are loading — tap the refresh button to try again.
+            Could not load news feeds — check your connection and try again.
           </p>
           <button
             onClick={onRefresh}
