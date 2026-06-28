@@ -1,6 +1,6 @@
 import type { MarketData } from '../types';
 
-const CACHE_KEY = 'market_data_cache_v3';  // bumped version
+const CACHE_KEY = 'market_data_cache_v4';  // bumped version
 const CACHE_TTL_MS = 30 * 60 * 1000;      // 30 minutes
 const STALE_WARN_MS = 2 * 60 * 60 * 1000; // 2 hours — warn user if older
 
@@ -64,7 +64,7 @@ async function fetchCrypto(): Promise<{ btc: MarketData['btc']; eth: MarketData[
   } catch { /* fall through */ }
 
   try {
-    // Fallback: CoinGecko public API (no key needed for basic data)
+    // Fallback: CoinGecko public API
     const res = await fetch(
       'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,solana&vs_currencies=usd&include_24hr_change=true'
     );
@@ -122,13 +122,10 @@ async function fetchForex(): Promise<MarketData['usdInr']> {
 }
 
 async function fetchIndianMarkets(): Promise<{ sensex: MarketData['sensex']; nifty: MarketData['nifty'] }> {
-  // Use Yahoo Finance v8 chart API via allorigins proxy to bypass CORS
+  // Use Vercel Serverless Function to proxy Yahoo Finance and bypass CORS
   const fetchYahooProxy = async (symbol: string): Promise<{ value: number; change: number } | null> => {
     try {
-      const targetUrl = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(symbol)}?interval=1d&range=2d`;
-      const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(targetUrl)}`;
-      
-      const res = await fetch(proxyUrl);
+      const res = await fetch(`/api/yahoo?symbol=${encodeURIComponent(symbol)}`);
       if (!res.ok) return null;
       
       const data = await res.json();
@@ -146,7 +143,6 @@ async function fetchIndianMarkets(): Promise<{ sensex: MarketData['sensex']; nif
         const prev = validCloses[validCloses.length - 2];
         change = ((latest - prev) / prev) * 100;
       } else {
-        // Fallback if only 1 day of data is available: use chartPreviousClose
         const prevClose = result.meta?.chartPreviousClose;
         if (prevClose) {
           change = ((latest - prevClose) / prevClose) * 100;
