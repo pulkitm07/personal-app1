@@ -2,7 +2,7 @@ import type { NewsArticle } from '../types';
 
 const RSS2JSON = 'https://api.rss2json.com/v1/api.json';
 
-// ── Feed lists — only proven, publicly accessible RSS feeds ───────────────────
+// ── Feed lists ────────────────────────────────────────────────────────────────
 
 const GEOPOLITICAL_FEEDS = [
   'https://feeds.bbci.co.uk/news/world/rss.xml',
@@ -20,68 +20,95 @@ const FINANCE_FEEDS = [
   'https://www.livemint.com/rss/markets',
 ];
 
-const CONSULTING_FEEDS = [
-  'https://hbr.org/resources/rss/topics/managing-organizations',
-  'https://www.strategy-business.com/rss/',
-  'https://economictimes.indiatimes.com/small-biz/rssfeeds/7771597760.cms',
+// Consulting: mix of dedicated management publications + active business feeds
+// filtered by consulting keywords
+const CONSULTING_FEEDS: { url: string; skipKeywordFilter: boolean }[] = [
+  // Dedicated management/consulting publications — accept all articles from these
+  { url: 'https://hbr.org/resources/rss/topics/managing-organizations', skipKeywordFilter: true },
+  { url: 'https://hbr.org/resources/rss/topics/leadership', skipKeywordFilter: true },
+  { url: 'https://www.strategy-business.com/rss/', skipKeywordFilter: true },
+  // General business feeds — filter by consulting keywords
+  { url: 'https://economictimes.indiatimes.com/news/company/corporate-trends/rssfeeds/13357270.cms', skipKeywordFilter: false },
+  { url: 'https://www.livemint.com/rss/companies', skipKeywordFilter: false },
+  { url: 'https://www.thehindubusinessline.com/companies/feeder/default.rss', skipKeywordFilter: false },
 ];
 
-// ── Exclusions (applied to all sections) ─────────────────────────────────────
+const CONSULTING_ALLOW = [
+  'strategy', 'strateg', 'consult', 'management', 'manag',
+  'leader', 'ceo', 'executive', 'board', 'chairman',
+  'transform', 'restructur', 'reorgani', 'turnaround',
+  'mckinsey', 'bcg', 'bain', 'deloitte', 'pwc', 'kpmg', 'accenture',
+  'advisory', 'supply chain', 'operations', 'efficiency',
+  'digital', 'innovation', 'ai strategy', 'workforce', 'talent',
+  'culture', 'business model', 'corporate governance',
+  'private equity', 'merger', 'acquisition', 'due diligence',
+  'company', 'corporate', 'firm', 'industry', 'sector',
+];
+
+// ── Exclusion filter ──────────────────────────────────────────────────────────
 const EXCLUDED = [
-  'sport', 'cricket', 'football', 'soccer', 'tennis', 'ipl',
-  'celebrity', 'bollywood', 'entertainment', 'movie', 'film',
-  'recipe', 'horoscope', 'astrology',
+  'sport', 'cricket', 'football', 'soccer', 'tennis', 'ipl', 'hockey',
+  'celebrity', 'bollywood', 'entertainment', 'movie', 'film', 'actor',
+  'recipe', 'horoscope', 'astrology', 'fashion', 'beauty',
 ];
 
-function excluded(text: string) {
+function isExcluded(text: string) {
   return EXCLUDED.some(w => text.includes(w));
+}
+
+// ── Recency filter ────────────────────────────────────────────────────────────
+function isWithinDays(pubDate: string, days: number): boolean {
+  if (!pubDate) return false; // if no date, let it through
+  const pub = new Date(pubDate).getTime();
+  if (isNaN(pub)) return true; // if unparseable, let it through
+  const cutoff = Date.now() - days * 24 * 60 * 60 * 1000;
+  return pub >= cutoff;
 }
 
 // ── Categorisers ──────────────────────────────────────────────────────────────
 
 function geoCategory(t: string, d: string) {
   const s = `${t} ${d}`.toLowerCase();
-  if (/war|conflict|ceasefire|missile|military|attack|bomb/.test(s)) return 'Conflict';
-  if (/election|vote|president|prime minister|parliament/.test(s)) return 'Politics';
-  if (/climate|environment|carbon|cop\d/.test(s)) return 'Climate';
+  if (/war|conflict|ceasefire|missile|military|attack|bomb|troops/.test(s)) return 'Conflict';
+  if (/election|vote|president|prime minister|parliament|coalition/.test(s)) return 'Politics';
+  if (/climate|environment|carbon|cop\d|emissions/.test(s)) return 'Climate';
   if (/trade|tariff|sanction|export|import/.test(s)) return 'Trade';
-  if (/diplomac|summit|bilateral|foreign minister/.test(s)) return 'Diplomacy';
+  if (/diplomac|summit|bilateral|foreign minister|treaty/.test(s)) return 'Diplomacy';
   if (/india/.test(s)) return 'India';
   return 'World';
 }
 
 function finCategory(t: string, d: string) {
   const s = `${t} ${d}`.toLowerCase();
-  if (/sensex|nifty|bse|nse|stock market|share market/.test(s)) return 'Markets';
+  if (/sensex|nifty|bse|nse|stock market|share market|equity/.test(s)) return 'Markets';
   if (/ipo|merger|acquisition/.test(s)) return 'M&A';
-  if (/rbi|fed|interest rate|monetary|repo/.test(s)) return 'Central Banks';
-  if (/startup|funding|venture|unicorn/.test(s)) return 'Startups';
-  if (/crypto|bitcoin|ethereum/.test(s)) return 'Crypto';
-  if (/budget|tax|gdp|inflation|fiscal/.test(s)) return 'Macro';
+  if (/rbi|fed|interest rate|monetary|repo|rate cut|rate hike/.test(s)) return 'Central Banks';
+  if (/startup|funding|venture|unicorn|seed/.test(s)) return 'Startups';
+  if (/crypto|bitcoin|ethereum|blockchain/.test(s)) return 'Crypto';
+  if (/budget|tax|gdp|inflation|fiscal|deficit/.test(s)) return 'Macro';
   return 'Finance';
 }
 
 function consultCategory(t: string, d: string) {
   const s = `${t} ${d}`.toLowerCase();
-  if (/mckinsey|bcg|bain|deloitte|pwc|kpmg/.test(s)) return 'Big Consulting';
+  if (/mckinsey|bcg|bain|deloitte|pwc|kpmg|accenture/.test(s)) return 'Big Consulting';
   if (/strateg/.test(s)) return 'Strategy';
   if (/leader|ceo|executive|board/.test(s)) return 'Leadership';
-  if (/digital|ai |automation|innovation/.test(s)) return 'Digital';
+  if (/digital|ai |automation|innovation|tech/.test(s)) return 'Digital';
   if (/supply chain|operations|logistics/.test(s)) return 'Operations';
-  if (/talent|workforce|culture|hiring/.test(s)) return 'Talent';
+  if (/talent|workforce|culture|hiring|employee/.test(s)) return 'Talent';
+  if (/merger|acquisition|private equity/.test(s)) return 'M&A';
   return 'Management';
 }
 
-// ── Core fetch (single feed via rss2json) ─────────────────────────────────────
+// ── Core fetch ────────────────────────────────────────────────────────────────
 
 async function fetchFeed(
   url: string,
   categorise: (t: string, d: string) => string
 ): Promise<NewsArticle[]> {
   try {
-    const res = await fetch(
-      `${RSS2JSON}?rss_url=${encodeURIComponent(url)}`
-    );
+    const res = await fetch(`${RSS2JSON}?rss_url=${encodeURIComponent(url)}`);
     if (!res.ok) return [];
     const data = await res.json();
     if (data.status !== 'ok' || !Array.isArray(data.items)) return [];
@@ -116,8 +143,8 @@ function dedup(articles: NewsArticle[]): NewsArticle[] {
 
 // ── Exported fetchers ─────────────────────────────────────────────────────────
 
+/** Geopolitical — only articles from the last 72 hours */
 export async function fetchGeopoliticalNews(): Promise<NewsArticle[]> {
-  // Fetch all feeds concurrently via Promise.allSettled so one failure doesn't kill rest
   const settled = await Promise.allSettled(
     GEOPOLITICAL_FEEDS.map(url => fetchFeed(url, geoCategory))
   );
@@ -125,11 +152,15 @@ export async function fetchGeopoliticalNews(): Promise<NewsArticle[]> {
   const articles = settled
     .filter((r): r is PromiseFulfilledResult<NewsArticle[]> => r.status === 'fulfilled')
     .flatMap(r => r.value)
-    .filter(a => a.title && !excluded(`${a.title} ${a.summary}`.toLowerCase()));
+    .filter(a => {
+      if (!a.title) return false;
+      const text = `${a.title} ${a.summary}`.toLowerCase();
+      return !isExcluded(text) && isWithinDays(a.publishedAt, 3);
+    });
 
   const result = dedup(articles);
 
-  // Sort: non-India categories first, then newest
+  // Sort: international first, India last; then newest within each group
   result.sort((a, b) => {
     const aIndia = a.category === 'India' ? 1 : 0;
     const bIndia = b.category === 'India' ? 1 : 0;
@@ -140,6 +171,7 @@ export async function fetchGeopoliticalNews(): Promise<NewsArticle[]> {
   return result;
 }
 
+/** Finance — only articles from the last 48 hours */
 export async function fetchFinanceNews(): Promise<{ articles: NewsArticle[]; keyInsight: string }> {
   const settled = await Promise.allSettled(
     FINANCE_FEEDS.map(url => fetchFeed(url, finCategory))
@@ -148,7 +180,11 @@ export async function fetchFinanceNews(): Promise<{ articles: NewsArticle[]; key
   const articles = settled
     .filter((r): r is PromiseFulfilledResult<NewsArticle[]> => r.status === 'fulfilled')
     .flatMap(r => r.value)
-    .filter(a => a.title && !excluded(`${a.title} ${a.summary}`.toLowerCase()));
+    .filter(a => {
+      if (!a.title) return false;
+      const text = `${a.title} ${a.summary}`.toLowerCase();
+      return !isExcluded(text) && isWithinDays(a.publishedAt, 2);
+    });
 
   const result = dedup(articles);
   result.sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
@@ -156,28 +192,27 @@ export async function fetchFinanceNews(): Promise<{ articles: NewsArticle[]; key
   return { articles: result, keyInsight: pickInsight(result) };
 }
 
+/** Consulting — dedicated publications (no keyword filter) + business feeds (keyword filtered)
+ *  Articles within 7 days (consulting publications update less frequently) */
 export async function fetchConsultingNews(): Promise<NewsArticle[]> {
-  const CONSULTING_ALLOW = [
-    'strategy', 'strateg', 'consult', 'management', 'leader',
-    'ceo', 'executive', 'board', 'transform', 'restructur',
-    'mckinsey', 'bcg', 'bain', 'deloitte', 'pwc', 'kpmg', 'ey ',
-    'advisory', 'supply chain', 'operations', 'digital', 'innovation',
-    'ai ', 'workforce', 'talent', 'culture', 'business model',
-    'private equity', 'merger', 'acquisition', 'due diligence',
-  ];
-
   const settled = await Promise.allSettled(
-    CONSULTING_FEEDS.map(url => fetchFeed(url, consultCategory))
+    CONSULTING_FEEDS.map(({ url }) => fetchFeed(url, consultCategory))
   );
 
   const articles = settled
     .filter((r): r is PromiseFulfilledResult<NewsArticle[]> => r.status === 'fulfilled')
-    .flatMap(r => r.value)
-    .filter(a => {
-      if (!a.title) return false;
-      const text = `${a.title} ${a.summary}`.toLowerCase();
-      if (excluded(text)) return false;
-      return CONSULTING_ALLOW.some(kw => text.includes(kw));
+    .flatMap((r, i) => {
+      const { skipKeywordFilter } = CONSULTING_FEEDS[i];
+      return r.value.filter(a => {
+        if (!a.title) return false;
+        const text = `${a.title} ${a.summary}`.toLowerCase();
+        if (isExcluded(text)) return false;
+        if (!isWithinDays(a.publishedAt, 7)) return false;
+        // Dedicated consulting feeds: accept all non-excluded articles
+        if (skipKeywordFilter) return true;
+        // General business feeds: must match a consulting keyword
+        return CONSULTING_ALLOW.some(kw => text.includes(kw));
+      });
     });
 
   const result = dedup(articles);
@@ -185,7 +220,7 @@ export async function fetchConsultingNews(): Promise<NewsArticle[]> {
   return result;
 }
 
-// ── Insight generator ─────────────────────────────────────────────────────────
+// ── Insight ───────────────────────────────────────────────────────────────────
 
 function pickInsight(articles: NewsArticle[]): string {
   if (articles.length === 0) return '';
