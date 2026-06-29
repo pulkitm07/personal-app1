@@ -73,6 +73,51 @@ async function fetchCrypto(): Promise<{
   }
 }
 
+// ── Crypto — Binance primary, CryptoCompare fallback ─────────────────────────
+
+async function fetchCrypto(): Promise<{
+  btc: MarketData['btc'];
+  eth: MarketData['eth'];
+  sol: MarketData['sol'];
+} | null> {
+  // Primary: Binance
+  try {
+    const [btcRes, ethRes, solRes] = await Promise.all([
+      fetch('https://api.binance.com/api/v3/ticker/24hr?symbol=BTCUSDT'),
+      fetch('https://api.binance.com/api/v3/ticker/24hr?symbol=ETHUSDT'),
+      fetch('https://api.binance.com/api/v3/ticker/24hr?symbol=SOLUSDT'),
+    ]);
+
+    if (btcRes.ok && ethRes.ok && solRes.ok) {
+      const [btc, eth, sol] = await Promise.all([
+        btcRes.json(), ethRes.json(), solRes.json(),
+      ]);
+      return {
+        btc: { price: parseFloat(btc.lastPrice), change24h: parseFloat(btc.priceChangePercent) },
+        eth: { price: parseFloat(eth.lastPrice), change24h: parseFloat(eth.priceChangePercent) },
+        sol: { price: parseFloat(sol.lastPrice), change24h: parseFloat(sol.priceChangePercent) },
+      };
+    }
+  } catch { /* fall through to CryptoCompare */ }
+
+  // Fallback: CryptoCompare (free, no key)
+  try {
+    const res = await fetch(
+      'https://min-api.cryptocompare.com/data/pricemultifull?fsyms=BTC,ETH,SOL&tsyms=USD'
+    );
+    if (res.ok) {
+      const d = await res.json();
+      const parse = (sym: string) => ({
+        price: d.RAW?.[sym]?.USD?.PRICE ?? 0,
+        change24h: d.RAW?.[sym]?.USD?.CHANGEPCT24HOUR ?? 0,
+      });
+      return { btc: parse('BTC'), eth: parse('ETH'), sol: parse('SOL') };
+    }
+  } catch { /* fall through */ }
+
+  return null;
+}
+
 // ── Forex — open.er-api.com (free, no key, supports INR) ─────────────────────
 
 async function fetchForex(): Promise<MarketData['usdInr']> {
@@ -88,7 +133,7 @@ async function fetchForex(): Promise<MarketData['usdInr']> {
   }
 }
 
-// ── Indian Markets — three proxy fallbacks ────────────────────────────────────
+// ── Indian Markets — Vercel /api/yahoo (primary) + proxy fallbacks ───────────
 
 function parseYahooResponse(data: any): { value: number; change: number } | null {
   try {
@@ -110,7 +155,7 @@ async function fetchWithProxy(
   isWrapped: boolean
 ): Promise<{ value: number; change: number } | null> {
   try {
-    const res = await fetch(proxyUrl, { signal: AbortSignal.timeout(6000) });
+    const res = await fetch(proxyUrl, { signal: AbortSignal.timeout(8000) });
     if (!res.ok) return null;
     const json = await res.json();
     const data = isWrapped ? JSON.parse(json.contents) : json;
@@ -120,29 +165,30 @@ async function fetchWithProxy(
   }
 }
 
-async function fetchIndex(yahooSymbol: string): Promise<{ value: number; change: number }> {
-  const encoded = encodeURIComponent(
-    `https://query2.finance.yahoo.com/v8/finance/chart/${yahooSymbol}?interval=1d&range=1d`
-  );
+async function fetchIndex(rawSymbol: string): Promise<{ value: number; change: number }> {
+  // Primary: Vercel serverless /api/yahoo — runs server-side, no CORS
+  try {
+    const r0 = await fetch(`/api/yahoo?symbol=${encodeURIComponent(rawSymbol)}`, {
+      signal: AbortSignal.timeout(8000),
+    });
+    if (r0.ok) {
+      const d0 = await r0.json();
+      const parsed = parseYahooResponse(d0);
+      if (parsed) return parsed;
+    }
+  } catch { /* fall through */ }
 
-  // Proxy 1 — corsproxy.io (most reliable, plain passthrough)
-  const proxy1 = `https://corsproxy.io/?${encoded}`;
-  const r1 = await fetchWithProxy(proxy1, false);
+  const yahooUrl = `https://query2.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(rawSymbol)}?interval=1d&range=1d`;
+  const encoded  = encodeURIComponent(yahooUrl);
+
+  // Fallback 1 — corsproxy.io
+  const r1 = await fetchWithProxy(`https://corsproxy.io/?${encoded}`, false);
   if (r1) return r1;
 
-  // Proxy 2 — thingproxy (simple redirect proxy)
-  const proxy2 = `https://thingproxy.freeboard.io/fetch/${encodeURIComponent(
-    `https://query2.finance.yahoo.com/v8/finance/chart/${yahooSymbol}?interval=1d&range=1d`
-  )}`;
-  const r2 = await fetchWithProxy(proxy2, false);
+  // Fallback 2 — allorigins /get (wrapped)
+  const r2 = await fetchWithProxy(`https://api.allorigins.win/get?url=${encoded}`, true);
   if (r2) return r2;
 
-  // Proxy 3 — allorigins /get (wrapped response)
-  const proxy3 = `https://api.allorigins.win/get?url=${encoded}`;
-  const r3 = await fetchWithProxy(proxy3, true);
-  if (r3) return r3;
-
-  // All proxies failed
   return { value: 0, change: 0 };
 }
 
@@ -150,7 +196,6 @@ async function fetchIndianMarkets(): Promise<{
   sensex: MarketData['sensex'];
   nifty: MarketData['nifty'];
 }> {
-  // Pass raw (unencoded) symbols — fetchIndex handles encoding internally
   const [sensex, nifty] = await Promise.all([
     fetchIndex('^BSESN'),
     fetchIndex('^NSEI'),
