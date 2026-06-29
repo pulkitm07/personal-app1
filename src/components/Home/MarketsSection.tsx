@@ -1,6 +1,10 @@
+import { useEffect, useRef, useState } from 'react';
 import { Card, SkeletonCard } from '../UI/Card';
 import { TrendingUp, TrendingDown, AlertTriangle } from 'lucide-react';
 import type { MarketData } from '../../types';
+import { fetchMarketData } from '../../services/marketService';
+
+const REFRESH_INTERVAL_MS = 5 * 60 * 1000; // 5 minutes
 
 interface MarketsSectionProps {
   markets: MarketData | null;
@@ -9,24 +13,65 @@ interface MarketsSectionProps {
   loading?: boolean;
 }
 
-// ── Relative timestamp helper ─────────────────────────────────────────────────
-function relativeTime(epochMs: number | null): string {
-  if (!epochMs) return '';
-  const diffSec = Math.floor((Date.now() - epochMs) / 1000);
-  if (diffSec < 60) return 'Updated just now';
-  const diffMin = Math.floor(diffSec / 60);
-  if (diffMin === 1) return 'Updated 1 min ago';
-  if (diffMin < 60) return `Updated ${diffMin} min ago`;
-  const diffHr = Math.floor(diffMin / 60);
-  return `Updated ${diffHr}h ago`;
-}
-
 function formatValue(value: number, prefix: string, fractionDigits = 2): string {
   if (!value || value === 0) return '—';
   return `${prefix}${value.toLocaleString('en-IN', { maximumFractionDigits: fractionDigits })}`;
 }
 
-export function MarketsSection({ markets, fetchedAt, isStale, loading }: MarketsSectionProps) {
+function formatCountdown(ms: number): string {
+  const totalSec = Math.max(0, Math.floor(ms / 1000));
+  const min = Math.floor(totalSec / 60);
+  const sec = totalSec % 60;
+  return `${min}:${sec.toString().padStart(2, '0')}`;
+}
+
+export function MarketsSection({ markets: initialMarkets, fetchedAt: initialFetchedAt, isStale: initialIsStale, loading }: MarketsSectionProps) {
+  const [markets, setMarkets] = useState<MarketData | null>(initialMarkets);
+  const [fetchedAt, setFetchedAt] = useState<number | null>(initialFetchedAt);
+  const [isStale, setIsStale] = useState(initialIsStale);
+  const [countdown, setCountdown] = useState<number>(REFRESH_INTERVAL_MS);
+
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const countdownRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  // Sync with parent props on first load
+  useEffect(() => {
+    setMarkets(initialMarkets);
+    setFetchedAt(initialFetchedAt);
+    setIsStale(initialIsStale);
+  }, [initialMarkets, initialFetchedAt, initialIsStale]);
+
+  // Set up 5-minute auto-refresh
+  useEffect(() => {
+    const doRefresh = async () => {
+      // Force cache bypass by clearing this key before fetch
+      try { localStorage.removeItem('market_data_cache_v7'); } catch {}
+
+      const result = await fetchMarketData();
+      if (result.data) {
+        setMarkets(result.data);
+        setFetchedAt(result.fetchedAt);
+        setIsStale(result.isStale);
+      }
+      setCountdown(REFRESH_INTERVAL_MS);
+    };
+
+    intervalRef.current = setInterval(doRefresh, REFRESH_INTERVAL_MS);
+
+    // Countdown tick every second
+    const start = Date.now();
+    countdownRef.current = setInterval(() => {
+      const elapsed = Date.now() - start;
+      const remaining = REFRESH_INTERVAL_MS - (elapsed % REFRESH_INTERVAL_MS);
+      setCountdown(remaining);
+    }, 1000);
+
+    return () => {
+      if (intervalRef.current) clearInterval(intervalRef.current);
+      if (countdownRef.current) clearInterval(countdownRef.current);
+    };
+  }, []);
+
   if (loading) {
     return (
       <div className="mb-6">
@@ -44,26 +89,27 @@ export function MarketsSection({ markets, fetchedAt, isStale, loading }: Markets
 
   return (
     <div className="mb-6">
-      {/* Header: title + live/stale indicator */}
+      {/* Header */}
       <div className="flex items-center gap-3 mb-4 flex-wrap">
         <h2 className="text-base lg:text-lg font-medium text-gray-900 dark:text-white">
           Markets
         </h2>
 
         {isStale ? (
-          /* ⚠ Stale — API failed or data >2h old */
           <span className="flex items-center gap-1.5 text-xs font-medium text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700/40 px-2 py-0.5 rounded-full">
             <AlertTriangle size={11} />
-            {markets ? 'Prices may be outdated' : '⚠ Prices unavailable'}
+            {markets ? 'Prices may be outdated' : 'Prices unavailable'}
           </span>
         ) : fetchedAt ? (
-          /* 🟢 Live */
-          <span className="flex items-center gap-1.5 text-xs font-medium text-emerald-600 dark:text-emerald-400">
+          <span className="flex items-center gap-2 text-xs font-medium text-emerald-600 dark:text-emerald-400">
             <span className="relative flex h-2 w-2">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
               <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
             </span>
-            {relativeTime(fetchedAt)}
+            Updated just now
+            <span className="text-gray-400 dark:text-gray-500 font-normal">
+              · Updates in {formatCountdown(countdown)}
+            </span>
           </span>
         ) : null}
       </div>

@@ -1,6 +1,6 @@
 import type { MarketData } from '../types';
 
-const CACHE_KEY = 'market_data_cache_v6';
+const CACHE_KEY = 'market_data_cache_v7';
 const CACHE_TTL_MS = 30 * 60 * 1000;
 const STALE_WARN_MS = 2 * 60 * 60 * 1000;
 
@@ -44,62 +44,117 @@ function clearCache() {
   try { localStorage.removeItem(CACHE_KEY); } catch { /* ignore */ }
 }
 
-// ── Fetch live data ────────────────────────────────────────────────────────────
+// ── Crypto — Primary: CoinCap (no key, no rate limit) ─────────────────────────
 
 async function fetchCrypto(): Promise<{ btc: MarketData['btc']; eth: MarketData['eth']; sol: MarketData['sol'] } | null> {
   try {
-    // Step 1: Use CoinGecko's free public endpoint with no authentication
-    const res = await fetch(
-      'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,solana&vs_currencies=usd&include_24hr_change=true'
-    );
-    if (res.ok) {
-      const data = await res.json();
+    const [btcRes, ethRes, solRes] = await Promise.all([
+      fetch('https://api.coincap.io/v2/assets/bitcoin'),
+      fetch('https://api.coincap.io/v2/assets/ethereum'),
+      fetch('https://api.coincap.io/v2/assets/solana'),
+    ]);
+
+    if (btcRes.ok && ethRes.ok && solRes.ok) {
+      const [btcJson, ethJson, solJson] = await Promise.all([
+        btcRes.json(),
+        ethRes.json(),
+        solRes.json(),
+      ]);
+
+      const parse = (json: { data: { priceUsd: string; changePercent24Hr: string } }) => ({
+        price: parseFloat(json.data.priceUsd),
+        change24h: parseFloat(json.data.changePercent24Hr),
+      });
+
       return {
-        btc: { price: data.bitcoin?.usd ?? null, change24h: data.bitcoin?.usd_24h_change ?? null },
-        eth: { price: data.ethereum?.usd ?? null, change24h: data.ethereum?.usd_24h_change ?? null },
-        sol: { price: data.solana?.usd ?? null, change24h: data.solana?.usd_24h_change ?? null },
+        btc: parse(btcJson),
+        eth: parse(ethJson),
+        sol: parse(solJson),
       };
     }
-  } catch {
-    // Return null immediately on failure instead of hardcoded fallbacks
-  }
+  } catch { /* fall through */ }
+
+  // Fallback: Coinbase spot prices (no change%, use 0)
+  try {
+    const [btcRes, ethRes, solRes] = await Promise.all([
+      fetch('https://api.coinbase.com/v2/prices/BTC-USD/spot'),
+      fetch('https://api.coinbase.com/v2/prices/ETH-USD/spot'),
+      fetch('https://api.coinbase.com/v2/prices/SOL-USD/spot'),
+    ]);
+
+    if (btcRes.ok && ethRes.ok && solRes.ok) {
+      const [btcJson, ethJson, solJson] = await Promise.all([
+        btcRes.json(),
+        ethRes.json(),
+        solRes.json(),
+      ]);
+
+      return {
+        btc: { price: parseFloat(btcJson.data.amount), change24h: 0 },
+        eth: { price: parseFloat(ethJson.data.amount), change24h: 0 },
+        sol: { price: parseFloat(solJson.data.amount), change24h: 0 },
+      };
+    }
+  } catch { /* fall through */ }
+
   return null;
 }
 
+// ── Forex — Frankfurter (ECB data, no key needed) ─────────────────────────────
+
 async function fetchForex(): Promise<MarketData['usdInr']> {
-  // Step 2: Use open.er-api.com free no-key endpoint
   try {
-    const res = await fetch('https://open.er-api.com/v6/latest/USD');
+    const res = await fetch('https://api.frankfurter.app/latest?from=USD&to=INR');
     if (res.ok) {
       const data = await res.json();
       if (data?.rates?.INR) {
         return { rate: data.rates.INR, change: 0 };
       }
     }
-  } catch {
-    // Return empty on failure
-  }
+  } catch { /* fall through */ }
+
   return { rate: 0, change: 0 };
 }
 
-async function fetchYahooProxy(symbol: string): Promise<{ value: number; change: number } | null> {
-  // Step 3: Use Yahoo Finance Proxy Endpoint
+// ── Indian Markets — Yahoo Finance via Vercel proxy ───────────────────────────
+
+async function fetchYahooViaProxy(symbol: string): Promise<{ value: number; change: number } | null> {
   try {
-    const targetUrl = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(symbol)}?interval=1d&range=1d`;
-    // We proxy it through our Vercel API to bypass CORS
     const res = await fetch(`/api/yahoo?symbol=${encodeURIComponent(symbol)}`);
     if (!res.ok) return null;
-    
+
     const data = await res.json();
     const result = data?.chart?.result?.[0];
     if (!result) return null;
-    
-    // Extract regularMarketPrice and regularMarketChangePercent from the response
+
     const latest = result.meta?.regularMarketPrice;
-    let change = result.meta?.regularMarketChangePercent ?? 0;
-    
+    const change = result.meta?.regularMarketChangePercent ?? 0;
+
     if (latest == null || isNaN(latest)) return null;
-    
+
+    return { value: parseFloat(latest.toFixed(2)), change: parseFloat(change.toFixed(2)) };
+  } catch {
+    return null;
+  }
+}
+
+async function fetchYahooDirect(symbol: string): Promise<{ value: number; change: number } | null> {
+  // Fallback: query2 has more relaxed CORS than query1
+  try {
+    const res = await fetch(
+      `https://query2.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(symbol)}?interval=1d&range=1d`
+    );
+    if (!res.ok) return null;
+
+    const data = await res.json();
+    const result = data?.chart?.result?.[0];
+    if (!result) return null;
+
+    const latest = result.meta?.regularMarketPrice;
+    const change = result.meta?.regularMarketChangePercent ?? 0;
+
+    if (latest == null || isNaN(latest)) return null;
+
     return { value: parseFloat(latest.toFixed(2)), change: parseFloat(change.toFixed(2)) };
   } catch {
     return null;
@@ -107,9 +162,10 @@ async function fetchYahooProxy(symbol: string): Promise<{ value: number; change:
 }
 
 async function fetchIndianMarkets(): Promise<{ sensex: MarketData['sensex']; nifty: MarketData['nifty'] }> {
+  // Try Vercel proxy first, then fall back to query2 direct
   const [sensex, nifty] = await Promise.all([
-    fetchYahooProxy('^BSESN'),
-    fetchYahooProxy('^NSEI'),
+    fetchYahooViaProxy('^BSESN').then(r => r ?? fetchYahooDirect('^BSESN')),
+    fetchYahooViaProxy('^NSEI').then(r => r ?? fetchYahooDirect('^NSEI')),
   ]);
 
   return {
@@ -117,6 +173,8 @@ async function fetchIndianMarkets(): Promise<{ sensex: MarketData['sensex']; nif
     nifty: nifty ?? { value: 0, change: 0 },
   };
 }
+
+// ── Assemble ──────────────────────────────────────────────────────────────────
 
 async function fetchLive(): Promise<MarketData | null> {
   try {
@@ -136,7 +194,7 @@ async function fetchLive(): Promise<MarketData | null> {
       sensex: indian.sensex,
       nifty: indian.nifty,
     };
-  } catch (err) {
+  } catch {
     return null;
   }
 }
@@ -144,19 +202,10 @@ async function fetchLive(): Promise<MarketData | null> {
 // ── Public API ────────────────────────────────────────────────────────────────
 
 export async function fetchMarketData(): Promise<MarketResult> {
-  // Step 5: Clear localStorage market cache
-  try {
-    localStorage.removeItem('market_cache');
-    // Also clearing the older cache keys just to be thoroughly sure
-    localStorage.removeItem('market_data_cache_v3');
-    localStorage.removeItem('market_data_cache_v4');
-    localStorage.removeItem('market_data_cache_v5');
-  } catch {}
-
   const now = Date.now();
   const cached = readCache();
 
-  // 1. Cache hit — within 30 min
+  // Cache hit — within 30 min
   if (cached && now - cached.fetchedAt < CACHE_TTL_MS) {
     return {
       data: cached.data,
@@ -166,7 +215,7 @@ export async function fetchMarketData(): Promise<MarketResult> {
     };
   }
 
-  // 2. Cache miss or expired — fetch fresh
+  // Cache miss or expired — fetch fresh
   const live = await fetchLive();
 
   if (live) {
@@ -174,7 +223,7 @@ export async function fetchMarketData(): Promise<MarketResult> {
     return { data: live, fetchedAt, isStale: false, fromCache: false };
   }
 
-  // 3. Fetch failed — fall back to stale cache with a warning if it exists
+  // Fetch failed — fall back to stale cache
   if (cached) {
     return {
       data: cached.data,
@@ -184,7 +233,7 @@ export async function fetchMarketData(): Promise<MarketResult> {
     };
   }
 
-  // 4. Nothing at all — signal unavailable
+  // Nothing at all
   clearCache();
   return { data: null, fetchedAt: null, isStale: true, fromCache: false };
 }
