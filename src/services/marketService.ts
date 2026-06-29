@@ -1,8 +1,7 @@
 import type { MarketData } from '../types';
 
-const CACHE_KEY = 'market_data_cache_v7';
-const CACHE_TTL_MS = 30 * 60 * 1000;
-const STALE_WARN_MS = 2 * 60 * 60 * 1000;
+const CACHE_KEY = 'market_data_v7';
+const CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutes
 
 export interface MarketResult {
   data: MarketData | null;
@@ -34,9 +33,7 @@ function writeCache(data: MarketData): number {
   const fetchedAt = Date.now();
   try {
     localStorage.setItem(CACHE_KEY, JSON.stringify({ data, fetchedAt }));
-  } catch {
-    // ignore
-  }
+  } catch { /* ignore */ }
   return fetchedAt;
 }
 
@@ -44,67 +41,39 @@ function clearCache() {
   try { localStorage.removeItem(CACHE_KEY); } catch { /* ignore */ }
 }
 
-// ── Crypto — Primary: CoinCap (no key, no rate limit) ─────────────────────────
+// ── Crypto — Binance (no key, no CORS issues) ─────────────────────────────────
 
 async function fetchCrypto(): Promise<{ btc: MarketData['btc']; eth: MarketData['eth']; sol: MarketData['sol'] } | null> {
   try {
     const [btcRes, ethRes, solRes] = await Promise.all([
-      fetch('https://api.coincap.io/v2/assets/bitcoin'),
-      fetch('https://api.coincap.io/v2/assets/ethereum'),
-      fetch('https://api.coincap.io/v2/assets/solana'),
+      fetch('https://api.binance.com/api/v3/ticker/24hr?symbol=BTCUSDT'),
+      fetch('https://api.binance.com/api/v3/ticker/24hr?symbol=ETHUSDT'),
+      fetch('https://api.binance.com/api/v3/ticker/24hr?symbol=SOLUSDT'),
     ]);
 
-    if (btcRes.ok && ethRes.ok && solRes.ok) {
-      const [btcJson, ethJson, solJson] = await Promise.all([
-        btcRes.json(),
-        ethRes.json(),
-        solRes.json(),
-      ]);
+    if (!btcRes.ok || !ethRes.ok || !solRes.ok) return null;
 
-      const parse = (json: { data: { priceUsd: string; changePercent24Hr: string } }) => ({
-        price: parseFloat(json.data.priceUsd),
-        change24h: parseFloat(json.data.changePercent24Hr),
-      });
-
-      return {
-        btc: parse(btcJson),
-        eth: parse(ethJson),
-        sol: parse(solJson),
-      };
-    }
-  } catch { /* fall through */ }
-
-  // Fallback: Coinbase spot prices (no change%, use 0)
-  try {
-    const [btcRes, ethRes, solRes] = await Promise.all([
-      fetch('https://api.coinbase.com/v2/prices/BTC-USD/spot'),
-      fetch('https://api.coinbase.com/v2/prices/ETH-USD/spot'),
-      fetch('https://api.coinbase.com/v2/prices/SOL-USD/spot'),
+    const [btc, eth, sol] = await Promise.all([
+      btcRes.json(),
+      ethRes.json(),
+      solRes.json(),
     ]);
 
-    if (btcRes.ok && ethRes.ok && solRes.ok) {
-      const [btcJson, ethJson, solJson] = await Promise.all([
-        btcRes.json(),
-        ethRes.json(),
-        solRes.json(),
-      ]);
-
-      return {
-        btc: { price: parseFloat(btcJson.data.amount), change24h: 0 },
-        eth: { price: parseFloat(ethJson.data.amount), change24h: 0 },
-        sol: { price: parseFloat(solJson.data.amount), change24h: 0 },
-      };
-    }
-  } catch { /* fall through */ }
-
-  return null;
+    return {
+      btc: { price: parseFloat(btc.lastPrice),  change24h: parseFloat(btc.priceChangePercent)  },
+      eth: { price: parseFloat(eth.lastPrice),  change24h: parseFloat(eth.priceChangePercent)  },
+      sol: { price: parseFloat(sol.lastPrice),  change24h: parseFloat(sol.priceChangePercent)  },
+    };
+  } catch {
+    return null;
+  }
 }
 
-// ── Forex — Frankfurter (ECB data, no key needed) ─────────────────────────────
+// ── Forex — exchangerate-api (free, no key) ───────────────────────────────────
 
 async function fetchForex(): Promise<MarketData['usdInr']> {
   try {
-    const res = await fetch('https://api.frankfurter.app/latest?from=USD&to=INR');
+    const res = await fetch('https://api.exchangerate-api.com/v4/latest/USD');
     if (res.ok) {
       const data = await res.json();
       if (data?.rates?.INR) {
@@ -112,34 +81,12 @@ async function fetchForex(): Promise<MarketData['usdInr']> {
       }
     }
   } catch { /* fall through */ }
-
   return { rate: 0, change: 0 };
 }
 
-// ── Indian Markets — Yahoo Finance via Vercel proxy ───────────────────────────
+// ── Indian Markets — Yahoo Finance query2 (more relaxed CORS than query1) ─────
 
-async function fetchYahooViaProxy(symbol: string): Promise<{ value: number; change: number } | null> {
-  try {
-    const res = await fetch(`/api/yahoo?symbol=${encodeURIComponent(symbol)}`);
-    if (!res.ok) return null;
-
-    const data = await res.json();
-    const result = data?.chart?.result?.[0];
-    if (!result) return null;
-
-    const latest = result.meta?.regularMarketPrice;
-    const change = result.meta?.regularMarketChangePercent ?? 0;
-
-    if (latest == null || isNaN(latest)) return null;
-
-    return { value: parseFloat(latest.toFixed(2)), change: parseFloat(change.toFixed(2)) };
-  } catch {
-    return null;
-  }
-}
-
-async function fetchYahooDirect(symbol: string): Promise<{ value: number; change: number } | null> {
-  // Fallback: query2 has more relaxed CORS than query1
+async function fetchYahoo(symbol: string): Promise<{ value: number; change: number } | null> {
   try {
     const res = await fetch(
       `https://query2.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(symbol)}?interval=1d&range=1d`
@@ -147,30 +94,30 @@ async function fetchYahooDirect(symbol: string): Promise<{ value: number; change
     if (!res.ok) return null;
 
     const data = await res.json();
-    const result = data?.chart?.result?.[0];
-    if (!result) return null;
+    const meta = data?.chart?.result?.[0]?.meta;
+    if (!meta) return null;
 
-    const latest = result.meta?.regularMarketPrice;
-    const change = result.meta?.regularMarketChangePercent ?? 0;
+    const value  = meta.regularMarketPrice        ?? 0;
+    const change = meta.regularMarketChangePercent ?? 0;
 
-    if (latest == null || isNaN(latest)) return null;
-
-    return { value: parseFloat(latest.toFixed(2)), change: parseFloat(change.toFixed(2)) };
+    return {
+      value:  parseFloat(value.toFixed(2)),
+      change: parseFloat(change.toFixed(2)),
+    };
   } catch {
     return null;
   }
 }
 
 async function fetchIndianMarkets(): Promise<{ sensex: MarketData['sensex']; nifty: MarketData['nifty'] }> {
-  // Try Vercel proxy first, then fall back to query2 direct
   const [sensex, nifty] = await Promise.all([
-    fetchYahooViaProxy('^BSESN').then(r => r ?? fetchYahooDirect('^BSESN')),
-    fetchYahooViaProxy('^NSEI').then(r => r ?? fetchYahooDirect('^NSEI')),
+    fetchYahoo('^BSESN'),
+    fetchYahoo('^NSEI'),
   ]);
 
   return {
     sensex: sensex ?? { value: 0, change: 0 },
-    nifty: nifty ?? { value: 0, change: 0 },
+    nifty:  nifty  ?? { value: 0, change: 0 },
   };
 }
 
@@ -187,12 +134,12 @@ async function fetchLive(): Promise<MarketData | null> {
     if (!crypto) return null;
 
     return {
-      btc: crypto.btc,
-      eth: crypto.eth,
-      sol: crypto.sol,
+      btc:    crypto.btc,
+      eth:    crypto.eth,
+      sol:    crypto.sol,
       usdInr,
       sensex: indian.sensex,
-      nifty: indian.nifty,
+      nifty:  indian.nifty,
     };
   } catch {
     return null;
@@ -202,15 +149,21 @@ async function fetchLive(): Promise<MarketData | null> {
 // ── Public API ────────────────────────────────────────────────────────────────
 
 export async function fetchMarketData(): Promise<MarketResult> {
-  const now = Date.now();
+  // Clear all old stale caches once on every load
+  try {
+    localStorage.removeItem('market_data_cache_v6');
+    localStorage.removeItem('market_cache');
+  } catch { /* ignore */ }
+
+  const now    = Date.now();
   const cached = readCache();
 
-  // Cache hit — within 30 min
+  // Cache hit — within 5 minutes
   if (cached && now - cached.fetchedAt < CACHE_TTL_MS) {
     return {
-      data: cached.data,
+      data:      cached.data,
       fetchedAt: cached.fetchedAt,
-      isStale: (now - cached.fetchedAt) > STALE_WARN_MS,
+      isStale:   false,
       fromCache: true,
     };
   }
@@ -223,17 +176,17 @@ export async function fetchMarketData(): Promise<MarketResult> {
     return { data: live, fetchedAt, isStale: false, fromCache: false };
   }
 
-  // Fetch failed — fall back to stale cache
+  // Fetch failed — fall back to stale cache with warning
   if (cached) {
     return {
-      data: cached.data,
+      data:      cached.data,
       fetchedAt: cached.fetchedAt,
-      isStale: true,
+      isStale:   true,
       fromCache: true,
     };
   }
 
-  // Nothing at all
+  // Nothing at all — signal unavailable
   clearCache();
   return { data: null, fetchedAt: null, isStale: true, fromCache: false };
 }
