@@ -73,11 +73,11 @@ async function fetchCrypto(): Promise<{
   }
 }
 
-// ── Forex — Frankfurter ECB data (CORS-safe) ──────────────────────────────────
+// ── Forex — open.er-api.com (free, no key, supports INR) ─────────────────────
 
 async function fetchForex(): Promise<MarketData['usdInr']> {
   try {
-    const res = await fetch('https://api.frankfurter.app/latest?from=USD&to=INR');
+    const res = await fetch('https://open.er-api.com/v6/latest/USD');
     const data = await res.json();
     if (data?.rates?.INR) {
       return { rate: parseFloat(data.rates.INR.toFixed(2)), change: 0 };
@@ -150,9 +150,10 @@ async function fetchIndianMarkets(): Promise<{
   sensex: MarketData['sensex'];
   nifty: MarketData['nifty'];
 }> {
+  // Pass raw (unencoded) symbols — fetchIndex handles encoding internally
   const [sensex, nifty] = await Promise.all([
-    fetchIndex('%5EBSESN'),
-    fetchIndex('%5ENSEI'),
+    fetchIndex('^BSESN'),
+    fetchIndex('^NSEI'),
   ]);
   return { sensex, nifty };
 }
