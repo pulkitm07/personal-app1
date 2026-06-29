@@ -81,43 +81,40 @@ async function fetchForex(): Promise<MarketData['usdInr']> {
   }
 }
 
-// ── Indian Markets — allorigins proxy → query2 Yahoo Finance ─────────────────
 
-async function fetchYahoo(symbol: string): Promise<{ value: number; change: number } | null> {
+// ── Indian Markets — allorigins /get proxy → query2 Yahoo Finance ────────────
+
+async function fetchIndianMarkets() {
   try {
-    const targetUrl = `https://query2.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(symbol)}?interval=1d&range=1d`;
-    const proxyUrl  = `https://api.allorigins.win/raw?url=${encodeURIComponent(targetUrl)}`;
+    const [sensexRes, niftyRes] = await Promise.all([
+      fetch('https://api.allorigins.win/get?url=' + encodeURIComponent('https://query2.finance.yahoo.com/v8/finance/chart/%5EBSESN?interval=1d&range=1d')),
+      fetch('https://api.allorigins.win/get?url=' + encodeURIComponent('https://query2.finance.yahoo.com/v8/finance/chart/%5ENSEI?interval=1d&range=1d'))
+    ]);
 
-    const res = await fetch(proxyUrl);
-    if (!res.ok) return null;
+    const sensexJson = await sensexRes.json();
+    const niftyJson  = await niftyRes.json();
 
-    const data = await res.json();
-    const meta = data?.chart?.result?.[0]?.meta;
-    if (!meta) return null;
+    const sensexData = JSON.parse(sensexJson.contents);
+    const niftyData  = JSON.parse(niftyJson.contents);
 
-    const value  = meta.regularMarketPrice        ?? 0;
-    const change = meta.regularMarketChangePercent ?? 0;
+    const sensexPrice  = sensexData?.chart?.result?.[0]?.meta?.regularMarketPrice          ?? 0;
+    const sensexChange = sensexData?.chart?.result?.[0]?.meta?.regularMarketChangePercent   ?? 0;
+    const niftyPrice   = niftyData?.chart?.result?.[0]?.meta?.regularMarketPrice            ?? 0;
+    const niftyChange  = niftyData?.chart?.result?.[0]?.meta?.regularMarketChangePercent    ?? 0;
 
     return {
-      value:  parseFloat(value.toFixed(2)),
-      change: parseFloat(change.toFixed(2)),
+      sensex: { value: parseFloat(sensexPrice.toFixed(2)),  change: parseFloat(sensexChange.toFixed(2)) },
+      nifty:  { value: parseFloat(niftyPrice.toFixed(2)),   change: parseFloat(niftyChange.toFixed(2))  }
     };
   } catch {
-    return null;
+    return {
+      sensex: { value: 0, change: 0 },
+      nifty:  { value: 0, change: 0 }
+    };
   }
 }
 
-async function fetchIndianMarkets(): Promise<{ sensex: MarketData['sensex']; nifty: MarketData['nifty'] }> {
-  const [sensex, nifty] = await Promise.all([
-    fetchYahoo('^BSESN'),
-    fetchYahoo('^NSEI'),
-  ]);
 
-  return {
-    sensex: sensex ?? { value: 0, change: 0 },
-    nifty:  nifty  ?? { value: 0, change: 0 },
-  };
-}
 
 // ── Assemble ──────────────────────────────────────────────────────────────────
 
