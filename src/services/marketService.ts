@@ -69,11 +69,11 @@ async function fetchCrypto(): Promise<{ btc: MarketData['btc']; eth: MarketData[
   }
 }
 
-// ── Forex — exchangerate-api (free, no key) ───────────────────────────────────
+// ── Forex — Frankfurter (ECB data, CORS-safe, ~₹84) ─────────────────────────
 
 async function fetchForex(): Promise<MarketData['usdInr']> {
   try {
-    const res = await fetch('https://api.exchangerate-api.com/v4/latest/USD');
+    const res = await fetch('https://api.frankfurter.app/latest?from=USD&to=INR');
     if (res.ok) {
       const data = await res.json();
       if (data?.rates?.INR) {
@@ -84,13 +84,14 @@ async function fetchForex(): Promise<MarketData['usdInr']> {
   return { rate: 0, change: 0 };
 }
 
-// ── Indian Markets — Yahoo Finance query2 (more relaxed CORS than query1) ─────
+// ── Indian Markets — allorigins proxy → query2 Yahoo Finance ─────────────────
 
 async function fetchYahoo(symbol: string): Promise<{ value: number; change: number } | null> {
   try {
-    const res = await fetch(
-      `https://query2.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(symbol)}?interval=1d&range=1d`
-    );
+    const targetUrl = `https://query2.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(symbol)}?interval=1d&range=1d`;
+    const proxyUrl  = `https://api.allorigins.win/raw?url=${encodeURIComponent(targetUrl)}`;
+
+    const res = await fetch(proxyUrl);
     if (!res.ok) return null;
 
     const data = await res.json();
