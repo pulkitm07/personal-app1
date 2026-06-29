@@ -74,14 +74,11 @@ async function fetchCrypto(): Promise<{ btc: MarketData['btc']; eth: MarketData[
 async function fetchForex(): Promise<MarketData['usdInr']> {
   try {
     const res = await fetch('https://api.frankfurter.app/latest?from=USD&to=INR');
-    if (res.ok) {
-      const data = await res.json();
-      if (data?.rates?.INR) {
-        return { rate: data.rates.INR, change: 0 };
-      }
-    }
-  } catch { /* fall through */ }
-  return { rate: 0, change: 0 };
+    const data = await res.json();
+    return { rate: data.rates.INR, change: 0 };
+  } catch {
+    return { rate: 0, change: 0 };
+  }
 }
 
 // ── Indian Markets — allorigins proxy → query2 Yahoo Finance ─────────────────
