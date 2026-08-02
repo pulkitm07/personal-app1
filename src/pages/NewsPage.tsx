@@ -6,21 +6,12 @@ import {
   fetchFinanceNews,
   fetchFintechNews,
   fetchConsultingNews,
+  fetchPsychologyNews,
 } from '../services/newsService';
 import { formatRelativeTime } from '../utils/storage';
-import { getDailyTopics } from '../utils/dailyTopics';
-import psychologyData from '../data/psychology.json';
 import type { NewsArticle } from '../types';
 
 type NewsTab = 'geopolitical' | 'finance' | 'fintech' | 'consultancy' | 'psychology';
-
-interface PsychologyTopic {
-  id: number;
-  title: string;
-  content: string;
-}
-
-const typedPsychData = psychologyData as PsychologyTopic[];
 
 export function NewsPage() {
   const [activeTab, setActiveTab] = useState<NewsTab>('geopolitical');
@@ -28,11 +19,9 @@ export function NewsPage() {
   const [finNews, setFinNews]           = useState<NewsArticle[]>([]);
   const [fintechNews, setFintechNews]   = useState<NewsArticle[]>([]);
   const [consultingNews, setConsultingNews] = useState<NewsArticle[]>([]);
+  const [psychologyNews, setPsychologyNews] = useState<NewsArticle[]>([]);
   const [keyInsight, setKeyInsight]     = useState<string>('');
   const [loading, setLoading]           = useState(true);
-
-  // Psychology topics are date-driven — no fetch needed
-  const dailyTopics = getDailyTopics<PsychologyTopic>(typedPsychData, 2);
 
   useEffect(() => {
     loadNews();
@@ -64,6 +53,10 @@ export function NewsPage() {
       fetchConsultingNews()
         .then(setConsultingNews)
         .catch(() => setConsultingNews([])),
+        
+      fetchPsychologyNews()
+        .then(setPsychologyNews)
+        .catch(() => setPsychologyNews([])),
     ]);
     
     setLoading(false);
@@ -75,7 +68,7 @@ export function NewsPage() {
     finance:      finNews.length,
     fintech:      fintechNews.length,
     consultancy:  consultingNews.length,
-    psychology:   dailyTopics.length,
+    psychology:   psychologyNews.length,
   };
 
   const TABS: { id: NewsTab; label: string }[] = [
@@ -229,50 +222,21 @@ export function NewsPage() {
         </Card>
       )}
 
-      {/* Psychology tab — daily topics from JSON */}
-      {activeTab === 'psychology' && (
-        <div className="space-y-4">
-          <Card className="bg-accent/5 dark:bg-accent/10 border-accent/20 dark:border-accent/20">
-            <div className="flex items-start gap-3">
-              <div className="shrink-0 w-1 h-12 bg-accent dark:bg-accent rounded-full" />
-              <div>
-                <p className="text-xs font-medium text-accent dark:text-accent mb-1 flex items-center gap-1.5">
-                  <Brain size={12} />
-                  TODAY'S PSYCHOLOGY TOPICS
-                </p>
-                <p className="text-sm text-gray-900 dark:text-white leading-relaxed">
-                  {dailyTopics.length > 0
-                    ? `Reading topics #${dailyTopics[0].id} & #${dailyTopics[1]?.id} today — come back tomorrow for the next 2!`
-                    : 'Loading topics...'}
-                </p>
-              </div>
-            </div>
-          </Card>
-          <div className="grid md:grid-cols-2 gap-4">
-            {dailyTopics.map(topic => (
-              <PsychologyCard key={topic.id} topic={topic} />
-            ))}
-          </div>
+      {/* News articles grid */}
+      {loading ? (
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {Array.from({ length: 6 }).map((_, i) => (
+            <SkeletonCard key={i} />
+          ))}
         </div>
-      )}
-
-      {/* News articles grid for all other tabs */}
-      {activeTab !== 'psychology' && (
-        loading ? (
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {Array.from({ length: 6 }).map((_, i) => (
-              <SkeletonCard key={i} />
-            ))}
-          </div>
-        ) : activeArticles.length > 0 ? (
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {activeArticles.map((article, index) => (
-              <NewsCard key={index} article={article} />
-            ))}
-          </div>
-        ) : (
-          <EmptyState />
-        )
+      ) : activeArticles.length > 0 ? (
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {activeArticles.map((article, index) => (
+            <NewsCard key={index} article={article} />
+          ))}
+        </div>
+      ) : (
+        <EmptyState />
       )}
     </div>
   );

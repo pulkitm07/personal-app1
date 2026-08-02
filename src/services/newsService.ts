@@ -37,6 +37,14 @@ const CONSULTING_FEEDS: { url: string; skipKeywordFilter: boolean }[] = [
   { url: 'https://www.consulting.us/rss', skipKeywordFilter: true },
 ];
 
+const PSYCHOLOGY_FEEDS: { url: string; skipKeywordFilter: boolean }[] = [
+  { url: 'https://www.psychologytoday.com/us/front/feed', skipKeywordFilter: true },
+  { url: 'https://www.apa.org/news/psycport/rss', skipKeywordFilter: true },
+  { url: 'https://www.scientificamerican.com/mind-and-brain/rss', skipKeywordFilter: true },
+  { url: 'https://digest.bps.org.uk/feed/', skipKeywordFilter: true },
+  { url: 'https://greatergood.berkeley.edu/site/rss', skipKeywordFilter: true },
+];
+
 // ── Keyword filters ────────────────────────────────────────────────────────────
 
 const CONSULTING_ALLOW = [
@@ -126,6 +134,16 @@ function consultCategory(t: string, d: string) {
   if (/talent|workforce|culture|hiring|employee/.test(s)) return 'Talent';
   if (/merger|acquisition|private equity/.test(s)) return 'M&A';
   return 'Management';
+}
+
+function psychCategory(t: string, d: string) {
+  const s = `${t} ${d}`.toLowerCase();
+  if (/mental health|anxiety|depression|therapy|trauma/.test(s)) return 'Mental Health';
+  if (/brain|neuro|cognitive|memory/.test(s)) return 'Neuroscience';
+  if (/behavior|habit|addiction/.test(s)) return 'Behavior';
+  if (/child|development|parenting/.test(s)) return 'Development';
+  if (/social|relationship|personality/.test(s)) return 'Social';
+  return 'Psychology';
 }
 
 // ── Core fetch ────────────────────────────────────────────────────────────────
@@ -274,21 +292,41 @@ export async function fetchFintechNews(): Promise<NewsArticle[]> {
  *  Articles within 7 days (consultancy publications update less frequently) */
 export async function fetchConsultingNews(): Promise<NewsArticle[]> {
   const settled = await Promise.allSettled(
-    CONSULTING_FEEDS.map(({ url }) => fetchFeed(url, consultCategory))
+    CONSULTING_FEEDS.map(f => fetchFeed(f.url, consultCategory))
   );
 
   const articles = settled
     .filter((r): r is PromiseFulfilledResult<NewsArticle[]> => r.status === 'fulfilled')
-    .flatMap((r, i) => {
-      const { skipKeywordFilter } = CONSULTING_FEEDS[i];
-      return r.value.filter(a => {
-        if (!a.title) return false;
-        const text = `${a.title} ${a.summary}`.toLowerCase();
-        if (isExcluded(text)) return false;
-        if (!isWithinDays(a.publishedAt, 7)) return false;
-        if (skipKeywordFilter) return true;
-        return CONSULTING_ALLOW.some(kw => text.includes(kw));
-      });
+    .flatMap(r => r.value)
+    .filter(a => {
+      if (!a.title) return false;
+      const text = `${a.title} ${a.summary}`.toLowerCase();
+      if (isExcluded(text)) return false;
+      
+      const feedConfig = CONSULTING_FEEDS.find(f => f.url === a.url || a.url.startsWith(new URL(f.url).origin));
+      if (feedConfig?.skipKeywordFilter) return isWithinDays(a.publishedAt, 7);
+      
+      return CONSULTING_ALLOW.some(k => text.includes(k)) && isWithinDays(a.publishedAt, 7);
+    });
+
+  const result = dedup(articles);
+  result.sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
+  return result;
+}
+
+export async function fetchPsychologyNews(): Promise<NewsArticle[]> {
+  const settled = await Promise.allSettled(
+    PSYCHOLOGY_FEEDS.map(f => fetchFeed(f.url, psychCategory))
+  );
+
+  const articles = settled
+    .filter((r): r is PromiseFulfilledResult<NewsArticle[]> => r.status === 'fulfilled')
+    .flatMap(r => r.value)
+    .filter(a => {
+      if (!a.title) return false;
+      const text = `${a.title} ${a.summary}`.toLowerCase();
+      if (isExcluded(text)) return false;
+      return isWithinDays(a.publishedAt, 7);
     });
 
   const result = dedup(articles);

@@ -99,18 +99,31 @@ async function fetchCrypto(): Promise<{
 // ── Forex — two free no-key endpoints ─────────────────────────────────────────
 
 async function fetchForex(): Promise<MarketData['usdInr']> {
-  // Primary: open.er-api.com
   try {
-    const res = await safeFetch('https://open.er-api.com/v6/latest/USD');
-    if (res) {
-      const data = await res.json();
-      if (data?.rates?.INR) {
-        return { rate: safeFloat(data.rates.INR.toFixed(2)), change: 0 };
+    const today = await safeFetch('https://api.frankfurter.app/latest?from=USD&to=INR');
+    
+    // Get yesterday's date in YYYY-MM-DD
+    const yesterdayDate = new Date(Date.now() - 86400000).toISOString().split('T')[0];
+    const yesterday = await safeFetch(`https://api.frankfurter.app/${yesterdayDate}?from=USD&to=INR`);
+    
+    if (today && yesterday) {
+      const tData = await today.json();
+      const yData = await yesterday.json();
+      
+      const rateToday = safeFloat(tData?.rates?.INR);
+      const rateYesterday = safeFloat(yData?.rates?.INR);
+      
+      if (rateToday && rateYesterday) {
+        const changePct = ((rateToday - rateYesterday) / rateYesterday) * 100;
+        return { 
+          rate: safeFloat(rateToday.toFixed(2)), 
+          change: safeFloat(changePct.toFixed(2)) 
+        };
       }
     }
   } catch { /**/ }
 
-  // Fallback: exchangerate-api.com
+  // Fallback if frankfurter fails completely
   try {
     const res = await safeFetch('https://api.exchangerate-api.com/v4/latest/USD');
     if (res) {
@@ -129,13 +142,20 @@ async function fetchForex(): Promise<MarketData['usdInr']> {
 function parseYahooMeta(data: unknown): { value: number; change: number } | null {
   try {
     const meta = (data as any)?.chart?.result?.[0]?.meta;
-    const price  = safeFloat(meta?.regularMarketPrice);
-    const prevClose = safeFloat(meta?.chartPreviousClose);
+    let price  = safeFloat(meta?.regularMarketPrice);
+    
+    // Yahoo's meta.chartPreviousClose is broken for commodities (returns current price).
+    // So we fetch range=5d and get the actual previous close from the historical quotes.
+    const closes = (data as any)?.chart?.result?.[0]?.indicators?.quote?.[0]?.close || [];
+    const validCloses = closes.filter((c: any) => c !== null);
+    
+    let prevClose = safeFloat(meta?.chartPreviousClose);
+    if (validCloses.length >= 2) {
+      prevClose = safeFloat(validCloses[validCloses.length - 2]);
+    }
     
     if (!price || !prevClose) return null;
     
-    // Yahoo API stopped returning regularMarketChangePercent reliably.
-    // Calculate it manually.
     const changePct = ((price - prevClose) / prevClose) * 100;
     
     return { 
@@ -146,6 +166,8 @@ function parseYahooMeta(data: unknown): { value: number; change: number } | null
 }
 
 async function fetchIndex(symbol: string): Promise<{ value: number; change: number }> {
+  const queryUrl = `https://query2.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(symbol)}?interval=1d&range=5d`;
+
   // Method 1: Vercel serverless /api/yahoo — server-side, no CORS restriction
   try {
     const res = await safeFetch(`/api/yahoo?symbol=${encodeURIComponent(symbol)}`);
@@ -155,11 +177,9 @@ async function fetchIndex(symbol: string): Promise<{ value: number; change: numb
     }
   } catch { /**/ }
 
-  // Method 2: allorigins /get proxy (wraps response in { contents: "..." })
+  // Method 2: allorigins /get proxy
   try {
-    const targetUrl = encodeURIComponent(
-      `https://query2.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(symbol)}?interval=1d&range=1d`
-    );
+    const targetUrl = encodeURIComponent(queryUrl);
     const res = await safeFetch(`https://api.allorigins.win/get?url=${targetUrl}`);
     if (res) {
       const wrapper = await res.json();
@@ -170,9 +190,7 @@ async function fetchIndex(symbol: string): Promise<{ value: number; change: numb
 
   // Method 3: corsproxy.io
   try {
-    const targetUrl = encodeURIComponent(
-      `https://query2.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(symbol)}?interval=1d&range=1d`
-    );
+    const targetUrl = encodeURIComponent(queryUrl);
     const res = await safeFetch(`https://corsproxy.io/?${targetUrl}`);
     if (res) {
       const parsed = parseYahooMeta(await res.json());
