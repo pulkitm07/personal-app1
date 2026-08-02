@@ -1,6 +1,6 @@
 import type { MarketData } from '../types';
 
-const CACHE_KEY = 'market_data_v9';
+const CACHE_KEY = 'market_data_v10';
 const CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutes
 
 export interface MarketResult {
@@ -182,6 +182,40 @@ async function fetchIndianMarkets(): Promise<{ sensex: MarketData['sensex']; nif
   return { sensex, nifty };
 }
 
+async function fetchUSMarkets(usdInrRate: number): Promise<{
+  nasdaq: MarketData['nasdaq'];
+  sp500: MarketData['sp500'];
+  dowjones: MarketData['dowjones'];
+  treasury10y: MarketData['treasury10y'];
+  goldInrPerGram: MarketData['goldInrPerGram'];
+  oilWti: MarketData['oilWti'];
+}> {
+  const [nasdaq, sp500, dowjones, treasury10y, goldRaw, oilWti] = await Promise.all([
+    fetchIndex('^IXIC'),
+    fetchIndex('^GSPC'),
+    fetchIndex('^DJI'),
+    fetchIndex('^TNX'),
+    fetchIndex('GC=F'),
+    fetchIndex('CL=F'),
+  ]);
+
+  // Convert Gold from USD/oz → INR/gram
+  const TROY_OZ_TO_GRAMS = 31.1035;
+  const goldUsdPerGram = goldRaw.value / TROY_OZ_TO_GRAMS;
+  const goldInrPerGram = usdInrRate > 0
+    ? parseFloat((goldUsdPerGram * usdInrRate).toFixed(2))
+    : 0;
+
+  return {
+    nasdaq,
+    sp500,
+    dowjones,
+    treasury10y,
+    goldInrPerGram: { value: goldInrPerGram, change: goldRaw.change },
+    oilWti,
+  };
+}
+
 // ── Assemble ──────────────────────────────────────────────────────────────────
 
 async function fetchLive(): Promise<MarketData | null> {
@@ -192,6 +226,10 @@ async function fetchLive(): Promise<MarketData | null> {
       fetchIndianMarkets(),
     ]);
     if (!crypto) return null;
+
+    // Fetch US markets after we have USD/INR rate (needed for gold conversion)
+    const us = await fetchUSMarkets(usdInr.rate);
+
     return {
       btc: crypto.btc,
       eth: crypto.eth,
@@ -199,6 +237,12 @@ async function fetchLive(): Promise<MarketData | null> {
       usdInr,
       sensex: indian.sensex,
       nifty: indian.nifty,
+      nasdaq: us.nasdaq,
+      sp500: us.sp500,
+      dowjones: us.dowjones,
+      treasury10y: us.treasury10y,
+      goldInrPerGram: us.goldInrPerGram,
+      oilWti: us.oilWti,
     };
   } catch { return null; }
 }
@@ -207,7 +251,7 @@ async function fetchLive(): Promise<MarketData | null> {
 
 export async function fetchMarketData(): Promise<MarketResult> {
   // Wipe every known old cache key on load
-  ['market_data_v8','market_data_v7','market_data_cache_v6','market_data_cache_v5',
+  ['market_data_v9','market_data_v8','market_data_v7','market_data_cache_v6','market_data_cache_v5',
    'market_data_cache_v4','market_data_cache_v3','market_cache']
     .forEach(k => { try { localStorage.removeItem(k); } catch { /**/ } });
 

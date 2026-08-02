@@ -31,6 +31,12 @@ export interface MarketData {
   usdInr: { rate: number; change: number };
   sensex: { value: number; change: number };
   nifty: { value: number; change: number };
+  nasdaq: { value: number; change: number };
+  sp500: { value: number; change: number };
+  dowjones: { value: number; change: number };
+  treasury10y: { value: number; change: number };
+  goldInrPerGram: { value: number; change: number };
+  oilWti: { value: number; change: number };
 }
 
 export interface GitaVerse {
