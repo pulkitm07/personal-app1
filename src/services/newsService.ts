@@ -22,12 +22,12 @@ const FINANCE_FEEDS = [
   'https://www.livemint.com/rss/markets',
 ];
 
-const FINTECH_FEEDS = [
-  'https://techcrunch.com/category/fintech/feed/',
-  'https://www.finextra.com/rss/headlines.aspx',
-  'https://thefintechtimes.com/feed/',
-  'https://economictimes.indiatimes.com/tech/technology/rssfeeds/13357270.cms',
-  'https://www.businessinsider.com/fintech/rss',
+const FINTECH_FEEDS: { url: string; skipKeywordFilter: boolean }[] = [
+  { url: 'https://techcrunch.com/category/fintech/feed/', skipKeywordFilter: true },
+  { url: 'https://www.finextra.com/rss/headlines.aspx', skipKeywordFilter: true },
+  { url: 'https://thefintechtimes.com/feed/', skipKeywordFilter: true },
+  { url: 'https://economictimes.indiatimes.com/tech/technology/rssfeeds/13357270.cms', skipKeywordFilter: false },
+  { url: 'https://www.businessinsider.com/fintech/rss', skipKeywordFilter: false },
 ];
 
 const CONSULTING_FEEDS: { url: string; skipKeywordFilter: boolean }[] = [
@@ -219,21 +219,24 @@ export async function fetchFinanceNews(): Promise<{ articles: NewsArticle[]; key
   return { articles: result, keyInsight: pickInsight(result) };
 }
 
-/** Fintech — only articles from the last 48 hours */
+/** Fintech — dedicated feeds skip keyword filter; general feeds use fintech keyword list */
 export async function fetchFintechNews(): Promise<NewsArticle[]> {
   const settled = await Promise.allSettled(
-    FINTECH_FEEDS.map(url => fetchFeed(url, fintechCategory))
+    FINTECH_FEEDS.map(({ url }) => fetchFeed(url, fintechCategory))
   );
 
   const articles = settled
     .filter((r): r is PromiseFulfilledResult<NewsArticle[]> => r.status === 'fulfilled')
-    .flatMap(r => r.value)
-    .filter(a => {
-      if (!a.title) return false;
-      const text = `${a.title} ${a.summary}`.toLowerCase();
-      if (isExcluded(text)) return false;
-      if (!isWithinDays(a.publishedAt, 2)) return false;
-      return FINTECH_ALLOW.some(kw => text.includes(kw));
+    .flatMap((r, i) => {
+      const { skipKeywordFilter } = FINTECH_FEEDS[i];
+      return r.value.filter(a => {
+        if (!a.title) return false;
+        const text = `${a.title} ${a.summary}`.toLowerCase();
+        if (isExcluded(text)) return false;
+        if (!isWithinDays(a.publishedAt, 2)) return false;
+        if (skipKeywordFilter) return true;
+        return FINTECH_ALLOW.some(kw => text.includes(kw));
+      });
     });
 
   const result = dedup(articles);

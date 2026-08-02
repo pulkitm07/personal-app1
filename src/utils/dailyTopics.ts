@@ -1,14 +1,18 @@
 /**
- * Returns `count` items from a dataset deterministically based on today's date.
- * The same pair always appears on the same calendar date, cycling through all items.
+ * Returns `count` topics sequentially from the dataset, starting from index 0 on EPOCH_DATE
+ * and advancing by `count` each day. Topics always go in order: 2, 3, 4 … 244, 245, then loop.
  */
+const EPOCH_DATE = new Date('2026-08-03T00:00:00+05:30').getTime();
+
 export function getDailyTopics<T>(data: T[], count: number = 2): T[] {
   if (!data.length) return [];
   const now = new Date();
-  const start = new Date(now.getFullYear(), 0, 0);
-  const diff = now.getTime() - start.getTime();
-  const dayOfYear = Math.floor(diff / (1000 * 60 * 60 * 24));
-  const startIndex = (dayOfYear * count) % data.length;
+  now.setHours(0, 0, 0, 0);
+  const daysSinceEpoch = Math.max(
+    0,
+    Math.floor((now.getTime() - EPOCH_DATE) / (1000 * 60 * 60 * 24))
+  );
+  const startIndex = (daysSinceEpoch * count) % data.length;
   const result: T[] = [];
   for (let i = 0; i < count; i++) {
     result.push(data[(startIndex + i) % data.length]);
