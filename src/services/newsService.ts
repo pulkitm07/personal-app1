@@ -231,18 +231,11 @@ export async function fetchGeopoliticalNews(): Promise<NewsArticle[]> {
     });
 
   const result = dedup(articles);
-
-  result.sort((a, b) => {
-    const aIndia = a.category === 'India' ? 1 : 0;
-    const bIndia = b.category === 'India' ? 1 : 0;
-    if (aIndia !== bIndia) return aIndia - bIndia;
-    return new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime();
-  });
-
+  result.sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
   return result;
 }
 
-/** Finance — only articles from the last 48 hours */
+/** Finance — only articles from the last 72 hours */
 export async function fetchFinanceNews(): Promise<{ articles: NewsArticle[]; keyInsight: string }> {
   const settled = await Promise.allSettled(
     FINANCE_FEEDS.map(url => fetchFeed(url, finCategory))
@@ -254,7 +247,7 @@ export async function fetchFinanceNews(): Promise<{ articles: NewsArticle[]; key
     .filter(a => {
       if (!a.title) return false;
       const text = `${a.title} ${a.summary}`.toLowerCase();
-      return !isExcluded(text) && isWithinDays(a.publishedAt, 2);
+      return !isExcluded(text) && isWithinDays(a.publishedAt, 3);
     });
 
   const result = dedup(articles);
@@ -277,7 +270,7 @@ export async function fetchFintechNews(): Promise<NewsArticle[]> {
         if (!a.title) return false;
         const text = `${a.title} ${a.summary}`.toLowerCase();
         if (isExcluded(text)) return false;
-        if (!isWithinDays(a.publishedAt, 7)) return false;
+        if (!isWithinDays(a.publishedAt, 3)) return false;
         if (skipKeywordFilter) return true;
         return FINTECH_ALLOW.some(kw => text.includes(kw));
       });
@@ -288,8 +281,7 @@ export async function fetchFintechNews(): Promise<NewsArticle[]> {
   return result;
 }
 
-/** Consultancy — dedicated publications (no keyword filter) + business feeds (keyword filtered)
- *  Articles within 7 days (consultancy publications update less frequently) */
+/** Consultancy — dedicated publications (no keyword filter) + business feeds (keyword filtered) */
 export async function fetchConsultingNews(): Promise<NewsArticle[]> {
   const settled = await Promise.allSettled(
     CONSULTING_FEEDS.map(f => fetchFeed(f.url, consultCategory))
@@ -297,16 +289,16 @@ export async function fetchConsultingNews(): Promise<NewsArticle[]> {
 
   const articles = settled
     .filter((r): r is PromiseFulfilledResult<NewsArticle[]> => r.status === 'fulfilled')
-    .flatMap(r => r.value)
-    .filter(a => {
-      if (!a.title) return false;
-      const text = `${a.title} ${a.summary}`.toLowerCase();
-      if (isExcluded(text)) return false;
-      
-      const feedConfig = CONSULTING_FEEDS.find(f => f.url === a.url || a.url.startsWith(new URL(f.url).origin));
-      if (feedConfig?.skipKeywordFilter) return isWithinDays(a.publishedAt, 7);
-      
-      return CONSULTING_ALLOW.some(k => text.includes(k)) && isWithinDays(a.publishedAt, 7);
+    .flatMap((r, i) => {
+      const { skipKeywordFilter } = CONSULTING_FEEDS[i];
+      return r.value.filter(a => {
+        if (!a.title) return false;
+        const text = `${a.title} ${a.summary}`.toLowerCase();
+        if (isExcluded(text)) return false;
+        if (!isWithinDays(a.publishedAt, 3)) return false;
+        if (skipKeywordFilter) return true;
+        return CONSULTING_ALLOW.some(k => text.includes(k));
+      });
     });
 
   const result = dedup(articles);
