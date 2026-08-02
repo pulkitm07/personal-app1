@@ -1,52 +1,1827 @@
 [
   {
-    "text": "The impediment to action advances action. What stands in the way becomes the way.",
-    "author": "Marcus Aurelius",
-    "bio": "Roman Emperor and Stoic philosopher"
+    "text": "Do unto others as you would have them do unto you.",
+    "author": "Jesus Christ",
+    "bio": ""
   },
   {
-    "text": "In the midst of chaos, there is also opportunity.",
-    "author": "Sun Tzu",
-    "bio": "Ancient Chinese military strategist and philosopher"
+    "text": "Veni, vidi, vici. I came, I saw, I conquered.",
+    "author": "Julius Caesar",
+    "bio": ""
   },
   {
-    "text": "The best time to plant a tree was 20 years ago. The second best time is now.",
-    "author": "Chinese Proverb",
-    "bio": "Ancient wisdom on taking action"
+    "text": "I know that I know nothing.",
+    "author": "Socrates",
+    "bio": ""
   },
   {
-    "text": "Do not wait to strike till the iron is hot, but make it hot by striking.",
-    "author": "W.B. Yeats",
-    "bio": "Irish poet and Nobel laureate"
+    "text": "Cogito ergo sum. I think; therefore I am.",
+    "author": "René Descartes",
+    "bio": ""
   },
   {
-    "text": "The man who moves a mountain begins by carrying away small stones.",
-    "author": "Confucius",
-    "bio": "Chinese philosopher and teacher"
+    "text": "To be, or not to be: that is the question.",
+    "author": "William Shakespeare",
+    "bio": ""
   },
   {
-    "text": "Excellence is not a destination; it is a continuous journey that never ends.",
-    "author": "Brian Tracy",
-    "bio": "Motivational speaker and business consultant"
+    "text": "Carpe diem — Seize the day.",
+    "author": "Horace",
+    "bio": ""
   },
   {
-    "text": "The only way to do great work is to love what you do.",
-    "author": "Steve Jobs",
-    "bio": "Co-founder of Apple Inc."
+    "text": "With great power comes great responsibility.",
+    "author": "Stan Lee",
+    "bio": ""
   },
   {
-    "text": "Success is not final, failure is not fatal: it is the courage to continue that counts.",
-    "author": "Winston Churchill",
-    "bio": "British Prime Minister during World War II"
+    "text": "You miss 100% of the shots you don’t take.",
+    "author": "Wayne Gretzky",
+    "bio": ""
   },
   {
-    "text": "The mind is everything. What you think you become.",
+    "text": "Fortes Fortuna adiuvat — Fortune favors the bold.",
+    "author": "Virgil",
+    "bio": ""
+  },
+  {
+    "text": "Knowledge is power.",
+    "author": "Sir Francis Bacon",
+    "bio": ""
+  },
+  {
+    "text": "Be yourself; everyone else is already taken.",
+    "author": "Anonymous",
+    "bio": ""
+  },
+  {
+    "text": "I’m selfish, impatient and a little insecure. I make mistakes, I am out of control and at times hard to handle. But if you can’t handle me at my worst, then you sure as hell don’t deserve me at my best.",
+    "author": "Anonymous",
+    "bio": ""
+  },
+  {
+    "text": "Two things are infinite: the universe and human stupidity; and I’m not sure about the universe.",
+    "author": "Albert Einstein",
+    "bio": ""
+  },
+  {
+    "text": "So many books, so little time.",
+    "author": "J. J. Wright",
+    "bio": ""
+  },
+  {
+    "text": "A room without books is like a body without a soul.",
+    "author": "Marcus Tullius Cicero",
+    "bio": ""
+  },
+  {
+    "text": "Be who you are and say what you feel, because those who mind don’t matter, and those who matter don’t mind.",
+    "author": "Anonymous",
+    "bio": ""
+  },
+  {
+    "text": "You’ve gotta dance like there’s nobody watching, Love like you’ll never be hurt, Sing like there’s nobody listening, And live like it’s heaven on earth.",
+    "author": "Susanna Clark & Richard Leigh",
+    "bio": ""
+  },
+  {
+    "text": "You know you’re in love when you can’t fall asleep because reality is finally better than your dreams.",
+    "author": "Anonymous",
+    "bio": ""
+  },
+  {
+    "text": "You only live once, but if you work it right, once is enough.",
+    "author": "Joe E. Lewis",
+    "bio": ""
+  },
+  {
+    "text": "Be the change you wish to see in the world.",
+    "author": "Arleen Lorrance & Mahatma Gandhi",
+    "bio": ""
+  },
+  {
+    "text": "I know I have but the body of a weak and feeble woman, but I have the heart and stomach of a king, and of a king of England too.",
+    "author": "Queen Elizabeth I",
+    "bio": ""
+  },
+  {
+    "text": "I have learned over the years that when one’s mind is made up, this diminishes fear; knowing what must be done does away with fear.",
+    "author": "Rosa Parks",
+    "bio": ""
+  },
+  {
+    "text": "A great wind is blowing, and that gives you either imagination or a headache.",
+    "author": "Catherine the Great",
+    "bio": ""
+  },
+  {
+    "text": "We realize the importance of our voices only when we are silenced.",
+    "author": "Malala Yousafzai",
+    "bio": ""
+  },
+  {
+    "text": "At this moment I am in a charming state of confusion; but it is that sort of confusion which is of a very bubble nature. I have no doubts it will all come out clean enough tomorrow.",
+    "author": "Ada Lovelace",
+    "bio": ""
+  },
+  {
+    "text": "I attribute my success to this: I never gave or took an excuse.",
+    "author": "Florence Nightingale",
+    "bio": ""
+  },
+  {
+    "text": "Feet, what do I need them for if I have wings to fly?",
+    "author": "Frida Kahlo",
+    "bio": ""
+  },
+  {
+    "text": "Do your best — but like it. Like what you do, and then you will do your best.",
+    "author": "Katherine Johnson",
+    "bio": ""
+  },
+  {
+    "text": "It’s worth remembering that it is often the small steps, not the giant leaps, that bring about the most lasting change.",
+    "author": "Queen Elizabeth II",
+    "bio": ""
+  },
+  {
+    "text": "You look at science as some sort of demoralising invention of man, something apart from real life, and which must be cautiously guarded and kept separate from everyday existence. But science and everyday life cannot and should not be separated.",
+    "author": "Rosalind Franklin",
+    "bio": ""
+  },
+  {
+    "text": "You have heard that it was said, ‘An eye for an eye and a tooth for a tooth.’ But I say to you, Do not resist the one who is evil. But if anyone slaps you on the right cheek, turn to him the other also.",
+    "author": "Jesus Christ",
+    "bio": ""
+  },
+  {
+    "text": "My mercy encompasses all things.",
+    "author": "Muhammad",
+    "bio": ""
+  },
+  {
+    "text": "However many holy words you read, however many you speak, what good will they do you if you do not act on upon them?",
     "author": "Buddha",
-    "bio": "Founder of Buddhism and spiritual teacher"
+    "bio": ""
   },
   {
-    "text": "Strength does not come from physical capacity. It comes from an indomitable will.",
-    "author": "Mahatma Gandhi",
-    "bio": "Leader of Indian independence movement"
+    "text": "Set thy heart upon thy work, but never on its reward. Work not for a reward, but never cease to do thy work.",
+    "author": "Vyasa",
+    "bio": ""
+  },
+  {
+    "text": "A penny saved is better than a penny earned.",
+    "author": "Martin Luther",
+    "bio": ""
+  },
+  {
+    "text": "For God so loved the world that he gave his one and only Son, that whoever believes in him shall not perish but have eternal life.",
+    "author": "John 3: 16",
+    "bio": "The Holy Bible"
+  },
+  {
+    "text": "My religion is very simple. My religion is kindness.",
+    "author": "Dalai Lama XIV",
+    "bio": ""
+  },
+  {
+    "text": "It does not matter how slowly you go as long as you do not stop.",
+    "author": "Confucius",
+    "bio": ""
+  },
+  {
+    "text": "It is not how much we do, but how much love we put in the action that we do.",
+    "author": "Mother Teresa",
+    "bio": ""
+  },
+  {
+    "text": "Make haste slowly.",
+    "author": "Augustus",
+    "bio": ""
+  },
+  {
+    "text": "There is nothing impossible to him who will try.",
+    "author": "Alexander the Great",
+    "bio": ""
+  },
+  {
+    "text": "Never interrupt your enemy when he is making a mistake.",
+    "author": "Napoleon Bonaparte",
+    "bio": ""
+  },
+  {
+    "text": "I am the punishment of God. If you had not committed great sins, God would not have sent a punishment like me upon you.",
+    "author": "Genghis Khan",
+    "bio": ""
+  },
+  {
+    "text": "I will either find a way, or make one.",
+    "author": "Hannibal",
+    "bio": ""
+  },
+  {
+    "text": "Eat well, for tonight we dine in Hades.",
+    "author": "King Leonidas of Sparta",
+    "bio": ""
+  },
+  {
+    "text": "Then we will fight in the shade.",
+    "author": "Dienekes of Sparta",
+    "bio": ""
+  },
+  {
+    "text": "If they do not comply with my wishes, we shall settle the difference with arms.",
+    "author": "Attila the Hun",
+    "bio": ""
+  },
+  {
+    "text": "Right action is better than knowledge; but in order to do what is right, we must know what is right.",
+    "author": "Charlemagne",
+    "bio": ""
+  },
+  {
+    "text": "Know thyself.",
+    "author": "Aristotle",
+    "bio": ""
+  },
+  {
+    "text": "The heaviest penalty for declining to rule is to be ruled by someone inferior to yourself.",
+    "author": "Plato",
+    "bio": ""
+  },
+  {
+    "text": "You have power over your mind — not outside events. Realize this, and you will find strength.",
+    "author": "Marcus Aurelius",
+    "bio": ""
+  },
+  {
+    "text": "We have two ears and one mouth, so we should listen more than we speak.",
+    "author": "Zeno of Citium",
+    "bio": ""
+  },
+  {
+    "text": "We suffer more often in imagination than in reality.",
+    "author": "Seneca",
+    "bio": ""
+  },
+  {
+    "text": "Men are disturbed not by things but by the principles and notions which they form concerning things.",
+    "author": "Epictetus",
+    "bio": ""
+  },
+  {
+    "text": "He who is not satisfied with a little, is satisfied with nothing.",
+    "author": "Epicurus",
+    "bio": ""
+  },
+  {
+    "text": "You could not step twice into the same river.",
+    "author": "Heraclitus",
+    "bio": ""
+  },
+  {
+    "text": "I am a citizen of the world.",
+    "author": "Diogenes",
+    "bio": ""
+  },
+  {
+    "text": "The most difficult thing in life is to know yourself.",
+    "author": "Thales",
+    "bio": ""
+  },
+  {
+    "text": "That which does not kill us makes us stronger.",
+    "author": "Friedrich Nietzsche",
+    "bio": ""
+  },
+  {
+    "text": "Sapere aude. Dare to think.",
+    "author": "Immanuel Kant",
+    "bio": ""
+  },
+  {
+    "text": "Man is born free, and everywhere he is in chains.",
+    "author": "Jean-Jacques Rousseau",
+    "bio": ""
+  },
+  {
+    "text": "Workers of the world, unite!",
+    "author": "Karl Marx",
+    "bio": ""
+  },
+  {
+    "text": "Life can only be understood backwards; but it must be lived forwards.",
+    "author": "Søren Kierkegaard",
+    "bio": ""
+  },
+  {
+    "text": "One ought to be both feared and loved, but as it is difficult for the two to go together, it is much safer to be feared than loved, if one of the two has to be wanting.",
+    "author": "Niccolò Machiavelli",
+    "bio": ""
+  },
+  {
+    "text": "Every man I meet is in some way my superior, and in that, I can learn of him.",
+    "author": "Ralph Waldo Emerson",
+    "bio": ""
+  },
+  {
+    "text": "All of humanity’s problems stem from man’s inability to sit quietly in a room alone.",
+    "author": "Blaise Pascal",
+    "bio": ""
+  },
+  {
+    "text": "Common sense is not so common.",
+    "author": "Voltaire",
+    "bio": ""
+  },
+  {
+    "text": "In the depths of winter, I finally learned that within me there lay an invincible summer.",
+    "author": "Albert Camus",
+    "bio": ""
+  },
+  {
+    "text": "Bad men need nothing more to compass their ends, than that good men should look on and do nothing.",
+    "author": "John Stuart Mill",
+    "bio": ""
+  },
+  {
+    "text": "Talent hits a target no one else can hit. Genius hits a target no one else can see.",
+    "author": "Arthur Schopenhauer",
+    "bio": ""
+  },
+  {
+    "text": "The limits of my language mean the limits of my world.",
+    "author": "Ludwig Wittgenstein",
+    "bio": ""
+  },
+  {
+    "text": "Man is condemned to be free.",
+    "author": "Jean-Paul Sartre",
+    "bio": ""
+  },
+  {
+    "text": "Imagination is more important than knowledge. Knowledge is limited. Imagination encircles the world.",
+    "author": "Albert Einstein",
+    "bio": ""
+  },
+  {
+    "text": "If I have seen further it is by standing on the shoulders of giants.",
+    "author": "Isaac Newton",
+    "bio": ""
+  },
+  {
+    "text": "Give me a lever and a place to stand, and I will move the earth.",
+    "author": "Archimedes",
+    "bio": ""
+  },
+  {
+    "text": "Nothing in life is to be feared, it is only to be understood. Now is the time to understand more, so that we may fear less.",
+    "author": "Marie Curie",
+    "bio": ""
+  },
+  {
+    "text": "I have not failed. I’ve just found 10,\r\n000 ways that won’t work.",
+    "author": "Thomas Edison",
+    "bio": ""
+  },
+  {
+    "text": "I do not feel obliged to believe that the same God who has endowed us with sense, reason, and intellect has intended us to forgo their use.",
+    "author": "Galileo Galilei",
+    "bio": ""
+  },
+  {
+    "text": "A man who dares to waste one hour of time has not discovered the value of life.",
+    "author": "Charles Darwin",
+    "bio": ""
+  },
+  {
+    "text": "We are just an advanced breed of monkeys on a minor planet of a very average star. But we can understand the Universe. That makes us something very special.",
+    "author": "Stephen Hawking",
+    "bio": ""
+  },
+  {
+    "text": "The Sun resides at the centre of everything.",
+    "author": "Nicolaus Copernicus",
+    "bio": ""
+  },
+  {
+    "text": "The first principle is that you must not fool yourself—and you are the easiest person to fool.",
+    "author": "Richard Feynman",
+    "bio": ""
+  },
+  {
+    "text": "Painting is poetry which is seen and not heard, and poetry is a painting which is heard but not seen.",
+    "author": "Leonardo Da Vinci",
+    "bio": ""
+  },
+  {
+    "text": "Beauty is the purgation of superfluities.",
+    "author": "Michelangelo",
+    "bio": ""
+  },
+  {
+    "text": "I am always doing what I can’t do yet in order to learn how to do it.",
+    "author": "Vincent van Gogh",
+    "bio": ""
+  },
+  {
+    "text": "When there’s anything to steal, I steal.",
+    "author": "Pablo Picasso",
+    "bio": ""
+  },
+  {
+    "text": "Don’t be afraid of perfection. You will never attain it!",
+    "author": "Salvador Dalí",
+    "bio": ""
+  },
+  {
+    "text": "The further I get, the more I regret how little I know.",
+    "author": "Claude Monet",
+    "bio": ""
+  },
+  {
+    "text": "From my rotting body, flowers shall grow and I am in them, and that is eternity.",
+    "author": "Edvard Munch",
+    "bio": ""
+  },
+  {
+    "text": "They always say that time changes things, but you actually have to change them yourself.",
+    "author": "Andy Warhol",
+    "bio": ""
+  },
+  {
+    "text": "When one is painting one does not think.",
+    "author": "Raphael",
+    "bio": ""
+  },
+  {
+    "text": "There are always flowers for those who want to see them.",
+    "author": "Henri Matisse",
+    "bio": ""
+  },
+  {
+    "text": "To thine own self be true.",
+    "author": "William Shakespeare",
+    "bio": ""
+  },
+  {
+    "text": "The drop hollows out the stone, not by force but by falling often.",
+    "author": "Ovid",
+    "bio": ""
+  },
+  {
+    "text": "In three words I can sum up everything I’ve learned about life: it goes on.",
+    "author": "Robert Frost",
+    "bio": ""
+  },
+  {
+    "text": "To live is the rarest thing in the world. Most people exist, that is all.",
+    "author": "Oscar Wilde",
+    "bio": ""
+  },
+  {
+    "text": "What you’re supposed to do when you don’t like a thing is change it. If you can’t change it, change the way you think about it. Don’t complain.",
+    "author": "Maya Angelou",
+    "bio": ""
+  },
+  {
+    "text": "I became insane, with long intervals of horrible sanity.",
+    "author": "Edgar Allan Poe",
+    "bio": ""
+  },
+  {
+    "text": "I am no bird; and no net ensnares me: I am a free human being with an independent will.",
+    "author": "Charlotte Brontë",
+    "bio": ""
+  },
+  {
+    "text": "Resist much, obey little.",
+    "author": "Walt Whitman",
+    "bio": ""
+  },
+  {
+    "text": "Words are, of course, the most powerful drug used by mankind.",
+    "author": "Rudyard Kipling",
+    "bio": ""
+  },
+  {
+    "text": "To be nobody-but-yourself-in a world which is doing its best, night and day, to make you everybody else-means to fight the hardest battle which any human being can fight; and never stop fighting.",
+    "author": "E.E. Cummings",
+    "bio": ""
+  },
+  {
+    "text": "Shall I compare thee to a summer’s day?",
+    "author": "William Shakespeare",
+    "bio": ""
+  },
+  {
+    "text": "All hope abandon, ye who enter here.",
+    "author": "Dante Alighieri",
+    "bio": ""
+  },
+  {
+    "text": "I shall be telling this with a sigh, Somewhere ages and ages hence: Two roads diverged in a wood, and I— I took the one less traveled by, And that has made all the difference.",
+    "author": "Robert Frost",
+    "bio": ""
+  },
+  {
+    "text": "You may shoot me with your words, You may cut me with your eyes, You may kill me with your hatefulness, But still, like air, I’ll rise.",
+    "author": "Maya Angelou",
+    "bio": ""
+  },
+  {
+    "text": "I love you without knowing how, or when, or from where. I love you simply, without problems or pride: I love you in this way because I do not know any other way of loving but this, in which there is no I or you, so intimate that your hand upon my chest is my hand, so intimate that when I fall asleep your eyes close.",
+    "author": "Pablo Neruda",
+    "bio": ""
+  },
+  {
+    "text": "Do I contradict myself? Very well then I contradict myself. I am large, I contain multitudes.",
+    "author": "Walt Whitman",
+    "bio": ""
+  },
+  {
+    "text": "Look on my works, ye Mighty, and despair!",
+    "author": "Percy Bysshe Shelley",
+    "bio": ""
+  },
+  {
+    "text": "‘Hope’ is the thing with feathers, That perches in the soul, And sings the tune without the words, And never stops at all.",
+    "author": "Emily Dickinson",
+    "bio": ""
+  },
+  {
+    "text": "It matters not how strait the gate, How charged with punishments the scroll, I am the master of my fate I am the captain of my soul.",
+    "author": "William Ernest Henley",
+    "bio": ""
+  },
+  {
+    "text": "Do not go gentle into that good night, Old age should burn and rave at close of day; Rage, rage against the dying of the light.",
+    "author": "Dylan Thomas",
+    "bio": ""
+  },
+  {
+    "text": "To see a World in a Grain of Sand And a Heaven in a Wild Flower Hold Infinity in the palm of your hand And Eternity in an hour.",
+    "author": "William Blake",
+    "bio": ""
+  },
+  {
+    "text": "If you’re going to try, go all the way. Otherwise, don’t even start. If you’re going to try, go all the way.",
+    "author": "Charles Bukowski",
+    "bio": ""
+  },
+  {
+    "text": "There is always light. Only if we are brave enough to see it. There is always light. Only if we are brave enough to be it.",
+    "author": "Amanda Gorman",
+    "bio": ""
+  },
+  {
+    "text": "Here’s to the crazy ones. The misfits. The rebels. The troublemakers. The round pegs in the square holes. The ones who see things differently. […\r\n] And while some may see them as the crazy ones, we see genius. Because the people who are crazy enough to think they can change the world, are the ones who do.",
+    "author": "Rob Siltanen & Lee Clow",
+    "bio": ""
+  },
+  {
+    "text": "All I insist on, and nothing else, is that you should show the whole world that you are not afraid. Be silent, if you choose; but when it is necessary, speak—and speak in such a way that people will remember it.",
+    "author": "Wolfgang Amadeus Mozart",
+    "bio": ""
+  },
+  {
+    "text": "I was obliged to be industrious. Whoever is equally industrious will succeed equally well.",
+    "author": "Johann Sebastian Bach",
+    "bio": ""
+  },
+  {
+    "text": "Someone who is born a master always has the lowest standing among masters.",
+    "author": "Richard Wagner",
+    "bio": ""
+  },
+  {
+    "text": "There is a season for everything, patience will reward you and reveal all answers to your questions.",
+    "author": "Elvis Presley",
+    "bio": ""
+  },
+  {
+    "text": "Music is a higher revelation than all wisdom and philosophy.",
+    "author": "Ludwig van Beethoven",
+    "bio": ""
+  },
+  {
+    "text": "The beautiful thing about learning is that nobody can take it away from you.",
+    "author": "B.B. King",
+    "bio": ""
+  },
+  {
+    "text": "A man is a success if he gets up in the morning and gets to bed at night, and in between he does what he wants to do.",
+    "author": "Bob Dylan",
+    "bio": ""
+  },
+  {
+    "text": "Possessions make you rich? I don’t have that type of richness. My richness is life, forever.",
+    "author": "Bob Marley",
+    "bio": ""
+  },
+  {
+    "text": "If you still have to ask [what jazz is\r\n], shame on you.",
+    "author": "Louis Armstrong",
+    "bio": ""
+  },
+  {
+    "text": "My language is understood all over the world.",
+    "author": "Joseph Haydn",
+    "bio": ""
+  },
+  {
+    "text": "I’m dreamin’ of a white Christmas With every Christmas card I write May your days be merry and bright And may all your Christmases be white.",
+    "author": "Bing Crosby",
+    "bio": "White Christmas"
+  },
+  {
+    "text": "And it seems to me you lived your life Like a candle in the wind Never fading with the sunset When the rain set in.",
+    "author": "Elton John",
+    "bio": "Candle in the Wind"
+  },
+  {
+    "text": "R-E-S-P-E-C-T Find out what it means to me R-E-S-P-E-C-T All I’m askin’ (Oo) Is for a little respect.",
+    "author": "Aretha Franklin",
+    "bio": "Respect"
+  },
+  {
+    "text": "Hello, hello, hello With the lights out, it’s less dangerous Here we are now, entertain us I feel stupid, and contagious Here we are now, entertain us.",
+    "author": "Nirvana",
+    "bio": "Smells Like Teen Spirit"
+  },
+  {
+    "text": "Is this the real life? Is this just fantasy?",
+    "author": "Queen",
+    "bio": "Bohemian Rhapsody"
+  },
+  {
+    "text": "I can’t get no satisfaction.",
+    "author": "The Rolling Stones",
+    "bio": "(I Can’t Get No) Satisfaction"
+  },
+  {
+    "text": "And I… will always love you.",
+    "author": "Dolly Parton",
+    "bio": "I Will Always Love You"
+  },
+  {
+    "text": "We are the world We are the children We are the ones who make a brighter day, so let’s start giving.",
+    "author": "USA for Africa",
+    "bio": "We Are the World"
+  },
+  {
+    "text": "Near, far, wherever you are I believe that the heart does go on Once more, you open the door And you’re here in my heart And my heart will go on and on.",
+    "author": "Celine Dion",
+    "bio": "My Heart Will Go On"
+  },
+  {
+    "text": "I just want you for my own More than you could ever know Make my wish come true All I want for Christmas is you.",
+    "author": "Mariah Carey",
+    "bio": "All I Want For Christmas Is You"
+  },
+  {
+    "text": "You may say I’m a dreamer, But I’m not the only one I hope someday you’ll join us And the world will live as one.",
+    "author": "John Lennon",
+    "bio": "Imagine"
+  },
+  {
+    "text": "I’m starting with the man in the mirror, I’m asking him to change his ways; And no message could have been any clearer, If you wanna make the world a better place, Take a look at yourself, and then make a change!",
+    "author": "Michael Jackson",
+    "bio": "Man in the Mirror"
+  },
+  {
+    "text": "The truth is I’ve never fooled anyone. I’ve let men sometimes fool themselves. Men sometimes didn’t bother to find out who and what I was. Instead, they would invent a character for me. I wouldn’t argue with them. They were obviously loving somebody I wasn’t. When they found this out, they would blame me for disillusioning them — and fooling them.",
+    "author": "Marilyn Monroe",
+    "bio": ""
+  },
+  {
+    "text": "Dream as if you’ll live forever. Live as if you’ll die today.",
+    "author": "James Dean",
+    "bio": ""
+  },
+  {
+    "text": "Imagination means nothing without doing.",
+    "author": "Charlie Chaplin",
+    "bio": ""
+  },
+  {
+    "text": "You’re only given one little spark of madness. You mustn’t lose it.",
+    "author": "Robin Williams",
+    "bio": ""
+  },
+  {
+    "text": "The great gift of human beings is that we have the power of empathy. We can all sense a mysterious connection to each other.",
+    "author": "Meryl Streep",
+    "bio": ""
+  },
+  {
+    "text": "Do what you gotta do so you can do what you wanna do.",
+    "author": "Denzel Washington",
+    "bio": ""
+  },
+  {
+    "text": "Failure is a massive part of being able to be successful. You have to get comfortable with failure. You have to actually seek failure. Failure is where all of the lessons are.",
+    "author": "Will Smith",
+    "bio": ""
+  },
+  {
+    "text": "Love is the best, and you’re lucky to get it. But even if you’re not getting it, you can still give it.",
+    "author": "Helena Bonham Carter",
+    "bio": ""
+  },
+  {
+    "text": "What happens after we die? I know the ones who love us will miss us.",
+    "author": "Keanu Reeves",
+    "bio": ""
+  },
+  {
+    "text": "May the Force be with you.",
+    "author": "Han Solo (Harrison Ford)",
+    "bio": "Star Wars: Episode IV — A New Hope"
+  },
+  {
+    "text": "My mom always said life was like a box of chocolates. You never know what you’re gonna get.",
+    "author": "Forrest Gump (Tom Hanks)",
+    "bio": "Forrest Gump"
+  },
+  {
+    "text": "I’ll be back.",
+    "author": "The Terminator (Arnold Schwarzenegger)",
+    "bio": "The Terminator"
+  },
+  {
+    "text": "YOU. SHALL NOT. PASS!",
+    "author": "Gandalf (Ian McKellen)",
+    "bio": "The Lord of the Rings: The Fellowship of the Ring"
+  },
+  {
+    "text": "Frankly, my dear, I don’t give a damn.",
+    "author": "Rhett Butler (Clark Gable)",
+    "bio": "Gone With the Wind"
+  },
+  {
+    "text": "Toto, I’ve a feeling we’re not in Kansas anymore.",
+    "author": "Dorothy Gale (Judy Garland)",
+    "bio": "The Wizard of Oz"
+  },
+  {
+    "text": "To infinity and beyond!",
+    "author": "Buzz Lightyear (Tim Allen)",
+    "bio": "Toy Story"
+  },
+  {
+    "text": "They may take our lives, but they’ll never take our freedom!",
+    "author": "William Wallace (Mel Gibson)",
+    "bio": "Braveheart"
+  },
+  {
+    "text": "Life finds a way.",
+    "author": "Dr. Ian Malcolm (Jeff Goldblum)",
+    "bio": "Jurassic Park"
+  },
+  {
+    "text": "Show me the money!",
+    "author": "Rod Tidwell (Cuba Gooding Jr.)",
+    "bio": "Jerry Maguire"
+  },
+  {
+    "text": "Greed, for lack of a better word, is good.",
+    "author": "Gordon Gekko (Michael Douglas)",
+    "bio": "Wall Street"
+  },
+  {
+    "text": "I’m the king of the world!",
+    "author": "Jack Dawson (Leonardo DiCaprio)",
+    "bio": "Titanic"
+  },
+  {
+    "text": "Magic Mirror on the wall, who is the fairest one of all?",
+    "author": "The Evil Queen (Lucille La Verne)",
+    "bio": "Snow White and the Seven Dwarfs"
+  },
+  {
+    "text": "The first rule of Fight Club is: You do not talk about Fight Club. The second rule of Fight Club is: You do NOT talk about Fight Club.",
+    "author": "Tyler Durden (Brad Pitt)",
+    "bio": "Fight Club"
+  },
+  {
+    "text": "Just keep swimming.",
+    "author": "Dory (Ellen DeGeneres)",
+    "bio": "Finding Nemo"
+  },
+  {
+    "text": "It’s alive! It’s alive!",
+    "author": "Henry Frankenstein (Colin Clive)",
+    "bio": "Frankenstein"
+  },
+  {
+    "text": "Are you not entertained?",
+    "author": "Maximus Decimus Meridius (Russell Crowe)",
+    "bio": "Gladiator"
+  },
+  {
+    "text": "Life moves pretty fast. If you don’t stop and look around once in a while, you could miss it.",
+    "author": "Ferris Bueller (Matthew Broderick)",
+    "bio": "Ferris Bueller’s Day Off"
+  },
+  {
+    "text": "Appearances often are deceiving.",
+    "author": "Aesop",
+    "bio": ""
+  },
+  {
+    "text": "All you have to do is write one true sentence. Write the truest sentence that you know.",
+    "author": "Ernest Hemingway",
+    "bio": ""
+  },
+  {
+    "text": "Show me a hero, and I’ll write you a tragedy.",
+    "author": "F. Scott Fitzgerald",
+    "bio": ""
+  },
+  {
+    "text": "Good friends, good books and a sleepy conscience: this is the ideal life.",
+    "author": "Mark Twain",
+    "bio": ""
+  },
+  {
+    "text": "Books are a uniquely portable magic.",
+    "author": "Stephen King",
+    "bio": "On Writing: A Memoir of the Craft"
+  },
+  {
+    "text": "It is a curious thought, but it is only when you see people looking ridiculous, that you realize just how much you love them!",
+    "author": "Agatha Christie",
+    "bio": "Agatha Christie: An Autobiography"
+  },
+  {
+    "text": "Everyone thinks of changing the world, but no one thinks of changing himself.",
+    "author": "Leo Tolstoy",
+    "bio": ""
+  },
+  {
+    "text": "How wonderful it is that nobody need wait a single moment before starting to improve the world.",
+    "author": "Anne Frank",
+    "bio": ""
+  },
+  {
+    "text": "Music expresses that which cannot be put into words and that which cannot remain silent.",
+    "author": "Victor Hugo",
+    "bio": ""
+  },
+  {
+    "text": "The best way to treat obstacles is to use them as stepping-stones.",
+    "author": "Enid Blyton",
+    "bio": ""
+  },
+  {
+    "text": "Lock up your libraries if you like; but there is no gate, no lock, no bolt that you can set upon the freedom of my mind.",
+    "author": "Virginia Woolf",
+    "bio": ""
+  },
+  {
+    "text": "I may not have gone where I intended to go, but I think I have ended up where I needed to be.",
+    "author": "Douglas Adams",
+    "bio": "The Long Dark Tea-Time of the Soul"
+  },
+  {
+    "text": "When we take people merely as they are, we make them worse; when we treat them as if they were what they should be, we help them become what they can be.",
+    "author": "Johann Wolfgang von Goethe",
+    "bio": ""
+  },
+  {
+    "text": "The person, be it gentleman or lady, who has not pleasure in a good novel, must be intolerably stupid.",
+    "author": "Jane Austen",
+    "bio": "Northanger Abbey"
+  },
+  {
+    "text": "You think your pain and your heartbreak are unprecedented in the history of the world, but then you read. It was Dostoevsky and Dickens who taught me that the things that tormented me most were the very things that connected me with all the people who were alive, who had ever been alive.",
+    "author": "James Baldwin",
+    "bio": ""
+  },
+  {
+    "text": "If you want to know what a man’s like, take a good look at how he treats his inferiors, not his equals.",
+    "author": "J. K. Rowling",
+    "bio": "Harry Potter and the Goblet of Fire"
+  },
+  {
+    "text": "Twenty years from now you will be more disappointed by the things that you didn’t do than by the ones you did do. So throw off the bowlines. Sail away from the safe harbor. Catch the trade winds in your sails. Explore. Dream. Discover.",
+    "author": "H. Jackson Brown Jr.",
+    "bio": "P.S. I Love You"
+  },
+  {
+    "text": "It is never too late to be wise.",
+    "author": "Daniel Defoe",
+    "bio": "Robinson Crusoe"
+  },
+  {
+    "text": "Men go to far greater lengths to avoid what they fear than to obtain what they desire.",
+    "author": "Dan Brown",
+    "bio": "The Da Vinci Code"
+  },
+  {
+    "text": "I am not proud, but I am happy; and happiness blinds, I think, more than pride.",
+    "author": "Alexandre Dumas",
+    "bio": "The Count of Monte Cristo"
+  },
+  {
+    "text": "What really knocks me out is a book that, when you’re all done reading it, you wish the author that wrote it was a terrific friend of yours and you could call him up on the phone whenever you felt like it. That doesn’t happen much, though.",
+    "author": "J.D. Salinger",
+    "bio": "The Catcher in the Rye"
+  },
+  {
+    "text": "It is only with the heart that one can see rightly; what is essential is invisible to the eye.",
+    "author": "Antoine de Saint-Exupéry",
+    "bio": "The Little Prince"
+  },
+  {
+    "text": "It was the best of times, it was the worst of times.",
+    "author": "Charles Dickens",
+    "bio": "A Tale of Two Cities"
+  },
+  {
+    "text": "Perhaps one did not want to be loved so much as to be understood.",
+    "author": "George Orwell,\r\n1984",
+    "bio": ""
+  },
+  {
+    "text": "And, when you want something, all the universe conspires in helping you to achieve it.",
+    "author": "Paulo Coelho",
+    "bio": "The Alchemist"
+  },
+  {
+    "text": "A reader lives a thousand lives before he dies. The man who never reads lives only one.",
+    "author": "George R.R. Martin",
+    "bio": "A Dance with Dragons"
+  },
+  {
+    "text": "The truth may be stretched thin, but it never breaks, and it always surfaces above lies, as oil floats on water.",
+    "author": "Miguel de Cervantes Saavedra",
+    "bio": "Don Quixote"
+  },
+  {
+    "text": "The world breaks everyone, and afterward, many are strong at the broken places.",
+    "author": "Ernest Hemingway",
+    "bio": "A Farewell to Arms"
+  },
+  {
+    "text": "So we beat on, boats against the current, borne back ceaselessly into the past.",
+    "author": "F. Scott Fitzgerald",
+    "bio": "The Great Gatsby"
+  },
+  {
+    "text": "He’s more myself than I am. Whatever our souls are made of, his and mine are the same.",
+    "author": "Emily Brontë",
+    "bio": "Wuthering Heights"
+  },
+  {
+    "text": "Everything can be taken from a man but one thing: the last of the human freedoms—to choose one’s attitude in any given set of circumstances, to choose one’s own way.",
+    "author": "Viktor E. Frankl",
+    "bio": "Man’s Search for Meaning"
+  },
+  {
+    "text": "True humility is not thinking less of yourself; it is thinking of yourself less.",
+    "author": "Rick Warren",
+    "bio": "The Purpose Driven Life"
+  },
+  {
+    "text": "It isn’t what you have or who you are or where you are or what you are doing that makes you happy or unhappy. It is what you think about it.",
+    "author": "Dale Carnegie",
+    "bio": "How to Win Friends and Influence People"
+  },
+  {
+    "text": "What would you do if you weren’t afraid?",
+    "author": "Spencer Johnson",
+    "bio": "Who Moved My Cheese?"
+  },
+  {
+    "text": "Every one of us is, in the cosmic perspective, precious. If a human disagrees with you, let him live. In a hundred billion galaxies, you will not find another.",
+    "author": "Carl Sagan",
+    "bio": "Cosmos"
+  },
+  {
+    "text": "Most people do not listen with the intent to understand; they listen with the intent to reply.",
+    "author": "Stephen R. Covey",
+    "bio": "The 7 Habits of Highly Effective People"
+  },
+  {
+    "text": "The universe doesn’t allow perfection.",
+    "author": "Stephen Hawking",
+    "bio": "A Brief History of Time"
+  },
+  {
+    "text": "One way to remember who you are is to remember who your heroes are.",
+    "author": "Walter Isaacson",
+    "bio": "Steve Jobs"
+  },
+  {
+    "text": "Remember, you have been criticizing yourself for years and it hasn’t worked. Try approving of yourself and see what happens.",
+    "author": "Louise Hay",
+    "bio": "You Can Heal Your Life"
+  },
+  {
+    "text": "Acceptance means no complaining, and happiness means no complaining about the things over which you can do nothing.",
+    "author": "Wayne Dyer",
+    "bio": "Your Erroneous Zones"
+  },
+  {
+    "text": "When you have eliminated all which is impossible, then whatever remains, however improbable, must be the truth.",
+    "author": "Sherlock Holmes (Arthur Conan Doyle)",
+    "bio": ""
+  },
+  {
+    "text": "Shaken, not stirred.",
+    "author": "James Bond (Ian Fleming)",
+    "bio": ""
+  },
+  {
+    "text": "I am your father.",
+    "author": "Darth Vader (Star Wars, George Lucas)",
+    "bio": ""
+  },
+  {
+    "text": "Of course it is happening inside your head, Harry, but why on earth should that mean that it is not real?",
+    "author": "Albus Dumbledore (Harry Potter, J. K. Rowling)",
+    "bio": ""
+  },
+  {
+    "text": "It’s not who I am underneath, but what I do, that defines me.",
+    "author": "Bruce Wayne (Batman, Bob Kane & Bill Finger)",
+    "bio": ""
+  },
+  {
+    "text": "All we have to decide is what to do with the time that is given us.",
+    "author": "Gandalf (The Lord of the Rings, J. R. R. Tolkien)",
+    "bio": ""
+  },
+  {
+    "text": "Would you tell me, please, which way I ought to go from here?” “That depends a good deal on where you want to get to.” “I don’t much care where—” “Then it doesn’t matter which way you go.",
+    "author": "Alice and the Cheshire Cat (Alice’s Adventures",
+    "bio": "Wonderland, Lewis Carroll)"
+  },
+  {
+    "text": "You, me, or nobody is gonna hit as hard as life. But it ain’t about how hard you hit. It’s about how hard you can get hit and keep moving forward. How much you can take and keep moving forward. That’s how winning is done!",
+    "author": "Rocky Balboa (Sylvester Stallone)",
+    "bio": ""
+  },
+  {
+    "text": "Fire is catching! And if we burn, you burn with us!",
+    "author": "Katniss Everdeen (The Hunger Games, Suzanne Collins)",
+    "bio": ""
+  },
+  {
+    "text": "What’s up, Doc?",
+    "author": "Bugs Bunny (Looney Tunes, Tex Avery)",
+    "bio": ""
+  },
+  {
+    "text": "Leave nothing for tomorrow which can be done today.",
+    "author": "Abraham Lincoln",
+    "bio": ""
+  },
+  {
+    "text": "The only thing we have to fear is fear itself.",
+    "author": "Franklin D. Roosevelt",
+    "bio": ""
+  },
+  {
+    "text": "Ask not what your country can do for you — ask what you can do for your country.",
+    "author": "John F. Kennedy",
+    "bio": ""
+  },
+  {
+    "text": "To improve is to change, so to be perfect is to have changed often.",
+    "author": "Winston Churchill",
+    "bio": ""
+  },
+  {
+    "text": "We hold these truths to be self-evident, that all men are created equal, that they are endowed by their Creator with certain unalienable Rights, that among these are Life, Liberty and the pursuit of Happiness.",
+    "author": "Thomas Jefferson",
+    "bio": ""
+  },
+  {
+    "text": "I learned that courage was not the absence of fear, but the triumph over it. The brave man is not he who does not feel afraid, but he who conquers that fear.",
+    "author": "Nelson Mandela",
+    "bio": ""
+  },
+  {
+    "text": "Preventive war is like committing suicide for fear of death.",
+    "author": "Otto von Bismarck",
+    "bio": ""
+  },
+  {
+    "text": "Change will not come if we wait for some other person, or if we wait for some other time. We are the ones we’ve been waiting for. We are the change that we seek.",
+    "author": "Barack Obama",
+    "bio": ""
+  },
+  {
+    "text": "There are three things extremely hard: steel, a diamond, and to know one’s self.",
+    "author": "Benjamin Franklin",
+    "bio": ""
+  },
+  {
+    "text": "It is for us the living, rather, to be dedicated here to the unfinished work which they who fought here have thus far so nobly advanced. It is rather for us to be here dedicated to the great task remaining before us—that from these honored dead we take increased devotion to that cause for which they here gave the last full measure of devotion—that we here highly resolve that these dead shall not have died in vain—that this nation, under God, shall have a new birth of freedom, and that government of the people, by the people, for the people, shall not perish from the earth.",
+    "author": "Abraham Lincoln",
+    "bio": "Gettysburg Address,\r\n1863"
+  },
+  {
+    "text": "We shall go on to the end, we shall fight in France, we shall fight on the seas and oceans, we shall fight with growing confidence and growing strength in the air, we shall defend our Island, whatever the cost may be, we shall fight on the beaches, we shall fight on the landing grounds, we shall fight in the fields and in the streets, we shall fight in the hills; we shall never surrender, and even if, which I do not for a moment believe, this Island or a large part of it were subjugated and starving, then our Empire beyond the seas, armed and guarded by the British Fleet, would carry on the struggle, until, in God’s good time, the New World, with all its power and might, steps forth to the rescue and the liberation of the old.",
+    "author": "Winston Churchill",
+    "bio": "We Shall Fight on the Beaches,\r\n1940"
+  },
+  {
+    "text": "I have a dream that one day this nation will rise up and live out the true meaning of its creed: ‘We hold these truths to be self-evident, that all men are created equal.’ I have a dream that one day on the red hills of Georgia, the sons of former slaves and the sons of former slave owners will be able to sit down together at the table of brotherhood. I have a dream that one day even the state of Mississippi, a state sweltering with the heat of injustice, sweltering with the heat of oppression, will be transformed into an oasis of freedom and justice. I have a dream that my four little children will one day live in a nation where they will not be judged by the color of their skin but by the content of their character. I have a dream today!",
+    "author": "Martin Luther King Jr.",
+    "bio": "I Have a Dream,\r\n1963"
+  },
+  {
+    "text": "It is not the critic who counts; not the man who points out how the strong man stumbles, or where the doer of deeds could have done them better. The credit belongs to the man who is actually in the arena, whose face in marred by dust and sweat and blood; who strives valiantly; who errs, who comes short again and again, because there is no effort without error and shortcoming; but who does actually strive to do the deeds; who knows great enthusiasms, the great devotions; who spends himself in a worthy cause; who at the best knows in the end the triumph of high achievement, and who at the worst, if he fails, at least fails while daring greatly, so that his place shall never be with those cold and timid souls who neither know victory nor defeat.",
+    "author": "Theodore Roosevelt",
+    "bio": "Citizenship in a Republic,\r\n1910"
+  },
+  {
+    "text": "And we perfect, most dangerously, our children. Let me tell you what we think about children. They’re hardwired for struggle when they get here. And when you hold those perfect little babies in your hand, our job is not to say, ‘Look at her, she’s perfect. My job is just to keep her perfect — make sure she makes the tennis team by fifth grade and Yale by seventh.’ That’s not our job. Our job is to look and say, ‘You know what? You’re imperfect, and you’re wired for struggle, but you are worthy of love and belonging.’ That’s our job. Show me a generation of kids raised like that, and we’ll end the problems, I think, that we see today.",
+    "author": "Brené Brown",
+    "bio": "The Power of Vulnerability,\r\n2010"
+  },
+  {
+    "text": "For the past two weeks you have been reading about a bad break. Yet today I consider myself the luckiest man on the face of the earth. I have been in ballparks for seventeen years and have never received anything but kindness and encouragement from you fans. When you look around, wouldn’t you consider it a privilege to associate yourself with such a fine looking men as they’re standing in uniform in this ballpark today? Sure, I’m lucky. […\r\n] So I close in saying that I might have been given a bad break, but I’ve got an awful lot to live for. Thank you.",
+    "author": "Lou Gehrig",
+    "bio": "Farewell to Baseball,\r\n1939"
+  },
+  {
+    "text": "People don’t buy what you do; they buy why you do it and what you do simply proves what you believe. In fact, people will do the things that prove what they believe. The reason that person bought the iPhone in the first six hours, stood in line for six hours, was because of what they believed about the world, and how they wanted everybody to see them: they were first. People don’t buy what you do; they buy why you do it.",
+    "author": "Simon Sinek",
+    "bio": "How Great Leaders Inspire Action,\r\n2009"
+  },
+  {
+    "text": "Your time is limited, so don’t waste it living someone else’s life. Don’t be trapped by dogma — which is living with the results of other people’s thinking. Don’t let the noise of others’ opinions drown out your own inner voice. And most important, have the courage to follow your heart and intuition. They somehow already know what you truly want to become. Everything else is secondary.",
+    "author": "Steve Jobs",
+    "bio": "Stanford Commencement Address,\r\n2005"
+  },
+  {
+    "text": "And so, my fellow Americans: ask not what your country can do for you — ask what you can do for your country. My fellow citizens of the world: ask not what America will do for you, but what together we can do for the freedom of man.",
+    "author": "John F. Kennedy",
+    "bio": "Inaugural Address,\r\n1961"
+  },
+  {
+    "text": "Failure meant a stripping away of the inessential. I stopped pretending to myself that I was anything other than what I was, and began to direct all my energy into finishing the only work that mattered to me. Had I really succeeded at anything else, I might never have found the determination to succeed in the one arena I believed I truly belonged. I was set free, because my greatest fear had been realised, and I was still alive, and I still had a daughter whom I adored, and I had an old typewriter and a big idea. And so rock bottom became the solid foundation on which I rebuilt my life.",
+    "author": "J. K. Rowling",
+    "bio": "Harvard Commencement Address,\r\n2008"
+  },
+  {
+    "text": "This is all wrong. I shouldn’t be up here. I should be back in school on the other side of the ocean. Yet you all come to us young people for hope? How dare you! You have stolen my dreams and my childhood with your empty words. And yet I’m one of the lucky ones. People are suffering. People are dying. Entire ecosystems are collapsing. We are in the beginning of a mass extinction. And all you can talk about is money and fairytales of eternal economic growth. How dare you! [..\r\n] You are failing us… But the young people are starting to understand your betrayal. The eyes of all future generations are upon you. And if you choose to fail us, I say: We will never forgive you.",
+    "author": "Greta Thunberg",
+    "bio": "How Dare You,\r\n2019"
+  },
+  {
+    "text": "The brick walls are there for a reason. The brick walls are not there to keep us out. The brick walls are there to give us a chance to show how badly we want something. Because the brick walls are there to stop the people who don’t want it badly enough. They’re there to stop the other people.",
+    "author": "Randy Pausch",
+    "bio": "The Last Lecture,\r\n2007"
+  },
+  {
+    "text": "What these things have in common is that kids will take a chance. If they don’t know, they’ll have a go. Am I right? They’re not frightened of being wrong. I don’t mean to say that being wrong is the same thing as being creative. What we do know is, if you’re not prepared to be wrong, you’ll never come up with anything original — if you’re not prepared to be wrong. And by the time they get to be adults, most kids have lost that capacity. They have become frightened of being wrong. And we run our companies like this. We stigmatize mistakes. And we’re now running national education systems where mistakes are the worst thing you can make. And the result is that we are educating people out of their creative capacities.",
+    "author": "Sir Ken Robinson",
+    "bio": "Do Schools Kill Creativity?,\r\n2006"
+  },
+  {
+    "text": "If there is one message that echoes forth from this conference, let it be that human rights are women’s rights and women’s rights are human rights once and for all. Let us not forget that among those rights are the right to speak freely — and the right to be heard.",
+    "author": "Hillary Clinton",
+    "bio": "Women’s Rights Are Human Rights,\r\n1995"
+  },
+  {
+    "text": "Look at me! Look at my arm! I have ploughed and planted, and gathered into barns, and no man could head me! And ain’t I a woman? I could work as much and eat as much as a man – when I could get it – and bear the lash as well! And ain’t I a woman? I could work as much and eat as much as a man – when I could get it – and bear the lash as well! And ain’t I a woman?",
+    "author": "Sojourner Truth",
+    "bio": "Ain’t I A Woman?,\r\n1851"
+  },
+  {
+    "text": "You can’t connect the dots looking forward; you can only connect them looking backward. So you have to trust that the dots will somehow connect in your future.",
+    "author": "Steve Jobs",
+    "bio": ""
+  },
+  {
+    "text": "Success is a lousy teacher. It seduces smart people into thinking they can’t lose.",
+    "author": "Bill Gates",
+    "bio": ""
+  },
+  {
+    "text": "I do not think that there is any other quality so essential to success of any kind as the quality of perseverance. It overcomes almost everything, even nature.",
+    "author": "John D. Rockefeller",
+    "bio": ""
+  },
+  {
+    "text": "Whether you believe you can do a thing or not, you are right.",
+    "author": "Henry Ford",
+    "bio": ""
+  },
+  {
+    "text": "The first thing is character […\r\n] before money or anything else. Money cannot buy it. A man I do not trust could not get money from me on all the bonds in Christendom.",
+    "author": "J. P. Morgan",
+    "bio": ""
+  },
+  {
+    "text": "There is only one boss: the customer. And he can fire everybody in the company from the chairman on down, simply by spending his money somewhere else.",
+    "author": "Sam Walton",
+    "bio": ""
+  },
+  {
+    "text": "I was an overnight success all right, but thirty years is a long, long night.",
+    "author": "Ray Kroc",
+    "bio": ""
+  },
+  {
+    "text": "Before you are a leader, success is all about growing yourself. When you become a leader, success is all about growing others.",
+    "author": "Jack Welch",
+    "bio": ""
+  },
+  {
+    "text": "Someone’s sitting in the shade today because someone planted a tree a long time ago.",
+    "author": "Warren Buffett",
+    "bio": ""
+  },
+  {
+    "text": "Today is difficult, tomorrow is much more difficult, but the day after tomorrow is beautiful.",
+    "author": "Jack Ma",
+    "bio": ""
+  },
+  {
+    "text": "The biggest risk is not taking any risk… In a world that changing really quickly, the only strategy that is guaranteed to fail is not taking risks.",
+    "author": "Mark Zuckerberg",
+    "bio": ""
+  },
+  {
+    "text": "When something is important enough, you do it even if the odds are not in your favor.",
+    "author": "Elon Musk",
+    "bio": ""
+  },
+  {
+    "text": "When you have something that you know is true, even over the long term, you can afford to put a lot of energy into it.",
+    "author": "Jeff Bezos",
+    "bio": ""
+  },
+  {
+    "text": "You don’t learn to walk by following rules. You learn by doing, and by falling over.",
+    "author": "Richard Branson",
+    "bio": ""
+  },
+  {
+    "text": "Never make a big decision without sleeping on it.",
+    "author": "Martha Stewart",
+    "bio": ""
+  },
+  {
+    "text": "We think, mistakenly, that success is the result of the amount of time we put in at work, instead of the quality of time we put in.",
+    "author": "Arianna Huffington",
+    "bio": ""
+  },
+  {
+    "text": "‘Listen to me,’ my mother replied. ‘You may be the president or whatever of PepsiCo, but when you come home, you are a wife and a mother and a daughter. Nobody can take your place. So you leave that crown in the garage.’",
+    "author": "Indra Nooyi",
+    "bio": ""
+  },
+  {
+    "text": "My dad would actually encourage me to fail growing up. I would come home from school and he would say to my brother and I: ‘So what’d you guys fail at this week?’ And if we didn’t have something, he would actually be disappointed. I didn’t realize it at the time, but he was just changing my definition of failure. My definition of failure became not about the outcome, but about not trying.",
+    "author": "Sara Blakely",
+    "bio": ""
+  },
+  {
+    "text": "Turn your wounds into wisdom. You will be wounded many times in your life. You’ll make mistakes. Some people will call them failures but I have learned that failure is really God’s way of saying, ‘Excuse me, you’re moving in the wrong direction.’ It’s just an experience, just an experience.",
+    "author": "Oprah Winfrey",
+    "bio": ""
+  },
+  {
+    "text": "Just do it.",
+    "author": "Nike",
+    "bio": ""
+  },
+  {
+    "text": "Think different.",
+    "author": "Apple",
+    "bio": ""
+  },
+  {
+    "text": "A diamond is forever.",
+    "author": "De Beers",
+    "bio": ""
+  },
+  {
+    "text": "The happiest place on earth.",
+    "author": "Disneyland",
+    "bio": ""
+  },
+  {
+    "text": "I’m lovin’ it.",
+    "author": "McDonald’s",
+    "bio": ""
+  },
+  {
+    "text": "All the news that’s fit to print.",
+    "author": "The New York Times",
+    "bio": ""
+  },
+  {
+    "text": "There are some things money can’t buy. For everything else, there’s Mastercard.",
+    "author": "Mastercard",
+    "bio": ""
+  },
+  {
+    "text": "It’s finger lickin’ good.",
+    "author": "Kentucky Fried Chicken",
+    "bio": ""
+  },
+  {
+    "text": "Sheer driving pleasure.",
+    "author": "BMW",
+    "bio": ""
+  },
+  {
+    "text": "Because you’re worth it.",
+    "author": "L’Oréal Paris",
+    "bio": ""
+  },
+  {
+    "text": "Have a break…have a KitKat.",
+    "author": "KitKat",
+    "bio": ""
+  },
+  {
+    "text": "Red Bull gives you wings.",
+    "author": "RedBull",
+    "bio": ""
+  },
+  {
+    "text": "Taste the rainbow.",
+    "author": "Skittles",
+    "bio": ""
+  },
+  {
+    "text": "Vorsprung durch Technik.",
+    "author": "Audi (“Advancement through technology.”)",
+    "bio": ""
+  },
+  {
+    "text": "Belong anywhere.",
+    "author": "AirBnB",
+    "bio": ""
+  },
+  {
+    "text": "That’s one small step for man, one giant leap for mankind.",
+    "author": "Neil Armstrong",
+    "bio": ""
+  },
+  {
+    "text": "I should not proceed by land to the East, as is customary, but by a Westerly route, in which direction we have hitherto no certain evidence that any one has gone.",
+    "author": "Christopher Columbus",
+    "bio": ""
+  },
+  {
+    "text": "If a man will begin with certainties, he shall end in doubts; but if he will be content to begin with doubts he shall end in certainties.",
+    "author": "Sir Francis Bacon",
+    "bio": ""
+  },
+  {
+    "text": "I am a lucky man. I have had a dream and it has come true, and that is not a thing that happens often to men.",
+    "author": "Edmund Hillary",
+    "bio": ""
+  },
+  {
+    "text": "A tourist follows a trail; a mountaineer finds one. A true mountaineer takes responsibility for him or herself and goes where no one else is going.",
+    "author": "Reinhold Messner",
+    "bio": ""
+  },
+  {
+    "text": "I was disposed to see some part of the world and its wonders.",
+    "author": "Amerigo Vespucci",
+    "bio": ""
+  },
+  {
+    "text": "Victory awaits him who has everything in order — luck, people call it. Defeat is certain for him who has neglected to take the necessary precautions in time; this is called bad luck.",
+    "author": "Roald Amundsen",
+    "bio": ""
+  },
+  {
+    "text": "The most difficult thing is the decision to act. The rest is merely tenacity. The fears are paper tigers. You can do anything you decide to do. You can act to change and control your life and the procedure. The process is its own reward.",
+    "author": "Amelia Earhart",
+    "bio": ""
+  },
+  {
+    "text": "I have not told half of what I saw.",
+    "author": "Marco Polo",
+    "bio": ""
+  },
+  {
+    "text": "I [had\r\n] ambition not only to go farther than any one had been before, but as far as it was possible for man to go.",
+    "author": "James Cook",
+    "bio": ""
+  },
+  {
+    "text": "There must be a beginning of any great matter, but the continuing unto the end until it be thoroughly finished yields the true glory.",
+    "author": "Sir Francis Drake",
+    "bio": ""
+  },
+  {
+    "text": "I always have a comfortable feeling that nothing is impossible if one applies a certain amount of energy in the right direction.",
+    "author": "Nellie Bly",
+    "bio": ""
+  },
+  {
+    "text": "The air is only the place free from prejudice.",
+    "author": "Bessie Coleman",
+    "bio": ""
+  },
+  {
+    "text": "I have found a dream of beauty at which one might look all one’s life and sigh.",
+    "author": "Isabella Bird",
+    "bio": ""
+  },
+  {
+    "text": "It is not the mountain we conquer, but ourselves.",
+    "author": "George Mallory",
+    "bio": ""
+  },
+  {
+    "text": "I’ve missed more than 9000 shots in my career. I’ve lost almost 300 games. 26 times, I’ve been trusted to take the game winning shot and missed. I’ve failed over and over and over again in my life. And that is why I succeed.",
+    "author": "Michael Jordan",
+    "bio": ""
+  },
+  {
+    "text": "I’m gonna float like a butterfly and sting like a bee. His hands can’t hit what his eyes can’t see.",
+    "author": "Muhammad Ali",
+    "bio": ""
+  },
+  {
+    "text": "The greatest thing about tomorrow is, I will be better than I am today. And that’s how I look at my life. I will be better as a golfer, I will be better as a person, I will be better as a father, I will be a better husband, I will be better as a friend. That’s the beauty of tomorrow. There is no such thing as a setback. The lessons I learn today I will apply tomorrow, and I will be better.",
+    "author": "Tiger Woods",
+    "bio": ""
+  },
+  {
+    "text": "If you put a limit on anything, you put a limit on how far you can go. I don’t think anything is too high. The more you use your imagination, the faster you go. If you think about doing the unthinkable, you can. The sky is the limit.",
+    "author": "Michael Phelps",
+    "bio": ""
+  },
+  {
+    "text": "The more difficult a victory, the greater the happiness in winning.",
+    "author": "Pelé",
+    "bio": ""
+  },
+  {
+    "text": "I really think a champion is defined not by their wins but by how they can recover when they fall.",
+    "author": "Serena Williams",
+    "bio": ""
+  },
+  {
+    "text": "I was never content unless I was trying my skill in some game against my fellow playmates or testing my endurance and wits against some member of the animal kingdom.",
+    "author": "Jim Thorpe",
+    "bio": ""
+  },
+  {
+    "text": "Do not give up. Keep on your quest.",
+    "author": "Junko Tabei",
+    "bio": ""
+  },
+  {
+    "text": "My only secret is that I never quit doing it.",
+    "author": "Tony Hawk",
+    "bio": ""
+  },
+  {
+    "text": "I had just seen what I wanted to be. And if you can see it, you can be it.",
+    "author": "Billie Jean King",
+    "bio": ""
+  },
+  {
+    "text": "You just can’t beat the person who never gives up.",
+    "author": "Babe Ruth",
+    "bio": ""
+  },
+  {
+    "text": "Following your dreams — not just in gymnastics, but in everything — shouldn’t have anything to do with the color of your skin. It should only be about finding the discipline and the courage to do the hard work.",
+    "author": "Simone Biles",
+    "bio": ""
+  },
+  {
+    "text": "Empty your mind. Be formless. Shapeless. Like water. You put water into a cup, it becomes the cup. You put water into a bottle, it becomes the bottle. You put it in a teapot, it becomes the teapot. Water can flow, or it can crash. Be water, my friend.",
+    "author": "Bruce Lee",
+    "bio": ""
+  },
+  {
+    "text": "I always thought that if I ever got good reviews I’d be happy. It’s so empty. It’s never what I wanted, ever. All I wanted was just what everyone else wants — to be loved.",
+    "author": "Rita Hayworth",
+    "bio": ""
+  },
+  {
+    "text": "Your love makes me strong, your hate makes me unstoppable.",
+    "author": "Cristiano Ronaldo",
+    "bio": ""
+  },
+  {
+    "text": "Focus on what you know you can do. Know what you’re capable of on any given day, what you can count on; that’s a philosophy I try to live by.",
+    "author": "Mia Hamm",
+    "bio": ""
+  },
+  {
+    "text": "I’ve always been aware that the image you patiently construct for an entire career can be ruined in a minute.",
+    "author": "Roger Federer",
+    "bio": ""
+  },
+  {
+    "text": "This feeling of ‘when I’m ready,’ deep in your heart you know it, and all the rest of it is just making excuses.",
+    "author": "Laura Dekker",
+    "bio": ""
+  },
+  {
+    "text": "The magic you’re looking for is in the will of trying and not giving up. The love of your dream is in your heart. […\r\n] Keep going. Because will always finds a way.",
+    "author": "Tom Brady",
+    "bio": ""
+  },
+  {
+    "text": "When I am in the moment, on the course, I’m not thinking about what this race means. I’m not worried about my knee, or what my legs can handle. I’m not thinking about crashing, or about holding back. I am only skiing.",
+    "author": "Lindsey Vonn",
+    "bio": ""
+  },
+  {
+    "text": "It doesn’t hurt to lose my crown. It hurts to lose.",
+    "author": "Steffi Graf",
+    "bio": ""
+  },
+  {
+    "text": "You have to set yourself goals so you can push yourself harder. Desire is the key to success.",
+    "author": "Usain Bolt",
+    "bio": ""
+  },
+  {
+    "text": "I had so much fun, and it didn’t matter to me if I won or lost. I was still happy. I’d go, ‘Well, next time, I’m gonna try hard. I know I can do it!",
+    "author": "Florence Griffith Joyner",
+    "bio": ""
+  },
+  {
+    "text": "Pain is temporary. It may last a minute, or an hour, or a day, or a year, but eventually it will subside and something else will take its place. If I quit, however, it lasts forever.",
+    "author": "Lance Armstrong",
+    "bio": ""
+  },
+  {
+    "text": "You can’t control what people say about you and what they think about you. You can’t plan for bad luck. You can only work your hardest and do your best and tell the truth. In the end, it’s the effort that matters. The rest is beyond your control.",
+    "author": "Maria Sharapova",
+    "bio": ""
+  },
+  {
+    "text": "If you tell the truth, you don’t have to remember anything.",
+    "author": "Anonymous",
+    "bio": ""
+  },
+  {
+    "text": "Success is going from failure to failure without losing your enthusiasm.",
+    "author": "Anonymous",
+    "bio": ""
+  },
+  {
+    "text": "Give me six hours to chop down a tree and I will spend the first four sharpening the axe.",
+    "author": "Anonymous",
+    "bio": ""
+  },
+  {
+    "text": "Success is not final; failure is not fatal. It is the courage to continue that counts.",
+    "author": "Anonymous",
+    "bio": ""
+  },
+  {
+    "text": "The only man who never makes a mistake is the man who never does anything.",
+    "author": "Anonymous",
+    "bio": ""
+  },
+  {
+    "text": "The man who does not read has no advantage over the man who cannot read.",
+    "author": "Anonymous",
+    "bio": ""
+  },
+  {
+    "text": "There are only two ways to live your life. One is as though nothing is a miracle. The other is as though everything is.",
+    "author": "Anonymous",
+    "bio": ""
+  },
+  {
+    "text": "Appear weak when you are strong, and strong when you are weak.",
+    "author": "Anonymous",
+    "bio": ""
+  },
+  {
+    "text": "Yesterday is history, tomorrow is a mystery, but today is a gift — that is why we call it the present.",
+    "author": "Anonymous",
+    "bio": ""
+  },
+  {
+    "text": "If you fail to prepare, you are preparing to fail.",
+    "author": "Anonymous",
+    "bio": ""
+  },
+  {
+    "text": "The music is not in the notes, but in the silence between.",
+    "author": "Anonymous",
+    "bio": ""
+  },
+  {
+    "text": "Joy is not in things; it is in us.",
+    "author": "Anonymous",
+    "bio": ""
+  },
+  {
+    "text": "I think everything in life is art. What you do. How you dress. The way you love someone, and how you talk. Your smile and your personality. What you believe in, and all your dreams. The way you drink your tea. How you decorate your home. Or party. Your grocery list. The food you make. How your writing looks. And the way you feel. Life is art.",
+    "author": "Anonymous",
+    "bio": ""
+  },
+  {
+    "text": "If you obey all of the rules, you miss all of the fun.",
+    "author": "Anonymous",
+    "bio": ""
+  },
+  {
+    "text": "I saw the angel in the marble and carved until I set him free.",
+    "author": "Anonymous",
+    "bio": ""
+  },
+  {
+    "text": "Even if I knew that tomorrow the world would go to pieces, I would still plant my apple tree.",
+    "author": "Anonymous",
+    "bio": ""
+  },
+  {
+    "text": "If you want to go fast, go alone. If you want to go far, go together.",
+    "author": "Anonymous",
+    "bio": ""
+  },
+  {
+    "text": "Everything has beauty, but not everyone can see it.",
+    "author": "Anonymous",
+    "bio": ""
+  },
+  {
+    "text": "Insanity is doing the same thing over and over again and expecting different results.",
+    "author": "Narcotics Anonymous",
+    "bio": ""
+  },
+  {
+    "text": "Everyone is a genius. But if you judge a fish by its ability to climb a tree, it will live its whole life believing that it is stupid.",
+    "author": "Anonymous",
+    "bio": ""
+  },
+  {
+    "text": "And in the end, it’s not the years in your life that count. It’s the life in your years.",
+    "author": "Edward J. Stieglitz",
+    "bio": ""
+  },
+  {
+    "text": "You can fool all the people some of the time and some of the people all the time, but you cannot fool all the people all the time.",
+    "author": "Jacques Abbadie",
+    "bio": ""
+  },
+  {
+    "text": "The right to swing your fist ends where my nose begins.",
+    "author": "John B. Finch",
+    "bio": ""
+  },
+  {
+    "text": "Whatever you are, be a good one.",
+    "author": "William Makepeace Thackeray",
+    "bio": ""
+  },
+  {
+    "text": "Do what you can, with what you’ve got, where you are.",
+    "author": "Squire Bill Widener",
+    "bio": ""
+  },
+  {
+    "text": "Most people die when they’re 25 but aren’t buried until they’re 75.",
+    "author": "G. E. Marchand",
+    "bio": ""
+  },
+  {
+    "text": "Not everything that can be counted counts, and not everything that counts can be counted.",
+    "author": "William Bruce Cameron",
+    "bio": ""
+  },
+  {
+    "text": "We are what we repeatedly do. Excellence, then, is not an act but a habit.",
+    "author": "Will Durant",
+    "bio": ""
+  },
+  {
+    "text": "Simplicity is the ultimate sophistication.",
+    "author": "Clare Boothe Luce",
+    "bio": ""
+  },
+  {
+    "text": "If I had more time, I would have written a shorter letter.",
+    "author": "Blaise Pascal",
+    "bio": ""
+  },
+  {
+    "text": "There is no agony like bearing an untold story inside you.",
+    "author": "Zora Neale Hurston",
+    "bio": ""
+  },
+  {
+    "text": "It is better to remain silent at the risk of being thought a fool, than to talk and remove all doubt of it.",
+    "author": "Maurice Switzer",
+    "bio": "Mrs. Goose, Her Book"
+  },
+  {
+    "text": "Victorious warriers win first and then go to war, while defeated warriors go to war first and then seek to win.",
+    "author": "Zhang Yu",
+    "bio": ""
+  },
+  {
+    "text": "Life is what happens to you while you’re busy making other plans.",
+    "author": "Allen Saunders",
+    "bio": ""
+  },
+  {
+    "text": "I’ve learned that people will forget what you said, people will forget what you did, but people will never forget how you made them feel.",
+    "author": "Carl W. Buehner",
+    "bio": ""
+  },
+  {
+    "text": "The world is a book and those who do not travel read only one page.",
+    "author": "Louis-Charles Fougeret de Monbron",
+    "bio": ""
+  },
+  {
+    "text": "We are saved by faith alone, but the faith that saves is never alone.",
+    "author": "John Calvin",
+    "bio": ""
+  },
+  {
+    "text": "Stay hungry, stay foolish.",
+    "author": "Whole Earth Catalog",
+    "bio": ""
+  },
+  {
+    "text": "Well-behaved women rarely make history.",
+    "author": "Laurel Thatcher Ulrich",
+    "bio": ""
+  },
+  {
+    "text": "The ends justify the means.",
+    "author": "Ovid",
+    "bio": ""
+  },
+  {
+    "text": "The journey of a thousand miles begins with a single step.",
+    "author": "Lao Tzu",
+    "bio": ""
+  },
+  {
+    "text": "Supreme excellence consists in breaking the enemy resistance without fighting.",
+    "author": "Sun Tzu",
+    "bio": ""
+  },
+  {
+    "text": "Love has nothing to do with what you are expecting to get — only with what you are expecting to give — which is everything.",
+    "author": "Katharine Hepburn",
+    "bio": ""
+  },
+  {
+    "text": "I am going to make him an offer he cannot refuse.",
+    "author": "Don Vito Corleone",
+    "bio": "The Godfather (Marlon Brando)"
+  },
+  {
+    "text": "You cannot handle the truth!",
+    "author": "Col. Nathan R. Jessup",
+    "bio": "A Few Good Men (Jack Nicholson)"
+  },
+  {
+    "text": "All that is gold does not glitter, Not all those who wander are lost; The old that is strong does not wither, Deep roots are not reached by the frost.",
+    "author": "J.R.R. Tolkien",
+    "bio": "The Lord of the Rings"
+  },
+  {
+    "text": "As he read, I fell in love the way you fall asleep: slowly, and then all at once.",
+    "author": "John Green",
+    "bio": "The Fault in Our Stars"
+  },
+  {
+    "text": "It is no use going back to yesterday, because I was a different person then.",
+    "author": "Lewis Carroll",
+    "bio": "Alice in Wonderland"
+  },
+  {
+    "text": "To go wrong in one own way is better than to go right in someone else way.",
+    "author": "Fyodor Dostoevsky",
+    "bio": "Crime and Punishment"
+  },
+  {
+    "text": "We are what we pretend to be, so we must be careful about what we pretend to be.",
+    "author": "Kurt Vonnegut",
+    "bio": "Mother Night"
+  },
+  {
+    "text": "In politics, if you want anything said, ask a man. If you want anything done, ask a woman.",
+    "author": "Margaret Thatcher",
+    "bio": ""
+  },
+  {
+    "text": "A sunny disposition is worth more than fortune. Young people should know that it can be cultivated; that the mind, like the body, can be moved from the shade into sunshine.",
+    "author": "Andrew Carnegie",
+    "bio": ""
   }
 ]

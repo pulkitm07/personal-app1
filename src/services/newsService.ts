@@ -73,7 +73,7 @@ function isExcluded(text: string) {
 
 // ── Recency filter ────────────────────────────────────────────────────────────
 function isWithinDays(pubDate: string, days: number): boolean {
-  if (!pubDate) return false;
+  if (!pubDate) return true; // missing pubDate → give benefit of the doubt
   const pub = new Date(pubDate).getTime();
   if (isNaN(pub)) return true;
   const cutoff = Date.now() - days * 24 * 60 * 60 * 1000;
@@ -233,7 +233,7 @@ export async function fetchFintechNews(): Promise<NewsArticle[]> {
         if (!a.title) return false;
         const text = `${a.title} ${a.summary}`.toLowerCase();
         if (isExcluded(text)) return false;
-        if (!isWithinDays(a.publishedAt, 2)) return false;
+        if (!isWithinDays(a.publishedAt, 7)) return false;
         if (skipKeywordFilter) return true;
         return FINTECH_ALLOW.some(kw => text.includes(kw));
       });
