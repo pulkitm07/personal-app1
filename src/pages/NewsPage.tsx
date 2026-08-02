@@ -40,17 +40,32 @@ export function NewsPage() {
 
   const loadNews = async () => {
     setLoading(true);
-    const [geo, fin, fintech, consulting] = await Promise.all([
-      fetchGeopoliticalNews(),
-      fetchFinanceNews(),
-      fetchFintechNews(),
-      fetchConsultingNews(),
+    
+    // Fetch individually to prevent one failure from crashing the page
+    await Promise.all([
+      fetchGeopoliticalNews()
+        .then(setGeoNews)
+        .catch(() => setGeoNews([])),
+      
+      fetchFinanceNews()
+        .then(fin => {
+          setFinNews(fin.articles);
+          setKeyInsight(fin.keyInsight);
+        })
+        .catch(() => {
+          setFinNews([]);
+          setKeyInsight('');
+        }),
+      
+      fetchFintechNews()
+        .then(setFintechNews)
+        .catch(() => setFintechNews([])),
+      
+      fetchConsultingNews()
+        .then(setConsultingNews)
+        .catch(() => setConsultingNews([])),
     ]);
-    setGeoNews(geo);
-    setFinNews(fin.articles);
-    setKeyInsight(fin.keyInsight);
-    setFintechNews(fintech);
-    setConsultingNews(consulting);
+    
     setLoading(false);
   };
 

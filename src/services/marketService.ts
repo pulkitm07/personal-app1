@@ -130,9 +130,18 @@ function parseYahooMeta(data: unknown): { value: number; change: number } | null
   try {
     const meta = (data as any)?.chart?.result?.[0]?.meta;
     const price  = safeFloat(meta?.regularMarketPrice);
-    const change = safeFloat(meta?.regularMarketChangePercent);
-    if (!price) return null;
-    return { value: safeFloat(price.toFixed(2)), change: safeFloat(change.toFixed(2)) };
+    const prevClose = safeFloat(meta?.chartPreviousClose);
+    
+    if (!price || !prevClose) return null;
+    
+    // Yahoo API stopped returning regularMarketChangePercent reliably.
+    // Calculate it manually.
+    const changePct = ((price - prevClose) / prevClose) * 100;
+    
+    return { 
+      value: safeFloat(price.toFixed(2)), 
+      change: safeFloat(changePct.toFixed(2)) 
+    };
   } catch { return null; }
 }
 

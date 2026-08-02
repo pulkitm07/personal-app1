@@ -86,8 +86,8 @@ function MarketCard({ item }: { item: CardItem }) {
       <div className="space-y-2">
         <div>
           {/* BUG 2 FIX: show clean unit label, not raw ticker */}
-          <p className="text-xs text-gray-600 dark:text-gray-400">{item.label}</p>
-          <p className="text-sm font-medium text-gray-900 dark:text-white">{item.unit}</p>
+          <p className="text-sm font-medium text-gray-900 dark:text-white">{item.label}</p>
+          <p className="text-xs text-gray-600 dark:text-gray-400">{item.unit}</p>
         </div>
         <div>
           <p className="text-base font-medium text-gray-900 dark:text-white">
