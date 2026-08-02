@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { Layout } from './components/Layout/Layout';
 import { HomePage } from './pages/HomePage';
+import { NewsPage } from './pages/NewsPage';
 import { SettingsPage } from './pages/SettingsPage';
 import { RulebookPage } from './pages/RulebookPage';
 
@@ -12,6 +13,8 @@ function App() {
     switch (currentPage) {
       case 'home':
         return <HomePage />;
+      case 'news':
+        return <NewsPage />;
       case 'settings':
         return <SettingsPage />;
       case 'rulebook':

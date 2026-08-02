@@ -1,4 +1,4 @@
-import { Home, Settings } from 'lucide-react';
+import { Home, Settings, Newspaper } from 'lucide-react';
 import { useTheme } from '../../contexts/ThemeContext';
 
 interface BottomNavProps {
@@ -8,6 +8,7 @@ interface BottomNavProps {
 
 const navItems = [
   { id: 'home', icon: Home },
+  { id: 'news', icon: Newspaper },
   { id: 'settings', icon: Settings },
 ];
 
