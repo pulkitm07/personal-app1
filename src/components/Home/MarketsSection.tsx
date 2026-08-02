@@ -4,7 +4,7 @@ import { TrendingUp, TrendingDown, AlertTriangle } from 'lucide-react';
 import type { MarketData } from '../../types';
 import { fetchMarketData } from '../../services/marketService';
 
-const REFRESH_INTERVAL_MS = 5 * 60 * 1000; // 5 minutes
+const REFRESH_INTERVAL_MS = 5 * 60 * 1000;
 
 interface MarketsSectionProps {
   markets: MarketData | null;
@@ -20,13 +20,14 @@ function formatCountdown(ms: number): string {
   return `${min}:${sec.toString().padStart(2, '0')}`;
 }
 
-// ── Card data item types ──────────────────────────────────────────────────────
+// ── Card item type ─────────────────────────────────────────────────────────────
 
 type CardMode = 'currency' | 'index' | 'yield' | 'commodity';
 
 interface CardItem {
-  label: string;
-  symbol: string;
+  label: string;  // human-readable name, e.g. "Bitcoin"
+  unit: string;   // clean unit label shown under name, e.g. "USD" — NEVER a raw ticker
+  key: string;    // unique React key, can be the raw ticker internally
   value: number;
   change: number;
   prefix: string;
@@ -36,15 +37,27 @@ interface CardItem {
   mode: CardMode;
 }
 
-function formatValue(value: number, prefix: string, suffix: string, fractionDigits: number): string {
+function formatValue(
+  value: number,
+  prefix: string,
+  suffix: string,
+  fractionDigits: number,
+): string {
   if (!value || value === 0) return '—';
-  return `${prefix}${value.toLocaleString('en-IN', { maximumFractionDigits: fractionDigits, minimumFractionDigits: fractionDigits })}${suffix}`;
+  return `${prefix}${value.toLocaleString('en-IN', {
+    maximumFractionDigits: fractionDigits,
+    minimumFractionDigits: fractionDigits,
+  })}${suffix}`;
 }
 
+// ── Change row — BUG 1 FIX ────────────────────────────────────────────────────
+// "Unavailable" is shown ONLY when the price itself is 0 (i.e. !hasData at card level).
+// A change of exactly 0.00% is valid and should display normally (e.g. during pre-market).
 function ChangeRow({ change, mode }: { change: number; mode: CardMode }) {
-  if (change === 0) return <p className="text-xs text-gray-400 dark:text-gray-600">Unavailable</p>;
   const isUp = change >= 0;
-  const colorCls = isUp ? 'text-green-600 dark:text-green-500' : 'text-red-600 dark:text-red-500';
+  const colorCls = isUp
+    ? 'text-green-600 dark:text-green-500'
+    : 'text-red-600 dark:text-red-500';
 
   if (mode === 'yield') {
     const bps = (change * 100).toFixed(1);
@@ -64,24 +77,30 @@ function ChangeRow({ change, mode }: { change: number; mode: CardMode }) {
   );
 }
 
+// ── Single card ────────────────────────────────────────────────────────────────
+
 function MarketCard({ item }: { item: CardItem }) {
   const hasData = item.value > 0;
   return (
     <Card className="!p-3">
       <div className="space-y-2">
         <div>
+          {/* BUG 2 FIX: show clean unit label, not raw ticker */}
           <p className="text-xs text-gray-600 dark:text-gray-400">{item.label}</p>
-          <p className="text-sm font-medium text-gray-900 dark:text-white">{item.symbol}</p>
+          <p className="text-sm font-medium text-gray-900 dark:text-white">{item.unit}</p>
         </div>
         <div>
           <p className="text-base font-medium text-gray-900 dark:text-white">
-            {hasData ? formatValue(item.value, item.prefix, item.suffix, item.fractionDigits) : '—'}
+            {hasData
+              ? formatValue(item.value, item.prefix, item.suffix, item.fractionDigits)
+              : '—'}
           </p>
           {item.subLabel && (
             <p className="text-[10px] text-gray-400 dark:text-gray-600 leading-tight mb-0.5">
               {item.subLabel}
             </p>
           )}
+          {/* BUG 1 FIX: "Unavailable" only when price is missing, not when change = 0 */}
           {hasData ? (
             <ChangeRow change={item.change} mode={item.mode} />
           ) : (
@@ -93,13 +112,32 @@ function MarketCard({ item }: { item: CardItem }) {
   );
 }
 
-// ── Group divider ─────────────────────────────────────────────────────────────
+// ── Group wrapper — BUG 3 FIX ─────────────────────────────────────────────────
+// Each group of 3 gets its own label + 3-column grid.
 
-function GroupLabel({ children }: { children: string }) {
+function MarketGroup({
+  label,
+  items,
+  showDivider = true,
+}: {
+  label: string;
+  items: CardItem[];
+  showDivider?: boolean;
+}) {
   return (
-    <p className="text-[11px] font-medium uppercase tracking-wider text-gray-400 dark:text-gray-600 mb-2 mt-5 first:mt-0">
-      {children}
-    </p>
+    <>
+      {showDivider && (
+        <div className="border-t border-gray-200 dark:border-gray-800 mt-5" />
+      )}
+      <p className="text-[11px] font-medium uppercase tracking-wider text-gray-400 dark:text-gray-600 mb-2 mt-4">
+        {label}
+      </p>
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+        {items.map(item => (
+          <MarketCard key={item.key} item={item} />
+        ))}
+      </div>
+    </>
   );
 }
 
@@ -155,37 +193,51 @@ export function MarketsSection({
   if (loading) {
     return (
       <div className="mb-6">
-        <h2 className="text-base lg:text-lg font-medium mb-4 text-gray-900 dark:text-white">Markets</h2>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-          {Array.from({ length: 12 }).map((_, i) => <SkeletonCard key={i} />)}
+        <h2 className="text-base lg:text-lg font-medium mb-4 text-gray-900 dark:text-white">
+          Markets
+        </h2>
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+          {Array.from({ length: 12 }).map((_, i) => (
+            <SkeletonCard key={i} />
+          ))}
         </div>
       </div>
     );
   }
 
-  const group1: CardItem[] = markets ? [
-    { label: 'Bitcoin',    symbol: 'BTC',    value: markets.btc.price,    change: markets.btc.change24h,  prefix: '$', suffix: '', subLabel: 'USD',      fractionDigits: 0, mode: 'currency' },
-    { label: 'Ethereum',   symbol: 'ETH',    value: markets.eth.price,    change: markets.eth.change24h,  prefix: '$', suffix: '', subLabel: 'USD',      fractionDigits: 2, mode: 'currency' },
-    { label: 'Solana',     symbol: 'SOL',    value: markets.sol.price,    change: markets.sol.change24h,  prefix: '$', suffix: '', subLabel: 'USD',      fractionDigits: 2, mode: 'currency' },
-    { label: 'USD / INR',  symbol: 'FOREX',  value: markets.usdInr.rate,  change: markets.usdInr.change,  prefix: '₹', suffix: '', subLabel: '',         fractionDigits: 2, mode: 'currency' },
-    { label: 'Sensex',     symbol: 'BSE',    value: markets.sensex.value, change: markets.sensex.change,  prefix: '', suffix: '',  subLabel: 'Index pts', fractionDigits: 0, mode: 'index'   },
-    { label: 'Nifty 50',   symbol: 'NSE',    value: markets.nifty.value,  change: markets.nifty.change,   prefix: '', suffix: '',  subLabel: 'Index pts', fractionDigits: 0, mode: 'index'   },
+  // ── BUG 3 FIX: 4 clean groups of 3 ──────────────────────────────────────────
+
+  const cryptoCards: CardItem[] = markets ? [
+    { key: 'BTC',  label: 'Bitcoin',  unit: 'USD', value: markets.btc.price, change: markets.btc.change24h, prefix: '$', suffix: '', subLabel: '', fractionDigits: 0, mode: 'currency' },
+    { key: 'ETH',  label: 'Ethereum', unit: 'USD', value: markets.eth.price, change: markets.eth.change24h, prefix: '$', suffix: '', subLabel: '', fractionDigits: 2, mode: 'currency' },
+    { key: 'SOL',  label: 'Solana',   unit: 'USD', value: markets.sol.price, change: markets.sol.change24h, prefix: '$', suffix: '', subLabel: '', fractionDigits: 2, mode: 'currency' },
   ] : [];
 
-  const group2: CardItem[] = markets ? [
-    { label: 'Nasdaq',       symbol: '^IXIC', value: markets.nasdaq.value,       change: markets.nasdaq.change,       prefix: '',  suffix: '',  subLabel: 'USD pts', fractionDigits: 0, mode: 'index'     },
-    { label: 'S&P 500',      symbol: '^GSPC', value: markets.sp500.value,        change: markets.sp500.change,        prefix: '',  suffix: '',  subLabel: 'USD pts', fractionDigits: 0, mode: 'index'     },
-    { label: 'Dow Jones',    symbol: '^DJI',  value: markets.dowjones.value,     change: markets.dowjones.change,     prefix: '',  suffix: '',  subLabel: 'USD pts', fractionDigits: 0, mode: 'index'     },
-    { label: '10-Yr Yield',  symbol: 'TNX',   value: markets.treasury10y.value,  change: markets.treasury10y.change,  prefix: '',  suffix: '%', subLabel: 'Yield',   fractionDigits: 3, mode: 'yield'     },
-    { label: 'Gold',         symbol: 'XAU',   value: markets.goldInrPerGram.value, change: markets.goldInrPerGram.change, prefix: '₹', suffix: '', subLabel: '/gram', fractionDigits: 2, mode: 'commodity' },
-    { label: 'Oil (WTI)',    symbol: 'CL=F',  value: markets.oilWti.value,       change: markets.oilWti.change,       prefix: '$', suffix: '',  subLabel: 'USD/bbl', fractionDigits: 2, mode: 'commodity' },
+  const indiaCards: CardItem[] = markets ? [
+    { key: 'FOREX',  label: 'USD / INR', unit: 'Forex', value: markets.usdInr.rate,  change: markets.usdInr.change,  prefix: '₹', suffix: '',  subLabel: '',          fractionDigits: 2, mode: 'currency' },
+    { key: 'SENSEX', label: 'Sensex',    unit: 'BSE',   value: markets.sensex.value, change: markets.sensex.change,  prefix: '',  suffix: '',  subLabel: 'Index pts', fractionDigits: 0, mode: 'index'   },
+    { key: 'NIFTY',  label: 'Nifty 50', unit: 'NSE',   value: markets.nifty.value,  change: markets.nifty.change,   prefix: '',  suffix: '',  subLabel: 'Index pts', fractionDigits: 0, mode: 'index'   },
+  ] : [];
+
+  const usCards: CardItem[] = markets ? [
+    { key: 'NASDAQ', label: 'Nasdaq',    unit: 'USD', value: markets.nasdaq.value,   change: markets.nasdaq.change,   prefix: '', suffix: '', subLabel: 'Index pts', fractionDigits: 0, mode: 'index' },
+    { key: 'SP500',  label: 'S&P 500',   unit: 'USD', value: markets.sp500.value,    change: markets.sp500.change,    prefix: '', suffix: '', subLabel: 'Index pts', fractionDigits: 0, mode: 'index' },
+    { key: 'DJI',    label: 'Dow Jones', unit: 'USD', value: markets.dowjones.value, change: markets.dowjones.change, prefix: '', suffix: '', subLabel: 'Index pts', fractionDigits: 0, mode: 'index' },
+  ] : [];
+
+  const ratesCards: CardItem[] = markets ? [
+    { key: 'TNX',  label: '10-Yr Yield', unit: 'US Treasury', value: markets.treasury10y.value,    change: markets.treasury10y.change,    prefix: '',  suffix: '%', subLabel: 'Yield',   fractionDigits: 3, mode: 'yield'     },
+    { key: 'GOLD', label: 'Gold',         unit: 'INR/gram',    value: markets.goldInrPerGram.value, change: markets.goldInrPerGram.change, prefix: '₹', suffix: '',  subLabel: '',        fractionDigits: 2, mode: 'commodity' },
+    { key: 'OIL',  label: 'Oil (WTI)',    unit: 'USD/bbl',     value: markets.oilWti.value,         change: markets.oilWti.change,         prefix: '$', suffix: '',  subLabel: '',        fractionDigits: 2, mode: 'commodity' },
   ] : [];
 
   return (
     <div className="mb-6">
       {/* Header */}
       <div className="flex items-center gap-3 mb-4 flex-wrap">
-        <h2 className="text-base lg:text-lg font-medium text-gray-900 dark:text-white">Markets</h2>
+        <h2 className="text-base lg:text-lg font-medium text-gray-900 dark:text-white">
+          Markets
+        </h2>
 
         {isStale ? (
           <span className="flex items-center gap-1.5 text-xs font-medium text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700/40 px-2 py-0.5 rounded-full">
@@ -215,20 +267,17 @@ export function MarketsSection({
         </Card>
       ) : (
         <>
-          {/* Group 1 — Crypto + Indian Markets */}
-          <GroupLabel>Crypto · Indian Markets</GroupLabel>
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3">
-            {group1.map(item => <MarketCard key={item.symbol} item={item} />)}
-          </div>
+          {/* Group 1 — Crypto */}
+          <MarketGroup label="Crypto" items={cryptoCards} showDivider={false} />
 
-          {/* Thin divider */}
-          <div className="border-t border-gray-200 dark:border-gray-800 mt-5" />
+          {/* Group 2 — Indian Markets */}
+          <MarketGroup label="Indian Markets" items={indiaCards} />
 
-          {/* Group 2 — US Markets + Commodities */}
-          <GroupLabel>US Markets · Commodities</GroupLabel>
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3">
-            {group2.map(item => <MarketCard key={item.symbol} item={item} />)}
-          </div>
+          {/* Group 3 — US Markets */}
+          <MarketGroup label="US Markets" items={usCards} />
+
+          {/* Group 4 — Rates & Commodities */}
+          <MarketGroup label="Rates & Commodities" items={ratesCards} />
         </>
       )}
     </div>

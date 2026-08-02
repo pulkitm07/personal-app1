@@ -1,7 +1,6 @@
 import type { NewsArticle } from '../types';
 
-const RSS2JSON = 'https://api.rss2json.com/v1/api.json';
-
+// Removed rss2json to fix rate limits, using allorigins + DOMParser instead
 // ── Feed lists ────────────────────────────────────────────────────────────────
 
 const GEOPOLITICAL_FEEDS = [
@@ -136,22 +135,49 @@ async function fetchFeed(
   categorise: (t: string, d: string) => string
 ): Promise<NewsArticle[]> {
   try {
-    const res = await fetch(`${RSS2JSON}?rss_url=${encodeURIComponent(url)}`);
+    const res = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(url)}`);
     if (!res.ok) return [];
+    
     const data = await res.json();
-    if (data.status !== 'ok' || !Array.isArray(data.items)) return [];
-    const source: string = data.feed?.title || 'News';
-    return data.items.map((item: { title?: string; pubDate?: string; link?: string; description?: string }) => {
-      const desc = (item.description ?? '').replace(/<[^>]+>/g, '').trim();
-      return {
-        title: item.title ?? '',
-        source,
-        publishedAt: item.pubDate ?? '',
-        category: categorise(item.title ?? '', desc),
-        summary: desc,
-        url: item.link ?? '',
-      } satisfies NewsArticle;
+    if (!data.contents) return [];
+
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(data.contents, 'text/xml');
+    
+    // Support both RSS (<item>) and Atom (<entry>)
+    const isAtom = doc.querySelector('feed') !== null;
+    const items = isAtom ? doc.querySelectorAll('entry') : doc.querySelectorAll('item');
+    const sourceNode = isAtom ? doc.querySelector('feed > title') : doc.querySelector('channel > title');
+    const source = sourceNode?.textContent || 'News';
+
+    const articles: NewsArticle[] = [];
+    
+    items.forEach(item => {
+      const title = (item.querySelector('title')?.textContent || '').trim();
+      const link = (item.querySelector('link')?.textContent || item.querySelector('link')?.getAttribute('href') || '').trim();
+      
+      const pubDateNode = item.querySelector('pubDate') || item.querySelector('published') || item.querySelector('updated');
+      const pubDate = (pubDateNode?.textContent || '').trim();
+      
+      const descNode = item.querySelector('description') || item.querySelector('summary') || item.querySelector('content');
+      const description = (descNode?.textContent || '').trim();
+      
+      // Strip HTML tags for the clean summary
+      const descClean = description.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+
+      if (title && link) {
+        articles.push({
+          title,
+          source,
+          publishedAt: pubDate,
+          category: categorise(title, descClean),
+          summary: descClean,
+          url: link,
+        });
+      }
     });
+
+    return articles;
   } catch {
     return [];
   }
