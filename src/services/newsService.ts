@@ -22,11 +22,23 @@ const FINANCE_FEEDS = [
   'https://www.livemint.com/rss/markets',
 ];
 
+const FINTECH_FEEDS = [
+  'https://techcrunch.com/category/fintech/feed/',
+  'https://www.finextra.com/rss/headlines.aspx',
+  'https://thefintechtimes.com/feed/',
+  'https://economictimes.indiatimes.com/tech/technology/rssfeeds/13357270.cms',
+  'https://www.businessinsider.com/fintech/rss',
+];
+
 const CONSULTING_FEEDS: { url: string; skipKeywordFilter: boolean }[] = [
   { url: 'https://hbr.org/resources/rss/topics/managing-organizations', skipKeywordFilter: true },
   { url: 'https://www.mckinsey.com/insights/rss', skipKeywordFilter: true },
   { url: 'https://sloanreview.mit.edu/feed/', skipKeywordFilter: true },
+  { url: 'https://www.consultancy.uk/rss', skipKeywordFilter: true },
+  { url: 'https://www.consulting.us/rss', skipKeywordFilter: true },
 ];
+
+// ── Keyword filters ────────────────────────────────────────────────────────────
 
 const CONSULTING_ALLOW = [
   'strategy', 'strateg', 'consult', 'management', 'manag',
@@ -40,11 +52,19 @@ const CONSULTING_ALLOW = [
   'company', 'corporate', 'firm', 'industry', 'sector',
 ];
 
+const FINTECH_ALLOW = [
+  'payments', 'payment', 'digital banking', 'upi', 'neobank', 'neo-bank',
+  'crypto regulation', 'blockchain', 'rbi digital currency', 'fintech funding',
+  'insurtech', 'wealthtech', 'embedded finance', 'bnpl', 'stablecoin',
+  'cbdc', 'open banking', 'fintech', 'digital wallet', 'mobile banking',
+  'digital payment', 'digital currency', 'defi', 'regtech',
+];
+
 // ── Exclusion filter ──────────────────────────────────────────────────────────
 const EXCLUDED = [
   'sport', 'cricket', 'football', 'soccer', 'tennis', 'ipl', 'hockey',
   'celebrity', 'bollywood', 'entertainment', 'movie', 'film', 'actor',
-  'recipe', 'horoscope', 'astrology', 'fashion', 'beauty',
+  'recipe', 'horoscope', 'astrology', 'fashion', 'beauty', 'lifestyle',
 ];
 
 function isExcluded(text: string) {
@@ -53,9 +73,9 @@ function isExcluded(text: string) {
 
 // ── Recency filter ────────────────────────────────────────────────────────────
 function isWithinDays(pubDate: string, days: number): boolean {
-  if (!pubDate) return false; // if no date, let it through
+  if (!pubDate) return false;
   const pub = new Date(pubDate).getTime();
-  if (isNaN(pub)) return true; // if unparseable, let it through
+  if (isNaN(pub)) return true;
   const cutoff = Date.now() - days * 24 * 60 * 60 * 1000;
   return pub >= cutoff;
 }
@@ -82,6 +102,19 @@ function finCategory(t: string, d: string) {
   if (/crypto|bitcoin|ethereum|blockchain/.test(s)) return 'Crypto';
   if (/budget|tax|gdp|inflation|fiscal|deficit/.test(s)) return 'Macro';
   return 'Finance';
+}
+
+function fintechCategory(t: string, d: string) {
+  const s = `${t} ${d}`.toLowerCase();
+  if (/upi|payment|wallet|mobile pay/.test(s)) return 'Payments';
+  if (/blockchain|defi|crypto|stablecoin|cbdc/.test(s)) return 'Blockchain';
+  if (/neobank|digital bank|open banking/.test(s)) return 'Digital Banking';
+  if (/insurtech/.test(s)) return 'Insurtech';
+  if (/wealthtech|robo.advis/.test(s)) return 'Wealthtech';
+  if (/bnpl|buy now|lending/.test(s)) return 'Lending';
+  if (/regulation|rbi|compliance|regtech/.test(s)) return 'Regulation';
+  if (/funding|raise|series|investment/.test(s)) return 'Funding';
+  return 'Fintech';
 }
 
 function consultCategory(t: string, d: string) {
@@ -155,7 +188,6 @@ export async function fetchGeopoliticalNews(): Promise<NewsArticle[]> {
 
   const result = dedup(articles);
 
-  // Sort: international first, India last; then newest within each group
   result.sort((a, b) => {
     const aIndia = a.category === 'India' ? 1 : 0;
     const bIndia = b.category === 'India' ? 1 : 0;
@@ -187,8 +219,30 @@ export async function fetchFinanceNews(): Promise<{ articles: NewsArticle[]; key
   return { articles: result, keyInsight: pickInsight(result) };
 }
 
-/** Consulting — dedicated publications (no keyword filter) + business feeds (keyword filtered)
- *  Articles within 7 days (consulting publications update less frequently) */
+/** Fintech — only articles from the last 48 hours */
+export async function fetchFintechNews(): Promise<NewsArticle[]> {
+  const settled = await Promise.allSettled(
+    FINTECH_FEEDS.map(url => fetchFeed(url, fintechCategory))
+  );
+
+  const articles = settled
+    .filter((r): r is PromiseFulfilledResult<NewsArticle[]> => r.status === 'fulfilled')
+    .flatMap(r => r.value)
+    .filter(a => {
+      if (!a.title) return false;
+      const text = `${a.title} ${a.summary}`.toLowerCase();
+      if (isExcluded(text)) return false;
+      if (!isWithinDays(a.publishedAt, 2)) return false;
+      return FINTECH_ALLOW.some(kw => text.includes(kw));
+    });
+
+  const result = dedup(articles);
+  result.sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
+  return result;
+}
+
+/** Consultancy — dedicated publications (no keyword filter) + business feeds (keyword filtered)
+ *  Articles within 7 days (consultancy publications update less frequently) */
 export async function fetchConsultingNews(): Promise<NewsArticle[]> {
   const settled = await Promise.allSettled(
     CONSULTING_FEEDS.map(({ url }) => fetchFeed(url, consultCategory))
@@ -203,9 +257,7 @@ export async function fetchConsultingNews(): Promise<NewsArticle[]> {
         const text = `${a.title} ${a.summary}`.toLowerCase();
         if (isExcluded(text)) return false;
         if (!isWithinDays(a.publishedAt, 7)) return false;
-        // Dedicated consulting feeds: accept all non-excluded articles
         if (skipKeywordFilter) return true;
-        // General business feeds: must match a consulting keyword
         return CONSULTING_ALLOW.some(kw => text.includes(kw));
       });
     });

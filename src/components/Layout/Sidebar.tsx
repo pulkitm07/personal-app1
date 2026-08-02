@@ -1,4 +1,4 @@
-import { Home, Settings } from 'lucide-react';
+import { Home, Settings, BookOpen } from 'lucide-react';
 import { useTheme } from '../../contexts/ThemeContext';
 
 interface SidebarProps {
@@ -8,6 +8,7 @@ interface SidebarProps {
 
 const navItems = [
   { id: 'home', label: 'Home', icon: Home },
+  { id: 'rulebook', label: 'Rulebook', icon: BookOpen },
   { id: 'settings', label: 'Settings', icon: Settings },
 ];
 

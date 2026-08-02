@@ -3,6 +3,7 @@ import { ThemeProvider } from './contexts/ThemeContext';
 import { Layout } from './components/Layout/Layout';
 import { HomePage } from './pages/HomePage';
 import { SettingsPage } from './pages/SettingsPage';
+import { RulebookPage } from './pages/RulebookPage';
 
 function App() {
   const [currentPage, setCurrentPage] = useState('home');
@@ -13,6 +14,8 @@ function App() {
         return <HomePage />;
       case 'settings':
         return <SettingsPage />;
+      case 'rulebook':
+        return <RulebookPage />;
       default:
         return <HomePage />;
     }
