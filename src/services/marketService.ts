@@ -1,6 +1,6 @@
 import type { MarketData } from '../types';
 
-const CACHE_KEY = 'market_data_v10';
+const CACHE_KEY = 'market_data_v11';
 const CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutes
 
 export interface MarketResult {
@@ -278,7 +278,7 @@ async function fetchLive(): Promise<MarketData | null> {
 
 export async function fetchMarketData(): Promise<MarketResult> {
   // Wipe every known old cache key on load
-  ['market_data_v9','market_data_v8','market_data_v7','market_data_cache_v6','market_data_cache_v5',
+  ['market_data_v10','market_data_v9','market_data_v8','market_data_v7','market_data_cache_v6','market_data_cache_v5',
    'market_data_cache_v4','market_data_cache_v3','market_cache']
     .forEach(k => { try { localStorage.removeItem(k); } catch { /**/ } });
 

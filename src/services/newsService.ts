@@ -29,12 +29,11 @@ const FINTECH_FEEDS: { url: string; skipKeywordFilter: boolean }[] = [
   { url: 'https://www.businessinsider.com/fintech/rss', skipKeywordFilter: false },
 ];
 
-const CONSULTING_FEEDS: { url: string; skipKeywordFilter: boolean }[] = [
-  { url: 'https://hbr.org/resources/rss/topics/managing-organizations', skipKeywordFilter: true },
-  { url: 'https://www.mckinsey.com/insights/rss', skipKeywordFilter: true },
-  { url: 'https://sloanreview.mit.edu/feed/', skipKeywordFilter: true },
-  { url: 'https://www.consultancy.uk/rss', skipKeywordFilter: true },
-  { url: 'https://www.consulting.us/rss', skipKeywordFilter: true },
+const CONSULTING_FEEDS = [
+  'https://news.google.com/rss/search?q=management+consulting+strategy+McKinsey+BCG+Bain&hl=en-US&gl=US&ceid=US:en',
+  'https://news.google.com/rss/search?q=business+strategy+leadership+CEO+corporate+governance&hl=en-US&gl=US&ceid=US:en',
+  'https://news.google.com/rss/search?q=Deloitte+PwC+KPMG+Accenture+advisory&hl=en-US&gl=US&ceid=US:en',
+  'https://news.google.com/rss/search?q=digital+transformation+enterprise+restructuring&hl=en-US&gl=US&ceid=US:en',
 ];
 
 const PSYCHOLOGY_FEEDS: { url: string; skipKeywordFilter: boolean }[] = [
@@ -146,6 +145,43 @@ function psychCategory(t: string, d: string) {
   return 'Psychology';
 }
 
+// ── HTML entity decoder ───────────────────────────────────────────────────────
+
+function decodeHtmlEntities(text: string): string {
+  const entities: Record<string, string> = {
+    '&nbsp;': ' ', '&amp;': '&', '&lt;': '<', '&gt;': '>',
+    '&quot;': '"', '&#39;': "'", '&apos;': "'", '&ndash;': '\u2013',
+    '&mdash;': '\u2014', '&hellip;': '\u2026', '&laquo;': '\u00AB', '&raquo;': '\u00BB',
+    '&rsquo;': '\u2019', '&lsquo;': '\u2018', '&rdquo;': '\u201D', '&ldquo;': '\u201C',
+    '&bull;': '\u2022', '&trade;': '\u2122', '&copy;': '\u00A9', '&reg;': '\u00AE',
+  };
+  let result = text;
+  for (const [entity, char] of Object.entries(entities)) {
+    result = result.split(entity).join(char);
+  }
+  // Handle numeric entities like &#8217;
+  result = result.replace(/&#(\d+);/g, (_, n) => String.fromCharCode(parseInt(n)));
+  result = result.replace(/&#x([0-9a-fA-F]+);/g, (_, n) => String.fromCharCode(parseInt(n, 16)));
+  return result;
+}
+
+// ── Clean Google News source labels ──────────────────────────────────────────
+
+function cleanSourceName(raw: string): string {
+  // Google News RSS feeds have source titles like "source:reuters world - Google News"
+  // Extract just the publication name
+  let name = raw;
+  // Remove " - Google News" suffix
+  name = name.replace(/\s*-\s*Google News$/i, '');
+  // Remove Google search query artifacts like "source:reuters+world"
+  name = name.replace(/^source:/i, '');
+  // Replace + with spaces
+  name = name.replace(/\+/g, ' ');
+  // Capitalize first letter of each word
+  name = name.replace(/\b\w/g, c => c.toUpperCase()).trim();
+  return name || 'News';
+}
+
 // ── Core fetch ────────────────────────────────────────────────────────────────
 
 async function fetchFeed(
@@ -166,29 +202,65 @@ async function fetchFeed(
     const isAtom = doc.querySelector('feed') !== null;
     const items = isAtom ? doc.querySelectorAll('entry') : doc.querySelectorAll('item');
     const sourceNode = isAtom ? doc.querySelector('feed > title') : doc.querySelector('channel > title');
-    const source = sourceNode?.textContent || 'News';
+    const rawSource = sourceNode?.textContent || 'News';
+    const source = cleanSourceName(rawSource);
 
     const articles: NewsArticle[] = [];
     
     items.forEach(item => {
-      const title = (item.querySelector('title')?.textContent || '').trim();
+      const rawTitle = (item.querySelector('title')?.textContent || '').trim();
+      const title = decodeHtmlEntities(rawTitle);
+      
       const link = (item.querySelector('link')?.textContent || item.querySelector('link')?.getAttribute('href') || '').trim();
       
       const pubDateNode = item.querySelector('pubDate') || item.querySelector('published') || item.querySelector('updated');
       const pubDate = (pubDateNode?.textContent || '').trim();
       
       const descNode = item.querySelector('description') || item.querySelector('summary') || item.querySelector('content');
-      const description = (descNode?.textContent || '').trim();
+      const rawDesc = (descNode?.textContent || '').trim();
       
-      // Strip HTML tags for the clean summary
-      const descClean = description.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+      // Strip HTML tags, decode entities
+      let descClean = decodeHtmlEntities(rawDesc.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim());
+      
+      // If summary is empty or just repeats the title, try content:encoded or leave empty
+      const titleNorm = title.toLowerCase().replace(/[^a-z0-9]/g, '');
+      const descNorm = descClean.toLowerCase().replace(/[^a-z0-9]/g, '');
+      if (!descClean || descNorm === titleNorm || descNorm.startsWith(titleNorm)) {
+        // Try content:encoded as fallback
+        const contentEncoded = item.querySelector('content\\:encoded, encoded');
+        if (contentEncoded?.textContent) {
+          const fallback = decodeHtmlEntities(
+            contentEncoded.textContent.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim()
+          );
+          // Take first ~200 chars as summary
+          descClean = fallback.substring(0, 200).trim();
+          if (fallback.length > 200) descClean += '…';
+        } else {
+          descClean = '';
+        }
+      }
+
+      // For Google News, extract actual source from the title (format: "Headline - Source")
+      let articleSource = source;
+      if (rawSource.toLowerCase().includes('google news') && title.includes(' - ')) {
+        const parts = title.split(' - ');
+        if (parts.length >= 2) {
+          articleSource = parts[parts.length - 1].trim();
+        }
+      }
 
       if (title && link) {
+        // For Google News results, strip the source suffix from the title
+        let cleanTitle = title;
+        if (rawSource.toLowerCase().includes('google news') && title.includes(' - ') && articleSource !== source) {
+          cleanTitle = title.substring(0, title.lastIndexOf(' - ')).trim();
+        }
+
         articles.push({
-          title,
-          source,
+          title: cleanTitle,
+          source: articleSource,
           publishedAt: pubDate,
-          category: categorise(title, descClean),
+          category: categorise(cleanTitle, descClean),
           summary: descClean,
           url: link,
         });
@@ -281,24 +353,21 @@ export async function fetchFintechNews(): Promise<NewsArticle[]> {
   return result;
 }
 
-/** Consultancy — dedicated publications (no keyword filter) + business feeds (keyword filtered) */
+/** Consultancy — Google News RSS feeds for consulting/strategy content */
 export async function fetchConsultingNews(): Promise<NewsArticle[]> {
   const settled = await Promise.allSettled(
-    CONSULTING_FEEDS.map(f => fetchFeed(f.url, consultCategory))
+    CONSULTING_FEEDS.map(url => fetchFeed(url, consultCategory))
   );
 
   const articles = settled
     .filter((r): r is PromiseFulfilledResult<NewsArticle[]> => r.status === 'fulfilled')
-    .flatMap((r, i) => {
-      const { skipKeywordFilter } = CONSULTING_FEEDS[i];
-      return r.value.filter(a => {
-        if (!a.title) return false;
-        const text = `${a.title} ${a.summary}`.toLowerCase();
-        if (isExcluded(text)) return false;
-        if (!isWithinDays(a.publishedAt, 3)) return false;
-        if (skipKeywordFilter) return true;
-        return CONSULTING_ALLOW.some(k => text.includes(k));
-      });
+    .flatMap(r => r.value)
+    .filter(a => {
+      if (!a.title) return false;
+      const text = `${a.title} ${a.summary}`.toLowerCase();
+      if (isExcluded(text)) return false;
+      if (!isWithinDays(a.publishedAt, 3)) return false;
+      return CONSULTING_ALLOW.some(k => text.includes(k));
     });
 
   const result = dedup(articles);
