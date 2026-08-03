@@ -37,12 +37,13 @@ const FINTECH_FEEDS = [
 
 const CONSULTING_FEEDS = [
   // High-volume direct RSS (via Vercel server-side proxy — no CORS issues)
-  'https://hbr.org/feed',                                   // ~8 articles/day
-  'https://sloanreview.mit.edu/feed/',                      // ~5 articles/day
-  'https://www.strategy-business.com/rss/rss.xml',          // ~5 articles/day
-  'https://www.fastcompany.com/feed',                       // ~20 articles/day
-  'https://fortune.com/feed/',                              // ~20 articles/day
-  'https://www.inc.com/rss',                                // ~15 articles/day
+  'https://hbr.org/feed',
+  'https://sloanreview.mit.edu/feed/',
+  'https://www.strategy-business.com/rss/rss.xml',
+  'https://www.fastcompany.com/feed',
+  'https://fortune.com/feed/',
+  'https://www.inc.com/rss',
+  'https://feeds.a.dj.com/rss/WSJcomUSBusiness.xml',
   // Google News topic searches as backup volume
   'https://news.google.com/rss/search?q=McKinsey+BCG+Bain+consulting+management&hl=en-US&gl=US&ceid=US:en',
   'https://news.google.com/rss/search?q=CEO+leadership+corporate+strategy+business&hl=en-US&gl=US&ceid=US:en',
@@ -88,7 +89,10 @@ function isWithinDays(pubDate: string, days: number): boolean {
   if (!pubDate) return true; // missing pubDate → give benefit of the doubt
   const pub = new Date(pubDate).getTime();
   if (isNaN(pub)) return true;
-  const cutoff = Date.now() - days * 24 * 60 * 60 * 1000;
+  const now = Date.now();
+  // Reject articles dated more than 2 hours in the future (scheduled whitepapers etc.)
+  if (pub > now + 2 * 60 * 60 * 1000) return false;
+  const cutoff = now - days * 24 * 60 * 60 * 1000;
   return pub >= cutoff;
 }
 

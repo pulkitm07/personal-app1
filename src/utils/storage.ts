@@ -106,13 +106,18 @@ export function formatTime(date: Date): string {
 }
 
 export function formatRelativeTime(dateString: string): string {
+  if (!dateString) return 'Just now';
   const date = new Date(dateString);
+  if (isNaN(date.getTime())) return 'Just now';
   const now = new Date();
   const diffMs = now.getTime() - date.getTime();
+  // Future dates (e.g. Finextra whitepapers scheduled ahead) — show as recent
+  if (diffMs < 0) return 'Just now';
   const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
 
   if (diffHours < 1) {
     const diffMins = Math.floor(diffMs / (1000 * 60));
+    if (diffMins < 1) return 'Just now';
     return `${diffMins} ${diffMins === 1 ? 'minute' : 'minutes'} ago`;
   } else if (diffHours < 24) {
     return `${diffHours} ${diffHours === 1 ? 'hour' : 'hours'} ago`;
