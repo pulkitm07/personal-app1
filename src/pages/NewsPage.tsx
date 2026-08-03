@@ -6,22 +6,33 @@ import {
   fetchFinanceNews,
   fetchFintechNews,
   fetchConsultingNews,
-  fetchPsychologyNews,
 } from '../services/newsService';
 import { formatRelativeTime } from '../utils/storage';
+import { getDailyTopics } from '../utils/dailyTopics';
+import psychologyData from '../data/psychology.json';
 import type { NewsArticle } from '../types';
 
 type NewsTab = 'geopolitical' | 'finance' | 'fintech' | 'consultancy' | 'psychology';
 
+interface PsychologyTopic {
+  id: number;
+  title: string;
+  content: string;
+}
+
+const typedPsychData = psychologyData as PsychologyTopic[];
+
 export function NewsPage() {
   const [activeTab, setActiveTab] = useState<NewsTab>('geopolitical');
-  const [geoNews, setGeoNews]           = useState<NewsArticle[]>([]);
-  const [finNews, setFinNews]           = useState<NewsArticle[]>([]);
-  const [fintechNews, setFintechNews]   = useState<NewsArticle[]>([]);
+  const [geoNews, setGeoNews]               = useState<NewsArticle[]>([]);
+  const [finNews, setFinNews]               = useState<NewsArticle[]>([]);
+  const [fintechNews, setFintechNews]       = useState<NewsArticle[]>([]);
   const [consultingNews, setConsultingNews] = useState<NewsArticle[]>([]);
-  const [psychologyNews, setPsychologyNews] = useState<NewsArticle[]>([]);
-  const [keyInsight, setKeyInsight]     = useState<string>('');
-  const [loading, setLoading]           = useState(true);
+  const [keyInsight, setKeyInsight]         = useState<string>('');
+  const [loading, setLoading]               = useState(true);
+
+  // Psychology: 2 hardcoded terms per day, rotating through all 244+ in order. No network fetch.
+  const dailyTopics = getDailyTopics<PsychologyTopic>(typedPsychData, 2);
 
   useEffect(() => {
     loadNews();
@@ -29,13 +40,12 @@ export function NewsPage() {
 
   const loadNews = async () => {
     setLoading(true);
-    
-    // Fetch individually to prevent one failure from crashing the page
+
     await Promise.all([
       fetchGeopoliticalNews()
         .then(setGeoNews)
         .catch(() => setGeoNews([])),
-      
+
       fetchFinanceNews()
         .then(fin => {
           setFinNews(fin.articles);
@@ -45,20 +55,16 @@ export function NewsPage() {
           setFinNews([]);
           setKeyInsight('');
         }),
-      
+
       fetchFintechNews()
         .then(setFintechNews)
         .catch(() => setFintechNews([])),
-      
+
       fetchConsultingNews()
         .then(setConsultingNews)
         .catch(() => setConsultingNews([])),
-        
-      fetchPsychologyNews()
-        .then(setPsychologyNews)
-        .catch(() => setPsychologyNews([])),
     ]);
-    
+
     setLoading(false);
   };
 
@@ -68,7 +74,7 @@ export function NewsPage() {
     finance:      finNews.length,
     fintech:      fintechNews.length,
     consultancy:  consultingNews.length,
-    psychology:   psychologyNews.length,
+    psychology:   dailyTopics.length,
   };
 
   const TABS: { id: NewsTab; label: string }[] = [
@@ -95,9 +101,11 @@ export function NewsPage() {
           {article.title}
         </h3>
 
-        <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed line-clamp-3">
-          {article.summary}
-        </p>
+        {article.summary && (
+          <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed line-clamp-3">
+            {article.summary}
+          </p>
+        )}
 
         <div className="flex items-center justify-between pt-2">
           <span className="text-xs text-gray-500 dark:text-gray-500">
@@ -120,7 +128,8 @@ export function NewsPage() {
   const PsychologyCard = ({ topic }: { topic: PsychologyTopic }) => (
     <Card className="flex flex-col space-y-3">
       <div className="flex items-start justify-between gap-2">
-        <span className="text-xs px-2 py-1 rounded bg-accent/10 text-accent dark:bg-accent/20 dark:text-accent">
+        <span className="text-xs px-2 py-1 rounded bg-accent/10 text-accent dark:bg-accent/20 dark:text-accent flex items-center gap-1">
+          <Brain size={11} />
           Psychology
         </span>
         <span className="text-xs text-gray-400 dark:text-gray-500 shrink-0 font-mono">
@@ -189,7 +198,7 @@ export function NewsPage() {
               }`}
             >
               {tab.label}
-              {!loading && count > 0 && (
+              {count > 0 && (
                 <span
                   className={`text-xs px-1.5 py-0.5 rounded-full font-semibold ${
                     isActive
@@ -222,21 +231,50 @@ export function NewsPage() {
         </Card>
       )}
 
-      {/* News articles grid */}
-      {loading ? (
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {Array.from({ length: 6 }).map((_, i) => (
-            <SkeletonCard key={i} />
-          ))}
+      {/* Psychology tab — hardcoded 2 daily terms, no network fetch */}
+      {activeTab === 'psychology' && (
+        <div className="space-y-4">
+          <Card className="bg-accent/5 dark:bg-accent/10 border-accent/20 dark:border-accent/20">
+            <div className="flex items-start gap-3">
+              <div className="shrink-0 w-1 h-12 bg-accent dark:bg-accent rounded-full" />
+              <div>
+                <p className="text-xs font-medium text-accent dark:text-accent mb-1 flex items-center gap-1.5">
+                  <Brain size={12} />
+                  TODAY'S PSYCHOLOGY TOPICS
+                </p>
+                <p className="text-sm text-gray-900 dark:text-white leading-relaxed">
+                  {dailyTopics.length > 0
+                    ? `Today you're learning topics #${dailyTopics[0].id} & #${dailyTopics[1]?.id} — come back tomorrow for the next 2!`
+                    : 'Loading topics…'}
+                </p>
+              </div>
+            </div>
+          </Card>
+          <div className="grid md:grid-cols-2 gap-4">
+            {dailyTopics.map(topic => (
+              <PsychologyCard key={topic.id} topic={topic} />
+            ))}
+          </div>
         </div>
-      ) : activeArticles.length > 0 ? (
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {activeArticles.map((article, index) => (
-            <NewsCard key={index} article={article} />
-          ))}
-        </div>
-      ) : (
-        <EmptyState />
+      )}
+
+      {/* News grid — 4 news tabs only */}
+      {activeTab !== 'psychology' && (
+        loading ? (
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <SkeletonCard key={i} />
+            ))}
+          </div>
+        ) : activeArticles.length > 0 ? (
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {activeArticles.map((article, index) => (
+              <NewsCard key={index} article={article} />
+            ))}
+          </div>
+        ) : (
+          <EmptyState />
+        )
       )}
     </div>
   );

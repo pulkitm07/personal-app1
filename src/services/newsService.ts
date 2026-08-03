@@ -21,12 +21,11 @@ const FINANCE_FEEDS = [
   'https://www.livemint.com/rss/markets',
 ];
 
-const FINTECH_FEEDS: { url: string; skipKeywordFilter: boolean }[] = [
-  { url: 'https://techcrunch.com/category/fintech/feed/', skipKeywordFilter: true },
-  { url: 'https://www.finextra.com/rss/headlines.aspx', skipKeywordFilter: true },
-  { url: 'https://thefintechtimes.com/feed/', skipKeywordFilter: true },
-  { url: 'https://economictimes.indiatimes.com/tech/technology/rssfeeds/13357270.cms', skipKeywordFilter: false },
-  { url: 'https://www.businessinsider.com/fintech/rss', skipKeywordFilter: false },
+const FINTECH_FEEDS = [
+  'https://news.google.com/rss/search?q=fintech+payments+digital+banking&hl=en-US&gl=US&ceid=US:en',
+  'https://news.google.com/rss/search?q=UPI+blockchain+crypto+regulation+neobank&hl=en-US&gl=US&ceid=US:en',
+  'https://news.google.com/rss/search?q=fintech+funding+startup+insurtech+wealthtech&hl=en-US&gl=US&ceid=US:en',
+  'https://news.google.com/rss/search?q=RBI+digital+currency+CBDC+open+banking&hl=en-US&gl=US&ceid=US:en',
 ];
 
 const CONSULTING_FEEDS = [
@@ -34,14 +33,6 @@ const CONSULTING_FEEDS = [
   'https://news.google.com/rss/search?q=business+strategy+leadership+CEO+corporate+governance&hl=en-US&gl=US&ceid=US:en',
   'https://news.google.com/rss/search?q=Deloitte+PwC+KPMG+Accenture+advisory&hl=en-US&gl=US&ceid=US:en',
   'https://news.google.com/rss/search?q=digital+transformation+enterprise+restructuring&hl=en-US&gl=US&ceid=US:en',
-];
-
-const PSYCHOLOGY_FEEDS: { url: string; skipKeywordFilter: boolean }[] = [
-  { url: 'https://www.psychologytoday.com/us/front/feed', skipKeywordFilter: true },
-  { url: 'https://www.apa.org/news/psycport/rss', skipKeywordFilter: true },
-  { url: 'https://www.scientificamerican.com/mind-and-brain/rss', skipKeywordFilter: true },
-  { url: 'https://digest.bps.org.uk/feed/', skipKeywordFilter: true },
-  { url: 'https://greatergood.berkeley.edu/site/rss', skipKeywordFilter: true },
 ];
 
 // ── Keyword filters ────────────────────────────────────────────────────────────
@@ -135,15 +126,7 @@ function consultCategory(t: string, d: string) {
   return 'Management';
 }
 
-function psychCategory(t: string, d: string) {
-  const s = `${t} ${d}`.toLowerCase();
-  if (/mental health|anxiety|depression|therapy|trauma/.test(s)) return 'Mental Health';
-  if (/brain|neuro|cognitive|memory/.test(s)) return 'Neuroscience';
-  if (/behavior|habit|addiction/.test(s)) return 'Behavior';
-  if (/child|development|parenting/.test(s)) return 'Development';
-  if (/social|relationship|personality/.test(s)) return 'Social';
-  return 'Psychology';
-}
+
 
 // ── HTML entity decoder ───────────────────────────────────────────────────────
 
@@ -305,7 +288,7 @@ function dedup(articles: NewsArticle[]): NewsArticle[] {
 
 // ── Exported fetchers ─────────────────────────────────────────────────────────
 
-/** Geopolitical — only articles from the last 72 hours */
+/** Geopolitical — top 50 most recent from last 3 days, newest first */
 export async function fetchGeopoliticalNews(): Promise<NewsArticle[]> {
   const settled = await Promise.allSettled(
     GEOPOLITICAL_FEEDS.map(url => fetchFeed(url, geoCategory))
@@ -322,10 +305,10 @@ export async function fetchGeopoliticalNews(): Promise<NewsArticle[]> {
 
   const result = dedup(articles);
   result.sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
-  return result;
+  return result.slice(0, 50);
 }
 
-/** Finance — only articles from the last 72 hours */
+/** Finance — top 50 most recent from last 3 days, newest first */
 export async function fetchFinanceNews(): Promise<{ articles: NewsArticle[]; keyInsight: string }> {
   const settled = await Promise.allSettled(
     FINANCE_FEEDS.map(url => fetchFeed(url, finCategory))
@@ -342,36 +325,32 @@ export async function fetchFinanceNews(): Promise<{ articles: NewsArticle[]; key
 
   const result = dedup(articles);
   result.sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
-
-  return { articles: result, keyInsight: pickInsight(result) };
+  return { articles: result.slice(0, 50), keyInsight: pickInsight(result) };
 }
 
-/** Fintech — dedicated feeds skip keyword filter; general feeds use fintech keyword list */
+/** Fintech — top 50 most recent from last 3 days, newest first */
 export async function fetchFintechNews(): Promise<NewsArticle[]> {
   const settled = await Promise.allSettled(
-    FINTECH_FEEDS.map(({ url }) => fetchFeed(url, fintechCategory))
+    FINTECH_FEEDS.map(url => fetchFeed(url, fintechCategory))
   );
 
   const articles = settled
     .filter((r): r is PromiseFulfilledResult<NewsArticle[]> => r.status === 'fulfilled')
-    .flatMap((r, i) => {
-      const { skipKeywordFilter } = FINTECH_FEEDS[i];
-      return r.value.filter(a => {
-        if (!a.title) return false;
-        const text = `${a.title} ${a.summary}`.toLowerCase();
-        if (isExcluded(text)) return false;
-        if (!isWithinDays(a.publishedAt, 3)) return false;
-        if (skipKeywordFilter) return true;
-        return FINTECH_ALLOW.some(kw => text.includes(kw));
-      });
+    .flatMap(r => r.value)
+    .filter(a => {
+      if (!a.title) return false;
+      const text = `${a.title} ${a.summary}`.toLowerCase();
+      if (isExcluded(text)) return false;
+      if (!isWithinDays(a.publishedAt, 3)) return false;
+      return FINTECH_ALLOW.some(kw => text.includes(kw));
     });
 
   const result = dedup(articles);
   result.sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
-  return result;
+  return result.slice(0, 50);
 }
 
-/** Consultancy — Google News RSS feeds for consulting/strategy content */
+/** Consultancy — top 50 most recent from last 3 days, newest first */
 export async function fetchConsultingNews(): Promise<NewsArticle[]> {
   const settled = await Promise.allSettled(
     CONSULTING_FEEDS.map(url => fetchFeed(url, consultCategory))
@@ -390,27 +369,7 @@ export async function fetchConsultingNews(): Promise<NewsArticle[]> {
 
   const result = dedup(articles);
   result.sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
-  return result;
-}
-
-export async function fetchPsychologyNews(): Promise<NewsArticle[]> {
-  const settled = await Promise.allSettled(
-    PSYCHOLOGY_FEEDS.map(f => fetchFeed(f.url, psychCategory))
-  );
-
-  const articles = settled
-    .filter((r): r is PromiseFulfilledResult<NewsArticle[]> => r.status === 'fulfilled')
-    .flatMap(r => r.value)
-    .filter(a => {
-      if (!a.title) return false;
-      const text = `${a.title} ${a.summary}`.toLowerCase();
-      if (isExcluded(text)) return false;
-      return isWithinDays(a.publishedAt, 7);
-    });
-
-  const result = dedup(articles);
-  result.sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
-  return result;
+  return result.slice(0, 50);
 }
 
 // ── Insight ───────────────────────────────────────────────────────────────────
