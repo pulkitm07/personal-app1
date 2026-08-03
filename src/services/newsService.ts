@@ -43,11 +43,15 @@ const CONSULTING_FEEDS = [
   'https://www.fastcompany.com/feed',
   'https://fortune.com/feed/',
   'https://www.inc.com/rss',
-  'https://feeds.a.dj.com/rss/WSJcomUSBusiness.xml',
+  'https://www.entrepreneur.com/latest.rss',
+  'https://search.cnbc.com/rs/search/combinedcms/view.xml?id=10001147',
+  'https://search.cnbc.com/rs/search/combinedcms/view.xml?id=10000115',
   // Google News topic searches as backup volume
   'https://news.google.com/rss/search?q=McKinsey+BCG+Bain+consulting+management&hl=en-US&gl=US&ceid=US:en',
   'https://news.google.com/rss/search?q=CEO+leadership+corporate+strategy+business&hl=en-US&gl=US&ceid=US:en',
   'https://news.google.com/rss/search?q=Deloitte+PwC+KPMG+Accenture+advisory&hl=en-US&gl=US&ceid=US:en',
+  'https://news.google.com/rss/search?q=enterprise+digital+transformation+business+advisory&hl=en-US&gl=US&ceid=US:en',
+  'https://news.google.com/rss/search?q=mergers+acquisitions+private+equity+corporate&hl=en-US&gl=US&ceid=US:en',
 ];
 
 
