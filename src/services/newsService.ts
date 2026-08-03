@@ -22,31 +22,33 @@ const FINANCE_FEEDS = [
 ];
 
 const FINTECH_FEEDS = [
-  // Source-targeted (high volume — same pattern as Geo/Finance)
-  'https://news.google.com/rss/search?q=source:techcrunch+fintech&hl=en-US&gl=US&ceid=US:en',
-  'https://news.google.com/rss/search?q=source:reuters+fintech+payments+digital&hl=en-US&gl=US&ceid=US:en',
-  'https://news.google.com/rss/search?q=source:bloomberg+fintech+banking+crypto&hl=en-US&gl=US&ceid=US:en',
-  'https://news.google.com/rss/search?q=source:ft+fintech+payments&hl=en-US&gl=US&ceid=US:en',
-  // Broad topic searches
+  // High-volume direct RSS (via Vercel server-side proxy — no CORS issues)
+  'https://www.finextra.com/rss/headlines.aspx',            // ~15 articles/day
+  'https://www.pymnts.com/feed/',                           // ~20 articles/day
+  'https://techcrunch.com/category/fintech/feed/',          // ~5 articles/day
+  'https://thefintechtimes.com/feed/',                      // ~8 articles/day
+  'https://www.coindesk.com/arc/outboundfeeds/rss/',        // ~20 articles/day
+  'https://economictimes.indiatimes.com/tech/technology/rssfeeds/13357270.cms',
+  // Google News topic searches as backup volume
   'https://news.google.com/rss/search?q=fintech+payments+digital+banking&hl=en-US&gl=US&ceid=US:en',
-  'https://news.google.com/rss/search?q=UPI+CBDC+blockchain+crypto+regulation&hl=en-US&gl=US&ceid=US:en',
-  'https://news.google.com/rss/search?q=neobank+open+banking+insurtech+wealthtech&hl=en-US&gl=US&ceid=US:en',
-  'https://news.google.com/rss/search?q=fintech+startup+funding+bnpl+defi&hl=en-US&gl=US&ceid=US:en',
+  'https://news.google.com/rss/search?q=cryptocurrency+blockchain+crypto+defi&hl=en-US&gl=US&ceid=US:en',
+  'https://news.google.com/rss/search?q=neobank+CBDC+UPI+open+banking&hl=en-US&gl=US&ceid=US:en',
 ];
 
 const CONSULTING_FEEDS = [
-  // Source-targeted (high volume — same pattern as Geo/Finance)
-  'https://news.google.com/rss/search?q=source:reuters+business+strategy+management&hl=en-US&gl=US&ceid=US:en',
-  'https://news.google.com/rss/search?q=source:bloomberg+consulting+strategy+corporate&hl=en-US&gl=US&ceid=US:en',
-  'https://news.google.com/rss/search?q=source:ft+consulting+strategy+leadership&hl=en-US&gl=US&ceid=US:en',
-  'https://news.google.com/rss/search?q=source:economist+business+management&hl=en-US&gl=US&ceid=US:en',
-  // Broad topic searches
-  'https://news.google.com/rss/search?q=McKinsey+BCG+Bain+consulting+strategy&hl=en-US&gl=US&ceid=US:en',
-  'https://news.google.com/rss/search?q=Deloitte+PwC+KPMG+Accenture+EY+advisory&hl=en-US&gl=US&ceid=US:en',
+  // High-volume direct RSS (via Vercel server-side proxy — no CORS issues)
+  'https://hbr.org/feed',                                   // ~8 articles/day
+  'https://sloanreview.mit.edu/feed/',                      // ~5 articles/day
+  'https://www.strategy-business.com/rss/rss.xml',          // ~5 articles/day
+  'https://www.fastcompany.com/feed',                       // ~20 articles/day
+  'https://fortune.com/feed/',                              // ~20 articles/day
+  'https://www.inc.com/rss',                                // ~15 articles/day
+  // Google News topic searches as backup volume
+  'https://news.google.com/rss/search?q=McKinsey+BCG+Bain+consulting+management&hl=en-US&gl=US&ceid=US:en',
   'https://news.google.com/rss/search?q=CEO+leadership+corporate+strategy+business&hl=en-US&gl=US&ceid=US:en',
-  'https://news.google.com/rss/search?q=digital+transformation+AI+strategy+enterprise&hl=en-US&gl=US&ceid=US:en',
-  'https://news.google.com/rss/search?q=merger+acquisition+private+equity+corporate+deal&hl=en-US&gl=US&ceid=US:en',
+  'https://news.google.com/rss/search?q=Deloitte+PwC+KPMG+Accenture+advisory&hl=en-US&gl=US&ceid=US:en',
 ];
+
 
 // ── Keyword filters ────────────────────────────────────────────────────────────
 
