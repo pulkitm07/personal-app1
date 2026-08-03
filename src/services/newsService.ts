@@ -22,17 +22,30 @@ const FINANCE_FEEDS = [
 ];
 
 const FINTECH_FEEDS = [
+  // Source-targeted (high volume — same pattern as Geo/Finance)
+  'https://news.google.com/rss/search?q=source:techcrunch+fintech&hl=en-US&gl=US&ceid=US:en',
+  'https://news.google.com/rss/search?q=source:reuters+fintech+payments+digital&hl=en-US&gl=US&ceid=US:en',
+  'https://news.google.com/rss/search?q=source:bloomberg+fintech+banking+crypto&hl=en-US&gl=US&ceid=US:en',
+  'https://news.google.com/rss/search?q=source:ft+fintech+payments&hl=en-US&gl=US&ceid=US:en',
+  // Broad topic searches
   'https://news.google.com/rss/search?q=fintech+payments+digital+banking&hl=en-US&gl=US&ceid=US:en',
-  'https://news.google.com/rss/search?q=UPI+blockchain+crypto+regulation+neobank&hl=en-US&gl=US&ceid=US:en',
-  'https://news.google.com/rss/search?q=fintech+funding+startup+insurtech+wealthtech&hl=en-US&gl=US&ceid=US:en',
-  'https://news.google.com/rss/search?q=RBI+digital+currency+CBDC+open+banking&hl=en-US&gl=US&ceid=US:en',
+  'https://news.google.com/rss/search?q=UPI+CBDC+blockchain+crypto+regulation&hl=en-US&gl=US&ceid=US:en',
+  'https://news.google.com/rss/search?q=neobank+open+banking+insurtech+wealthtech&hl=en-US&gl=US&ceid=US:en',
+  'https://news.google.com/rss/search?q=fintech+startup+funding+bnpl+defi&hl=en-US&gl=US&ceid=US:en',
 ];
 
 const CONSULTING_FEEDS = [
-  'https://news.google.com/rss/search?q=management+consulting+strategy+McKinsey+BCG+Bain&hl=en-US&gl=US&ceid=US:en',
-  'https://news.google.com/rss/search?q=business+strategy+leadership+CEO+corporate+governance&hl=en-US&gl=US&ceid=US:en',
-  'https://news.google.com/rss/search?q=Deloitte+PwC+KPMG+Accenture+advisory&hl=en-US&gl=US&ceid=US:en',
-  'https://news.google.com/rss/search?q=digital+transformation+enterprise+restructuring&hl=en-US&gl=US&ceid=US:en',
+  // Source-targeted (high volume — same pattern as Geo/Finance)
+  'https://news.google.com/rss/search?q=source:reuters+business+strategy+management&hl=en-US&gl=US&ceid=US:en',
+  'https://news.google.com/rss/search?q=source:bloomberg+consulting+strategy+corporate&hl=en-US&gl=US&ceid=US:en',
+  'https://news.google.com/rss/search?q=source:ft+consulting+strategy+leadership&hl=en-US&gl=US&ceid=US:en',
+  'https://news.google.com/rss/search?q=source:economist+business+management&hl=en-US&gl=US&ceid=US:en',
+  // Broad topic searches
+  'https://news.google.com/rss/search?q=McKinsey+BCG+Bain+consulting+strategy&hl=en-US&gl=US&ceid=US:en',
+  'https://news.google.com/rss/search?q=Deloitte+PwC+KPMG+Accenture+EY+advisory&hl=en-US&gl=US&ceid=US:en',
+  'https://news.google.com/rss/search?q=CEO+leadership+corporate+strategy+business&hl=en-US&gl=US&ceid=US:en',
+  'https://news.google.com/rss/search?q=digital+transformation+AI+strategy+enterprise&hl=en-US&gl=US&ceid=US:en',
+  'https://news.google.com/rss/search?q=merger+acquisition+private+equity+corporate+deal&hl=en-US&gl=US&ceid=US:en',
 ];
 
 // ── Keyword filters ────────────────────────────────────────────────────────────
