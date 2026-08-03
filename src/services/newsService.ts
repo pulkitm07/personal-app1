@@ -340,9 +340,7 @@ export async function fetchFintechNews(): Promise<NewsArticle[]> {
     .filter(a => {
       if (!a.title) return false;
       const text = `${a.title} ${a.summary}`.toLowerCase();
-      if (isExcluded(text)) return false;
-      if (!isWithinDays(a.publishedAt, 3)) return false;
-      return FINTECH_ALLOW.some(kw => text.includes(kw));
+      return !isExcluded(text) && isWithinDays(a.publishedAt, 3);
     });
 
   const result = dedup(articles);
@@ -362,9 +360,7 @@ export async function fetchConsultingNews(): Promise<NewsArticle[]> {
     .filter(a => {
       if (!a.title) return false;
       const text = `${a.title} ${a.summary}`.toLowerCase();
-      if (isExcluded(text)) return false;
-      if (!isWithinDays(a.publishedAt, 3)) return false;
-      return CONSULTING_ALLOW.some(k => text.includes(k));
+      return !isExcluded(text) && isWithinDays(a.publishedAt, 3);
     });
 
   const result = dedup(articles);
