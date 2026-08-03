@@ -184,19 +184,37 @@ function cleanSourceName(raw: string): string {
 
 // ── Core fetch ────────────────────────────────────────────────────────────────
 
+async function safeFetchRSS(url: string): Promise<string | null> {
+  // Method 1: Vercel serverless /api/rss (most reliable, avoids all CORS issues)
+  try {
+    const res = await fetch(`/api/rss?url=${encodeURIComponent(url)}`);
+    if (res.ok) {
+      return await res.text();
+    }
+  } catch { /**/ }
+
+  // Method 2: allorigins (wrapped in JSON) - Fallback
+  try {
+    const res = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(url)}`);
+    if (res.ok) {
+      const data = await res.json();
+      if (data.contents) return data.contents;
+    }
+  } catch { /**/ }
+
+  return null;
+}
+
 async function fetchFeed(
   url: string,
   categorise: (t: string, d: string) => string
 ): Promise<NewsArticle[]> {
   try {
-    const res = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(url)}`);
-    if (!res.ok) return [];
-    
-    const data = await res.json();
-    if (!data.contents) return [];
+    const contents = await safeFetchRSS(url);
+    if (!contents) return [];
 
     const parser = new DOMParser();
-    const doc = parser.parseFromString(data.contents, 'text/xml');
+    const doc = parser.parseFromString(contents, 'text/xml');
     
     // Support both RSS (<item>) and Atom (<entry>)
     const isAtom = doc.querySelector('feed') !== null;
