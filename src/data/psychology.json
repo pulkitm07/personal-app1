@@ -107,7 +107,7 @@
   {
     "id": 23,
     "title": "Neuron Structure - Parts of a Neuron",
-    "content": ""
+    "content": "A neuron is the basic building block of the nervous system, and it has several distinct parts designed to receive and transmit information. The cell body, or soma, contains the nucleus and is the neuron's life-support center. Branching out from the cell body are the dendrites, which act like antennas to receive incoming chemical messages from other neurons. If a strong enough signal is received, it triggers an electrical impulse that travels down the axon, a long extension that passes the message away from the cell body. Many axons are coated in a layer of fatty tissue called the myelin sheath, which acts like electrical insulation to vastly speed up the transmission of the impulse. Finally, at the end of the axon are the terminal branches (or terminal buttons), which release chemical messengers called neurotransmitters to pass the signal to the next neuron."
   },
   {
     "id": 24,
@@ -552,7 +552,7 @@
   {
     "id": 112,
     "title": "What is Intelligence?",
-    "content": ""
+    "content": "Intelligence is one of the most hotly debated topics in all of psychology. Because it is a socially constructed concept rather than a physical trait, psychologists have historically struggled to agree on a single definition. Generally speaking, intelligence is defined as the mental quality consisting of the ability to learn from experience, solve problems, and use knowledge to adapt to new situations. Some psychologists, like Charles Spearman, argued that we have a single, underlying general intelligence (often called the 'g factor') that predicts our abilities across all academic areas. Others, like Howard Gardner, argue for multiple independent intelligences—suggesting you could be mathematically brilliant but have low interpersonal or musical intelligence. Regardless of the definition, measuring intelligence accurately and fairly has been a major challenge."
   },
   {
     "id": 113,
@@ -632,7 +632,7 @@
   {
     "id": 128,
     "title": "What is Personality?",
-    "content": ""
+    "content": "Personality is defined as an individual's characteristic pattern of thinking, feeling, and acting. It is what makes you uniquely you, and crucially, it is relatively stable over time and across different situations. While your current mood might change from hour to hour, your underlying personality—whether you are generally outgoing, anxious, or highly organized—remains a consistent baseline. Psychologists have developed various theories to explain how personality forms, ranging from Sigmund Freud's psychoanalytic focus on unconscious childhood conflicts, to humanistic theories that focus on our potential for personal growth, to trait theories that simply seek to identify and measure the specific fundamental dimensions of personality that all humans share."
   },
   {
     "id": 129,
@@ -732,7 +732,7 @@
   {
     "id": 148,
     "title": "What is an Emotion?",
-    "content": ""
+    "content": "We all know what it feels like to be happy, angry, or afraid, but how do psychologists actually define an emotion? In psychology, an emotion is a complex, full-body response to a significant event or stimulus. It is not just a 'feeling' in your mind. An emotion always involves three distinct components interacting together: (1) physiological arousal (your heart pounds, your pupils dilate, you sweat), (2) expressive behaviors (you clench your fists, smile, or run away fast), and (3) a conscious experience, which includes your active thoughts ('I'm in danger!') and your subjective feeling of fear or joy. Understanding how these three components combine and influence each other is the foundation of emotion research."
   },
   {
     "id": 149,
@@ -782,7 +782,7 @@
   {
     "id": 158,
     "title": "Motivation - Instincts & Drives",
-    "content": ""
+    "content": "Motivation is the need or desire that energizes and directs behavior. Early psychologists tried to explain motivation through Instinct Theory, which focused on genetically predisposed, unlearned behaviors that have a fixed pattern throughout a species (like birds migrating or salmon swimming upstream). However, instincts couldn't explain complex human behaviors. This led to Drive-Reduction Theory, which argues that a physiological need (like a lack of food or water) creates an aroused state of psychological tension—a 'drive' (like hunger or thirst). This drive motivates the organism to satisfy the need by eating or drinking. The ultimate goal of drive reduction is homeostasis: maintaining a steady, balanced internal physiological state."
   },
   {
     "id": 159,
