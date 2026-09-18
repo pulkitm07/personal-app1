@@ -1,4 +1,5 @@
 import type { NewsArticle } from '../types';
+import { scoreNewsArticles } from './aiService';
 
 // Removed rss2json to fix rate limits, using allorigins + DOMParser instead
 // ── Feed lists ────────────────────────────────────────────────────────────────
@@ -328,7 +329,7 @@ export async function fetchGeopoliticalNews(): Promise<NewsArticle[]> {
 
   const result = dedup(articles);
   result.sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
-  return result.slice(0, 50);
+  return await scoreNewsArticles(result.slice(0, 50), 'geopolitical');
 }
 
 /** Finance — top 50 most recent from last 3 days, newest first */
@@ -348,7 +349,7 @@ export async function fetchFinanceNews(): Promise<{ articles: NewsArticle[]; key
 
   const result = dedup(articles);
   result.sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
-  return { articles: result.slice(0, 50), keyInsight: pickInsight(result) };
+  return { articles: await scoreNewsArticles(result.slice(0, 50), 'finance') as NewsArticle[], keyInsight: pickInsight(result) };
 }
 
 /** Fintech — top 50 most recent from last 3 days, newest first */
@@ -368,7 +369,7 @@ export async function fetchFintechNews(): Promise<NewsArticle[]> {
 
   const result = dedup(articles);
   result.sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
-  return result.slice(0, 50);
+  return await scoreNewsArticles(result.slice(0, 50), 'fintech');
 }
 
 /** Consultancy — top 50 most recent from last 3 days, newest first */
@@ -388,7 +389,7 @@ export async function fetchConsultingNews(): Promise<NewsArticle[]> {
 
   const result = dedup(articles);
   result.sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
-  return result.slice(0, 50);
+  return await scoreNewsArticles(result.slice(0, 50), 'consultancy');
 }
 
 // ── Insight ───────────────────────────────────────────────────────────────────

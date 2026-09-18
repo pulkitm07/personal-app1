@@ -266,3 +266,42 @@ Keys needed:
   }
   return data;
 }
+
+export async function scoreNewsArticles(articles: any[], domain: string): Promise<any[]> {
+  if (articles.length === 0) return [];
+  const dateStr = new Date().toDateString() + `_${domain}_${articles.length}`;
+  const cacheKey = `news_score_${domain}`;
+
+  // Limit to top 30 to avoid massive token usage and slow responses
+  const candidates = articles.slice(0, 30);
+  
+  const payload = candidates.map((a, i) => ({ id: i, title: a.title, summary: a.summary }));
+  
+  const prompt = `You are a strict, high-level executive news curator. Your job is to filter and rank these ${domain} news articles by their global and industry impact.
+Massive acquisitions (e.g. Nvidia buying Hugging Face for $12B), major bankruptcies, critical geopolitical events, or massive macroeconomic shifts should get a high score (8-10).
+Generic advice (e.g. "Secret to slower brain aging", "10 tips for leaders"), lifestyle, and minor personnel changes should get a low score (1-3).
+Return ONLY a strictly valid JSON array of objects, one for each input article. Do not include markdown blocks.
+Keys needed: "id" (number, matching input), "score" (number 1-10).
+Input: ${JSON.stringify(payload)}`;
+
+  const scoredData = await callOpenAI(prompt, cacheKey, dateStr, async () => {
+    return payload.map(p => ({ id: p.id, score: 5 }));
+  });
+
+  if (Array.isArray(scoredData)) {
+    const scoreMap = new Map(scoredData.map((item: any) => [item.id, item.score]));
+    const sorted = [...candidates].sort((a, b) => {
+      const scoreA = scoreMap.get(candidates.indexOf(a)) || 5;
+      const scoreB = scoreMap.get(candidates.indexOf(b)) || 5;
+      // If scores are equal, fallback to chronological order
+      if (scoreB !== scoreA) {
+          return scoreB - scoreA;
+      }
+      return new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime();
+    });
+    // Return the sorted top candidates, followed by the rest of the articles (unscored)
+    return [...sorted, ...articles.slice(30)];
+  }
+
+  return articles;
+}

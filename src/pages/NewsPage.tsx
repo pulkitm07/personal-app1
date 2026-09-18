@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Card, SkeletonCard } from '../components/UI/Card';
-import { ExternalLink, RefreshCw, Brain } from 'lucide-react';
+import { ExternalLink, RefreshCw, Brain, ChevronLeft, ChevronRight } from 'lucide-react';
 import {
   fetchGeopoliticalNews,
   fetchFinanceNews,
@@ -31,8 +31,10 @@ export function NewsPage() {
   const [keyInsight, setKeyInsight]         = useState<string>('');
   const [loading, setLoading]               = useState(true);
 
+  const [psychOffset, setPsychOffset]         = useState(0);
+
   // Psychology: 2 hardcoded terms per day, rotating through all 244+ in order. No network fetch.
-  const dailyTopics = getDailyTopics<PsychologyTopic>(typedPsychData, 2);
+  const dailyTopics = getDailyTopics<PsychologyTopic>(typedPsychData, 2, psychOffset);
 
   useEffect(() => {
     loadNews();
@@ -235,18 +237,38 @@ export function NewsPage() {
       {activeTab === 'psychology' && (
         <div className="space-y-4">
           <Card className="bg-accent/5 dark:bg-accent/10 border-accent/20 dark:border-accent/20">
-            <div className="flex items-start gap-3">
-              <div className="shrink-0 w-1 h-12 bg-accent dark:bg-accent rounded-full" />
-              <div>
-                <p className="text-xs font-medium text-accent dark:text-accent mb-1 flex items-center gap-1.5">
-                  <Brain size={12} />
-                  TODAY'S PSYCHOLOGY TOPICS
-                </p>
-                <p className="text-sm text-gray-900 dark:text-white leading-relaxed">
-                  {dailyTopics.length > 0
-                    ? `Today you're learning topics #${dailyTopics[0].id} & #${dailyTopics[1]?.id} — come back tomorrow for the next 2!`
-                    : 'Loading topics…'}
-                </p>
+            <div className="flex items-start justify-between gap-3 w-full">
+              <div className="flex items-start gap-3">
+                <div className="shrink-0 w-1 h-12 bg-accent dark:bg-accent rounded-full" />
+                <div>
+                  <p className="text-xs font-medium text-accent dark:text-accent mb-1 flex items-center gap-1.5">
+                    <Brain size={12} />
+                    {psychOffset === 0 ? "TODAY'S PSYCHOLOGY TOPICS" : "PSYCHOLOGY TOPICS"}
+                  </p>
+                  <p className="text-sm text-gray-900 dark:text-white leading-relaxed">
+                    {dailyTopics.length > 0
+                      ? psychOffset === 0
+                        ? `Today you're learning topics #${dailyTopics[0].id} & #${dailyTopics[1]?.id} — come back tomorrow for the next 2!`
+                        : `Viewing topics #${dailyTopics[0].id} & #${dailyTopics[1]?.id}`
+                      : 'Loading topics…'}
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-center gap-2 shrink-0">
+                <button
+                  onClick={() => setPsychOffset(prev => prev - 1)}
+                  className="p-1.5 rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+                  aria-label="Previous topics"
+                >
+                  <ChevronLeft size={16} />
+                </button>
+                <button
+                  onClick={() => setPsychOffset(prev => prev + 1)}
+                  className="p-1.5 rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+                  aria-label="Next topics"
+                >
+                  <ChevronRight size={16} />
+                </button>
               </div>
             </div>
           </Card>
